@@ -6,7 +6,7 @@ public class AnimalData : ScriptableObject
 {
     public enum AnimalName { None, Bear, Moose };
 
-    [SerializeField] AnimalInfo[] animals;
+    [SerializeField] private AnimalInfo[] animals;
     public AnimalInfo[] Animals { get { return animals; } }
 
     [Serializable]

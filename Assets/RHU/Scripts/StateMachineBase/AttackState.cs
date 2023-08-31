@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class AttackState : AnimalStateBase
 {
-    protected AnimalStateMachine animal;
+    protected AnimalStateMachine aniaml;
 
     public AttackState(AnimalStateMachine animal)
     {
-        this.animal = animal;
+        this.aniaml = animal;
     }
 
     public override void Enter()

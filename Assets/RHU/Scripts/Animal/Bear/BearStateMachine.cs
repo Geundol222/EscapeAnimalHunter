@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AnimalStates;
 
-public class BearStateMachine : HerbivoreStateMachine
+public class BearStateMachine : CarnivoreStateMachine
 {
+
 }
