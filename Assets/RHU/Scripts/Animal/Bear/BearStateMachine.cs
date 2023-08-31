@@ -5,5 +5,5 @@ using AnimalStates;
 
 public class BearStateMachine : CarnivoreStateMachine
 {
-
+    
 }

@@ -13,6 +13,8 @@ namespace AnimalStates
 
         protected Animator animator;
         protected int curHp;
+        protected int intRandom;
+        protected float floatRandom;
 
         protected AnimalStateBase[] states;
         protected AnimalState curState; 
