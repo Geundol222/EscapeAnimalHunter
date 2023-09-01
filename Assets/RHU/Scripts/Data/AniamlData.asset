@@ -12,4 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d0e10d8c2ef01b49b9964cc7259d07e, type: 3}
   m_Name: AniamlData
   m_EditorClassIdentifier: 
-  animals: []
+  animals:
+  - name: 1
+    description: 
+    prefab: {fileID: 1841248920129678806, guid: 4f4c9767e7206b846acc41909e88fe17,
+      type: 3}
+    maxHp: 10
+    walkSpeed: 5
+    runSpeed: 10
+    damage: 2
+  - name: 2
+    description: 
+    prefab: {fileID: 100044, guid: 35f8fcd388a18654693cddf8f1ad9905, type: 3}
+    maxHp: 5
+    walkSpeed: 10
+    runSpeed: 20
+    damage: 0
