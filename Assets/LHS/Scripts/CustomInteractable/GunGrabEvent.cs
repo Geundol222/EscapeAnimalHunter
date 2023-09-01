@@ -10,31 +10,37 @@ public class GunGrabEvent : MonoBehaviour
     [SerializeField] Transform attachPoint;
     [SerializeField] Transform secondaryPoint;
 
-    int handCount = 0;
+    bool isFirst;
     Dictionary<Select, Transform> interactors;
     XRGrabInteractable grabInteractable;
-
     private void Awake()
     {
         interactors = new Dictionary<Select, Transform>();
         grabInteractable = GetComponent<XRGrabInteractable>();
     }
 
-    public void SetPriority(IXRInteractor interactor)
+    public void SetPriority(SelectEnterEventArgs args)
     {
-        interactors.Add((Select)handCount, interactor.transform);
+        isFirst = grabInteractable.interactorsSelecting.Count <= 1 || ReferenceEquals(args.interactorObject, grabInteractable.interactorsSelecting[0]);
 
-        if (handCount == 0)
-            handCount++;
+        if (isFirst)
+        {
+        }
     }
 
-    public void SetAttachPointToFirst()
+    public void SetAttachPointToFirst(SelectEnterEventArgs args)
     {
-        grabInteractable.attachTransform = attachPoint;
+        if (args.interactorObject.transform == interactors[Select.First])
+            grabInteractable.attachTransform = attachPoint;
+        else
+            return;
     }
 
-    public void SetAttachPointToSecond()
+    public void SetAttachPointToSecond(SelectExitEventArgs args)
     {
-        grabInteractable.attachTransform = secondaryPoint;
+        if (args.interactorObject.transform == interactors[Select.First])
+            grabInteractable.attachTransform = secondaryPoint;
+        else
+            return;
     }
 }
