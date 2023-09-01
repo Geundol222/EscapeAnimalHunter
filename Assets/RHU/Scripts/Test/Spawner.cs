@@ -55,8 +55,12 @@ public class Spawner : MonoBehaviour
 
     private Transform RandomSpawnPoint()
     {
-        spawnPoint.transform.Translate(new Vector3(random.Next(minRadius, maxRadius), 50, random.Next(minRadius, maxRadius)));
+        spawnPoint.transform.Translate(new Vector3(random.Next(minRadius, maxRadius), 20, random.Next(minRadius, maxRadius)));
 
+        //if (Physics.Raycast(spawnPoint.transform.position, spawnPoint.transform.forward)) // °³¹ßÁß
+        //{
+
+        //}
 
         return spawnPoint.transform;
     }
