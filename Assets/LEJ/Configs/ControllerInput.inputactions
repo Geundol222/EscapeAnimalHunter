@@ -1,0 +1,74 @@
+{
+    "name": "ControllerInput",
+    "maps": [
+        {
+            "name": "Button",
+            "id": "b77be5c4-240f-4695-823e-a986edbf486b",
+            "actions": [
+                {
+                    "name": "RightTriggerPressed",
+                    "type": "PassThrough",
+                    "id": "496f192f-26c2-4ac3-937e-544c1609d68b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LeftTriggerPressed",
+                    "type": "PassThrough",
+                    "id": "33c67ebf-f4dc-405b-9cc6-eed511278fd5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RightJoyStick",
+                    "type": "Value",
+                    "id": "4b44f44f-8ca2-4912-bebc-9a78ecc42a51",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f004ce00-5be7-42c6-b0c5-3ed53f617e43",
+                    "path": "<XRController>{RightHand}/triggerPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightTriggerPressed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0a4489e3-dbf3-4c43-975b-0f48d66c6e5f",
+                    "path": "<XRController>{LeftHand}/triggerPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftTriggerPressed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2c519d60-8ce2-4fbf-8848-dfba37ea8611",
+                    "path": "<XRController>{RightHand}/primary2DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightJoyStick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
