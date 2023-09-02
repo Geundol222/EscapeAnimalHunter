@@ -7,7 +7,7 @@ namespace UnityEngine.XR.Content.Interaction
     /// <summary>
     /// An interactable that follows the position of the interactor on a single axis
     /// </summary>
-    public class XRSlider : XRBaseInteractable
+    public class XRSliderLEJ : XRBaseInteractable
     {
         public bool isGrabbing;
         public UnityAction OnStopGrabbing;

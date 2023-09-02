@@ -7,7 +7,7 @@ namespace UnityEngine.XR.Content.Interaction
     /// <summary>
     /// An interactable knob that follows the rotation of the interactor
     /// </summary>
-    public class XRKnob : XRBaseInteractable
+    public class XRKnobLEJ : XRBaseInteractable
     {
         const float k_ModeSwitchDeadZone = 0.1f; // Prevents rapid switching between the different rotation tracking modes
 
@@ -96,11 +96,11 @@ namespace UnityEngine.XR.Content.Interaction
 
         [SerializeField]
         [Tooltip("Rotation of the knob at value '1'")]
-        float m_MaxAngle = 90.0f;
+        float m_MaxAngle = 180.0f;
 
         [SerializeField]
-        [Tooltip("Rotation of the knob at value '0'")]
-        float m_MinAngle = -90.0f;
+        [Tooltip("Rotation of the knob at value '-1'")]
+        float m_MinAngle = -180.0f;
 
         [SerializeField]
         [Tooltip("Angle increments to support, if greater than '0'")]
@@ -344,7 +344,7 @@ namespace UnityEngine.XR.Content.Interaction
         void SetValue(float value)
         {
             if (m_ClampedMotion)
-                value = Mathf.Clamp01(value);
+                value = Mathf.Clamp(value, -1f, 1f);
 
             if (m_AngleIncrement > 0)
             {
@@ -414,7 +414,7 @@ namespace UnityEngine.XR.Content.Interaction
         void OnValidate()
         {
             if (m_ClampedMotion)
-                m_Value = Mathf.Clamp01(m_Value);
+                m_Value = Mathf.Clamp(m_Value, -1f, 1f);
 
             if (m_MinAngle > m_MaxAngle)
                 m_MinAngle = m_MaxAngle;
