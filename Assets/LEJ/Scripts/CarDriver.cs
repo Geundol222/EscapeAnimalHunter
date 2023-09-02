@@ -43,12 +43,17 @@ public class CarDriver : MonoBehaviour
         WhichPedalIsUsing();
 
         if (isAcceling)
+        {
             UseAccelPedal();
+            Handling();
+        }
 
         if (isBreaking)
+        {
+            Handling();
             UseBreakPedal();
+        }
 
-        Handling();
     }
 
     private void WhichPedalIsUsing()
