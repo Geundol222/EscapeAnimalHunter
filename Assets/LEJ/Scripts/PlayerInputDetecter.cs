@@ -6,19 +6,19 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputDetecter : MonoBehaviour
 {
-    public bool isRightTriggerPressed;
-    public bool isLeftTriggerPressed;
+    public bool isRightGripPressed;
+    public bool isLeftGripPressed;
     public float rightJoyStickYValue;
     public float leftJoyStickYValue;
 
-    public void OnRightTriggerPressed(InputValue value)
+    public void OnRightGripPressed(InputValue value)
     {
-        isRightTriggerPressed = value.isPressed;
+        isRightGripPressed = value.isPressed;
     }
 
-    public void OnLeftTriggerPressed(InputValue value)
+    public void OnLeftGripPressed(InputValue value)
     {
-        isLeftTriggerPressed = value.isPressed;
+        isLeftGripPressed = value.isPressed;
     }
 
     public void OnRightJoyStick(InputValue value)

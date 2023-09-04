@@ -22,8 +22,9 @@ public class CarDriver : MonoBehaviour
 
     bool isAcceling;
     bool isBreaking;
-    XRKnobLEJ handleValue;
+    XRKnobLEJ handleKnob;
     float setHandleValue;
+    bool isGrabbingHandle;
 
     private void Awake()
     {
@@ -34,27 +35,29 @@ public class CarDriver : MonoBehaviour
         inputDetecter = player.GetComponent<PlayerInputDetecter>();
 
         gearState = gearObj.GetComponent<SetGearState>();
-        handleValue = handleObj.GetComponent<XRKnobLEJ>();
+        handleKnob = handleObj.GetComponent<XRKnobLEJ>();
 
-        handleValue.value = 0.5f;
+        handleKnob.value = 0.5f;
     }
+
 
     private void Update()
     {
-        Handling();
-
-        WhichPedalIsUsing();
-
-        if (isAcceling)
+        if (handleKnob.isHandleGripped)
         {
-            UseAccelPedal();
-            Handling();
-        }
+            WhichPedalIsUsing();
 
-        if (isBreaking)
-        {
-            UseBreakPedal();
-            Handling();
+            if (isAcceling)
+            {
+                UseAccelPedal();
+                Handling();
+            }
+
+            if (isBreaking)
+            {
+                UseBreakPedal();
+                Handling();
+            }
         }
 
     }
@@ -63,13 +66,13 @@ public class CarDriver : MonoBehaviour
     {
         if (carInteractor.isPlayerTakingCar)
         {
-            if (inputDetecter.rightJoyStickYValue > 0)
+            if (inputDetecter.rightJoyStickYValue > 0 || inputDetecter.leftJoyStickYValue > 0)
             {
                 isAcceling = true;
                 isBreaking = false;
             }
 
-            if (inputDetecter.leftJoyStickYValue > 0)
+            if (inputDetecter.rightJoyStickYValue < 0 || inputDetecter.leftJoyStickYValue < 0)
             {
                 isAcceling = false;
                 isBreaking = true;
@@ -90,10 +93,10 @@ public class CarDriver : MonoBehaviour
     private void UseBreakPedal()
     {
         if (gearState.isDriveState)
-            characterController.Move(transform.position * Time.deltaTime * inputDetecter.leftJoyStickYValue);
+            characterController.Move(transform.position * Time.deltaTime * inputDetecter.rightJoyStickYValue);
 
         if (gearState.isReverseState)
-            characterController.Move(-transform.position * Time.deltaTime * inputDetecter.leftJoyStickYValue);
+            characterController.Move(-transform.position * Time.deltaTime * inputDetecter.rightJoyStickYValue);
     }
 
     private void Handling()
@@ -108,14 +111,14 @@ public class CarDriver : MonoBehaviour
     {
         //To make handleValue.value 0f ~ 1f to -1f ~ 1f
 
-        if (handleValue.value == 0.5f)
+        if (handleKnob.value == 0.5f)
             setHandleValue = 0f;
 
-        else if (handleValue.value < 0.5f)
-            setHandleValue = -1f + handleValue.value * 2f; //-1f ~ 0f
+        else if (handleKnob.value < 0.5f)
+            setHandleValue = -1f + handleKnob.value * 2f; //-1f ~ 0f
 
         else
-            setHandleValue = (handleValue.value - 0.5f) * 2f; //0f ~ 1f
+            setHandleValue = (handleKnob.value - 0.5f) * 2f; //0f ~ 1f
     }
 }
 

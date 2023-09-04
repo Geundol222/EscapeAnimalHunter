@@ -9,8 +9,12 @@ namespace UnityEngine.XR.Content.Interaction
     /// </summary>
     public class XRKnobLEJ : XRBaseInteractable
     {
-        public UnityAction OnStartGrabbing;
-        public UnityAction OnEndGrabbing;
+        public bool isRightControllerAttached;
+        public bool isLeftControllerAttached;
+
+        public bool isHandleGripped;
+
+        private PlayerInputDetecter playerInput;
 
         const float k_ModeSwitchDeadZone = 0.1f; // Prevents rapid switching between the different rotation tracking modes
 
@@ -199,6 +203,8 @@ namespace UnityEngine.XR.Content.Interaction
         {
             SetValue(m_Value);
             SetKnobRotation(ValueToRotation());
+
+            playerInput = GameObject.FindWithTag("Player").GetComponent<PlayerInputDetecter>();
         }
 
         protected override void OnEnable()
@@ -217,8 +223,6 @@ namespace UnityEngine.XR.Content.Interaction
 
         void StartGrab(SelectEnterEventArgs args)
         {
-            OnStartGrabbing?.Invoke();
-
             m_Interactor = args.interactorObject;
 
             m_PositionAngles.Reset();
@@ -229,10 +233,32 @@ namespace UnityEngine.XR.Content.Interaction
             UpdateRotation(true);
         }
 
+        private void Update()
+        {
+            if (isRightControllerAttached && playerInput.isRightGripPressed || isLeftControllerAttached && playerInput.isLeftGripPressed)
+                isHandleGripped = true;
+
+            else
+                isHandleGripped = false;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.tag == "RightController")
+                isRightControllerAttached = true;
+            if (other.tag == "LeftController")
+                isLeftControllerAttached = true;
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.tag == "RightController")
+                isRightControllerAttached = false;
+            if (other.tag == "LeftController")
+                isLeftControllerAttached = false;
+        }
+
         void EndGrab(SelectExitEventArgs args)
         {
-            OnEndGrabbing?.Invoke();
-
             m_Interactor = null;
         }
 

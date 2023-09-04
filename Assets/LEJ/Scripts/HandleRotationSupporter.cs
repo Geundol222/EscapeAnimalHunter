@@ -14,18 +14,6 @@ public class HandleRotationSupporter : MonoBehaviour
         xrKnob = GetComponent<XRKnobLEJ>();
     }
 
-    private void OnEnable()
-    {
-        xrKnob.OnEndGrabbing += SetBackToZeroBoolTrue;
-        xrKnob.OnStartGrabbing += SetBackToZeroBoolFalse;
-    }
-
-    private void OnDisable()
-    {
-        xrKnob.OnEndGrabbing -= SetBackToZeroBoolTrue;
-        xrKnob.OnStartGrabbing -= SetBackToZeroBoolFalse;
-    }
-
     private void Update()
     {
         if (backToZero)
