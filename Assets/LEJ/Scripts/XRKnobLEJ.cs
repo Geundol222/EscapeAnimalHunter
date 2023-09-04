@@ -9,6 +9,8 @@ namespace UnityEngine.XR.Content.Interaction
     /// </summary>
     public class XRKnobLEJ : XRBaseInteractable
     {
+        public UnityAction OnStartGrab;
+
         const float k_ModeSwitchDeadZone = 0.1f; // Prevents rapid switching between the different rotation tracking modes
 
         /// <summary>
@@ -214,6 +216,8 @@ namespace UnityEngine.XR.Content.Interaction
 
         void StartGrab(SelectEnterEventArgs args)
         {
+            OnStartGrab?.Invoke();
+
             m_Interactor = args.interactorObject;
 
             m_PositionAngles.Reset();

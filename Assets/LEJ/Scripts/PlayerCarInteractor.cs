@@ -7,6 +7,13 @@ public class PlayerCarInteractor : MonoBehaviour
     [SerializeField] Transform carPlayerPosition;
     [SerializeField] Transform characterControllerObj;
     public bool isPlayerTakingCar;
+    [SerializeField] bool autoStart;
+
+    public void Start()
+    {
+        if (autoStart)
+            Interact();
+    }
 
     public void Interact()
     {

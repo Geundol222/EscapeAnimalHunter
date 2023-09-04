@@ -15,9 +15,10 @@ public class CarDriver : MonoBehaviour
 
     [SerializeField] GameObject gearObj;
     [SerializeField] GameObject handleObj;
+    [SerializeField] GameObject handleRotatePivotObj;
 
     [SerializeField] float maxSpeed;
-    [SerializeField] float rotateAmount;
+    [SerializeField] float handleRotateSpeed;
 
     bool isAcceling;
     bool isBreaking;
@@ -40,6 +41,8 @@ public class CarDriver : MonoBehaviour
 
     private void Update()
     {
+        Handling();
+
         WhichPedalIsUsing();
 
         if (isAcceling)
@@ -50,8 +53,8 @@ public class CarDriver : MonoBehaviour
 
         if (isBreaking)
         {
-            Handling();
             UseBreakPedal();
+            Handling();
         }
 
     }
@@ -97,7 +100,8 @@ public class CarDriver : MonoBehaviour
     {
         SetHandleValue();
 
-        transform.localRotation = Quaternion.Euler(transform.localRotation.x, -180f * setHandleValue, transform.localRotation.z);
+        //transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y - handleRotateAmount * setHandleValue, transform.rotation.z);
+        transform.RotateAround(transform.position, new Vector3(0f, 1f, 0f), -handleRotateSpeed * setHandleValue);
     }
 
     private void SetHandleValue()
