@@ -940,7 +940,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 0
-  scopeCamera: {fileID: 0}
+  scopeCamera: {fileID: 1034908788}
   bullet: {fileID: 7506125065514030748, guid: 322403c08d47d7d40b19da0cc8d74c55, type: 3}
 --- !u!114 &977240694
 MonoBehaviour:
