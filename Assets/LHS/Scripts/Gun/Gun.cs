@@ -5,7 +5,7 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     [SerializeField] int damage;
-    [SerializeField] Transform muzzlePoint;
+    [SerializeField] Camera scopeCamera;
     [SerializeField] Bullet bullet;
 
     bool isShoot;
@@ -14,7 +14,7 @@ public class Gun : MonoBehaviour
     {
         if (!isShoot)
         {
-            GameManager.Resource.Instantiate<GameObject>("Prefabs/Bullet", muzzlePoint.localPosition, muzzlePoint.localRotation, true);
+            GameManager.Resource.Instantiate<GameObject>("Prefabs/Bullet", scopeCamera.transform.position, scopeCamera.transform.rotation, true);
             isShoot = true;
         }
         else

@@ -30,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1076268427689873602}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 47.8, y: -12.8, z: 135.7}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 15, y: 15, z: 15}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -44,7 +44,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1076268427689873602}
-  m_Mesh: {fileID: 5283261607579422976, guid: fa28f16cc1cb47f4aa37aa40576842ce, type: 3}
+  m_Mesh: {fileID: 5283261607579422976, guid: eb0d646fbbe49b14680ec897f0e4947b, type: 3}
 --- !u!23 &1580570088132833559
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -139,7 +139,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -6907965307834503673, guid: c15b07900f619b44ebcd3c0d0ba19caa, type: 3}
+  - {fileID: 5296590585878813031, guid: eb0d646fbbe49b14680ec897f0e4947b, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -238,7 +238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55bb2cbdefc960b45868157828ab19c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 50
+  bulletSpeed: 100
   groundMask:
     serializedVersion: 2
     m_Bits: 256

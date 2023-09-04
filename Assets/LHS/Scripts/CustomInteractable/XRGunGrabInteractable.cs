@@ -24,9 +24,9 @@ public class XRGunGrabInteractable : XRGrabInteractable
         base.Awake();
     }
 
-    protected override void OnSelectEntered(SelectEnterEventArgs args)
+    protected override void OnSelectEntering(SelectEnterEventArgs args)
     {
-        base.OnSelectEntered(args);
+        base.OnSelectEntering(args);
         SetPriority(args);
         SetFirstAttachPoint(args);
     }
