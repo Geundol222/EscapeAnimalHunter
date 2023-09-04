@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActionNode : Node
+public abstract class ActionNode //: Node
 {
 
+
+    public abstract void Action();
 }
