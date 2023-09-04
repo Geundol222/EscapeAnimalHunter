@@ -28,6 +28,11 @@ public class XRGunGrabInteractable : XRGrabInteractable
     {
         base.OnSelectEntering(args);
         SetPriority(args);
+    }
+
+    protected override void OnSelectEntered(SelectEnterEventArgs args)
+    {
+        base.OnSelectEntered(args);
         SetFirstAttachPoint(args);
     }
 
@@ -51,6 +56,9 @@ public class XRGunGrabInteractable : XRGrabInteractable
     public void SetFirstAttachPoint(SelectEnterEventArgs args)
     {
         attachTransform = gunHandleAttach;
+        
+        if (interactors[1] != null)
+            secondaryAttachTransform = interactors[1].transform;
 
         if (args.interactorObject == interactors[0])
         {
