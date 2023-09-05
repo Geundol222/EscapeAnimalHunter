@@ -8,14 +8,14 @@ public class Gun : MonoBehaviour
     [SerializeField] Camera scopeCamera;
     [SerializeField] Bullet bullet;
 
-    bool isShoot;
+    public bool IsShoot { get; set; } = false;
 
     public void Fire()
     {
-        if (!isShoot)
+        if (!IsShoot)
         {
             GameManager.Resource.Instantiate<GameObject>("Prefabs/Bullet", scopeCamera.transform.position, scopeCamera.transform.rotation, true);
-            isShoot = true;
+            IsShoot = true;
         }
         else
             return;
