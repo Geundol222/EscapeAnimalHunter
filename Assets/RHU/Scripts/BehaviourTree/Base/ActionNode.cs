@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ActionNode //: Node
+public abstract class ActionNode : Node
 {
+    public BTBase btBase;
 
-
-    public abstract void Action();
+    //private void Awake()
+    //{
+    //    btBase = GetComponent<BTBase>();
+    //}
 }

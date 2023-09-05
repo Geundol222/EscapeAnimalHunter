@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SequenceNode : CompositeNode
+public class SequenceNode : Node
 {
-    public SequenceNode(Node item, Node parent, Node left, Node right) : base(item, parent, left, right)
+    public List<Node> childrenNode;
+
+    public SequenceNode(List<Node> childrenNode)
     {
+        this.childrenNode = childrenNode;
     }
 
     public override NodeState Evaluate()
@@ -15,7 +18,7 @@ public class SequenceNode : CompositeNode
 
         foreach (Node childNode in childrenNode)
         {
-            switch (childNode.CurState)
+            switch (childNode.Evaluate())
             {
                 case NodeState.Success:
                     continue;
