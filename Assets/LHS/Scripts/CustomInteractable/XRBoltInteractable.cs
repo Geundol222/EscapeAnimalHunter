@@ -9,15 +9,14 @@ public class XRBoltInteractable : XRBaseInteractable
     [SerializeField] Transform boltTransform;
 
     public UnityEvent<float> OnBoltRotated;
-    public MovementType movementType;
 
     IXRSelectInteractor selectInteractor;
     float currentAngle = 0.0f;
+    float angleDifference;
 
     private void Start()
     {
-        movementType = MovementType.VelocityTracking;
-        Mathf.Clamp(boltTransform.rotation.eulerAngles.z, 0f, 70f);
+        Mathf.Clamp(-angleDifference, 0f, 70f);
     }
 
     protected override void OnSelectEntered(SelectEnterEventArgs args)
@@ -43,7 +42,8 @@ public class XRBoltInteractable : XRBaseInteractable
             if (isSelected)
             {
                 RotateBolt();
-                boltTransform.position = new Vector3(boltTransform.position.x, boltTransform.position.y, selectInteractor.transform.position.z);
+                if (-angleDifference >= 70f)
+                    boltTransform.position = new Vector3(boltTransform.position.x, boltTransform.position.y, selectInteractor.transform.position.z);
             }
         }
     }
@@ -52,7 +52,8 @@ public class XRBoltInteractable : XRBaseInteractable
     {
         float totalAngle = FindBoltAngle();
 
-        float angleDifference = currentAngle - totalAngle;
+        angleDifference = currentAngle - totalAngle;
+        
         boltTransform.Rotate(transform.forward, -angleDifference);
 
         currentAngle = totalAngle;
