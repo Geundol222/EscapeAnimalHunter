@@ -7,7 +7,6 @@ public class HandleRotationSupporter : MonoBehaviour
 {
     [SerializeField] float backToZeroSpeed;
     XRKnobLEJ xrKnob;
-    bool backToZero;
 
     private void Awake()
     {
@@ -16,19 +15,8 @@ public class HandleRotationSupporter : MonoBehaviour
 
     private void Update()
     {
-        if (backToZero)
-            xrKnob.value = Mathf.Lerp(xrKnob.value, 0.5f, backToZeroSpeed);
+        
 
-    }
-
-    private void SetBackToZeroBoolTrue()
-    {
-        backToZero = true;
-    }
-
-    private void SetBackToZeroBoolFalse()
-    {
-        backToZero = false;
     }
 
 }

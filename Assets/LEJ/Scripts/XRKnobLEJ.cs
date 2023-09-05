@@ -13,7 +13,6 @@ namespace UnityEngine.XR.Content.Interaction
         public bool isLeftControllerAttached;
 
         public bool isHandleGripped;
-
         private PlayerInputDetecter playerInput;
 
         const float k_ModeSwitchDeadZone = 0.1f; // Prevents rapid switching between the different rotation tracking modes
