@@ -7,7 +7,7 @@ using UnityEngine.XR.Content.Interaction;
 
 public class CarDriver : MonoBehaviour
 {
-    GameObject player;
+    [SerializeField] GameObject player;
     CharacterController characterController;
     PlayerCarInteractor carInteractor;
     PlayerInputDetecter inputDetecter;
@@ -93,7 +93,7 @@ public class CarDriver : MonoBehaviour
             }
 
 
-            if (curSpeed == 0)
+            if (curSpeed < 1f)
                 isMoving = false;
             else
                 isMoving = true;
@@ -133,13 +133,13 @@ public class CarDriver : MonoBehaviour
 
         if (inputDetecter.leftJoyStickYValue != 0)
         {
-            curSpeed = Mathf.Lerp(curSpeed, 0, speedLerpValue * -inputDetecter.leftJoyStickYValue);
+            curSpeed = Mathf.Lerp(curSpeed, 0, speedLerpValue * 2 - inputDetecter.leftJoyStickYValue);
             characterController.Move(transform.forward * Time.deltaTime * -inputDetecter.leftJoyStickYValue);
         }
 
         if (inputDetecter.rightJoyStickYValue != 0)
         {
-            curSpeed = Mathf.Lerp(curSpeed, 0, speedLerpValue * -inputDetecter.rightJoyStickYValue);
+            curSpeed = Mathf.Lerp(curSpeed, 0, speedLerpValue * 2 * -inputDetecter.rightJoyStickYValue);
             characterController.Move(transform.forward * Time.deltaTime * -inputDetecter.rightJoyStickYValue);
         }
     }
