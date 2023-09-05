@@ -12,7 +12,8 @@ namespace UnityEngine.XR.Content.Interaction
         public bool isRightControllerAttached;
         public bool isLeftControllerAttached;
 
-        public bool isHandleGripped;
+        public bool isRightControllerGripped;
+        public bool isLeftControllerGripped;
         private PlayerInputDetecter playerInput;
 
         const float k_ModeSwitchDeadZone = 0.1f; // Prevents rapid switching between the different rotation tracking modes
@@ -224,21 +225,17 @@ namespace UnityEngine.XR.Content.Interaction
         {
             m_Interactor = args.interactorObject;
 
+            if (isRightControllerAttached)
+                isRightControllerGripped = true;
+            if (isLeftControllerAttached)
+                isLeftControllerGripped = true;
+
             m_PositionAngles.Reset();
             m_UpVectorAngles.Reset();
             m_ForwardVectorAngles.Reset();
 
             UpdateBaseKnobRotation();
             UpdateRotation(true);
-        }
-
-        private void Update()
-        {
-            if (isRightControllerAttached && playerInput.isRightGripPressed || isLeftControllerAttached && playerInput.isLeftGripPressed)
-                isHandleGripped = true;
-
-            else
-                isHandleGripped = false;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -251,9 +248,15 @@ namespace UnityEngine.XR.Content.Interaction
         private void OnTriggerExit(Collider other)
         {
             if (other.tag == "RightController")
+            {
                 isRightControllerAttached = false;
+                isRightControllerGripped = false;
+            }
             if (other.tag == "LeftController")
+            {
                 isLeftControllerAttached = false;
+                isLeftControllerGripped = false;
+            }
         }
 
         void EndGrab(SelectExitEventArgs args)

@@ -20,10 +20,10 @@ public class CarDriver : MonoBehaviour
 
     [SerializeField] float maxSpeed; //in LEJTestScene : 30
     [SerializeField] float curSpeed;
-    [SerializeField] float targetSpeed;
-    [SerializeField] float speedLerpValue; //in LEJTestScene : 0.005
+    [SerializeField] float accelLerpValue; //in LEJTestScene : 0.01
+    [SerializeField] float breakLerpValue;
     [SerializeField] float handleRotateSpeed; //in LEJTestScene : 0.5
-    [SerializeField] float backToZeroSpeed; //in LEJTestScene : 0.05
+    [SerializeField] float backToZeroSpeed; //in LEJTestScene : 0.01
 
     bool isAcceling;
     bool isBreaking;
@@ -67,7 +67,7 @@ public class CarDriver : MonoBehaviour
                 Handling();
             }
         }
-        if (!handleKnob.isHandleGripped)
+        if (!handleKnob.isRightControllerGripped || !handleKnob.isLeftControllerGripped)
             handleKnob.value = Mathf.Lerp(handleKnob.value, 0.5f, backToZeroSpeed);
 
     }
@@ -88,7 +88,7 @@ public class CarDriver : MonoBehaviour
             }
             else
             {
-                curSpeed = Mathf.Lerp(curSpeed, 0, speedLerpValue);
+                curSpeed = Mathf.Lerp(curSpeed, 0, accelLerpValue);
                 characterController.Move(transform.forward * Time.deltaTime * curSpeed);
             }
 
@@ -104,8 +104,10 @@ public class CarDriver : MonoBehaviour
     {
         if (inputDetecter.leftJoyStickYValue != 0)
         {
-            targetSpeed = maxSpeed * inputDetecter.leftJoyStickYValue;
-            curSpeed = Mathf.Lerp(curSpeed, targetSpeed, speedLerpValue);
+            curSpeed += maxSpeed * inputDetecter.leftJoyStickYValue * accelLerpValue;
+
+            if (curSpeed > maxSpeed)
+                curSpeed = maxSpeed;
 
             if (gearState.isDriveState)
                 characterController.Move(transform.forward * Time.deltaTime * curSpeed);
@@ -116,8 +118,10 @@ public class CarDriver : MonoBehaviour
 
         if (inputDetecter.rightJoyStickYValue != 0)
         {
-            targetSpeed = maxSpeed * inputDetecter.rightJoyStickYValue;
-            curSpeed = Mathf.Lerp(curSpeed, targetSpeed, speedLerpValue);
+            curSpeed += maxSpeed * inputDetecter.rightJoyStickYValue * accelLerpValue;
+
+            if (curSpeed > maxSpeed)
+                curSpeed = maxSpeed;
 
             if (gearState.isDriveState)
                 characterController.Move(transform.forward * Time.deltaTime * curSpeed);
@@ -133,14 +137,29 @@ public class CarDriver : MonoBehaviour
 
         if (inputDetecter.leftJoyStickYValue != 0)
         {
-            curSpeed = Mathf.Lerp(curSpeed, 0, speedLerpValue * 2 - inputDetecter.leftJoyStickYValue);
-            characterController.Move(transform.forward * Time.deltaTime * -inputDetecter.leftJoyStickYValue);
+            curSpeed += maxSpeed * inputDetecter.leftJoyStickYValue * breakLerpValue;
+            if (curSpeed < 0)
+                curSpeed = 0;
+
+            if (gearState.isDriveState)
+                characterController.Move(transform.forward * Time.deltaTime * curSpeed);
+
+            if (gearState.isReverseState)
+                characterController.Move(-transform.forward * Time.deltaTime * curSpeed);
+
         }
 
         if (inputDetecter.rightJoyStickYValue != 0)
         {
-            curSpeed = Mathf.Lerp(curSpeed, 0, speedLerpValue * 2 * -inputDetecter.rightJoyStickYValue);
-            characterController.Move(transform.forward * Time.deltaTime * -inputDetecter.rightJoyStickYValue);
+            curSpeed += maxSpeed * inputDetecter.rightJoyStickYValue * breakLerpValue;
+            if (curSpeed < 0)
+                curSpeed = 0;
+
+            if (gearState.isDriveState)
+                characterController.Move(transform.forward * Time.deltaTime * curSpeed);
+
+            if (gearState.isReverseState)
+                characterController.Move(-transform.forward * Time.deltaTime * curSpeed);
         }
     }
 

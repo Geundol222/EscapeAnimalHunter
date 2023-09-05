@@ -23,11 +23,11 @@ public class PlayerInputDetecter : MonoBehaviour
 
     public void OnRightJoyStick(InputValue value)
     {
-        rightJoyStickYValue = Mathf.Clamp(value.Get<Vector2>().y, 0f, 1f);
+        rightJoyStickYValue = value.Get<Vector2>().y;
     }
 
     public void OnLeftJoyStick(InputValue value)
     {
-        leftJoyStickYValue = Mathf.Clamp(value.Get<Vector2>().y, 0f, 1f);
+        leftJoyStickYValue = value.Get<Vector2>().y;
     }
 }
