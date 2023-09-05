@@ -12,20 +12,24 @@ public class CarDriver : MonoBehaviour
     PlayerCarInteractor carInteractor;
     PlayerInputDetecter inputDetecter;
     SetGearState gearState;
+    XRKnobLEJ handleKnob;
 
     [SerializeField] GameObject gearObj;
     [SerializeField] GameObject handleObj;
     [SerializeField] GameObject handleRotatePivotObj;
 
     [SerializeField] float maxSpeed;
+    [SerializeField] float curSpeed;
+    [SerializeField] float targetSpeed;
+    [SerializeField] float speedLerpValue;
     [SerializeField] float handleRotateSpeed;
     [SerializeField] float backToZeroSpeed;
 
-    [SerializeField] bool isAcceling;
+    bool isAcceling;
     bool isBreaking;
-    XRKnobLEJ handleKnob;
     float setHandleValue;
     bool isMoving;
+
 
     private void Awake()
     {
@@ -76,18 +80,23 @@ public class CarDriver : MonoBehaviour
             {
                 isAcceling = true;
                 isBreaking = false;
-
-                isMoving = true;
             }
             else if (inputDetecter.rightJoyStickYValue < 0 || inputDetecter.leftJoyStickYValue < 0)
             {
                 isAcceling = false;
                 isBreaking = true;
-
-                isMoving = true;
             }
             else
+            {
+                curSpeed = Mathf.Lerp(curSpeed, 0, speedLerpValue);
+                characterController.Move(transform.forward * Time.deltaTime * curSpeed);
+            }
+
+
+            if (curSpeed == 0)
                 isMoving = false;
+            else
+                isMoving = true;
         }
     }
 
@@ -95,31 +104,44 @@ public class CarDriver : MonoBehaviour
     {
         if (inputDetecter.leftJoyStickYValue != 0)
         {
+            targetSpeed = maxSpeed * inputDetecter.leftJoyStickYValue;
+            curSpeed = Mathf.Lerp(curSpeed, targetSpeed, speedLerpValue);
+
             if (gearState.isDriveState)
-                characterController.Move(transform.forward * Time.deltaTime * maxSpeed * inputDetecter.leftJoyStickYValue);
+                characterController.Move(transform.forward * Time.deltaTime * curSpeed);
 
             if (gearState.isReverseState)
-                characterController.Move(-transform.forward * Time.deltaTime * maxSpeed * inputDetecter.leftJoyStickYValue);
+                characterController.Move(-transform.forward * Time.deltaTime * curSpeed);
         }
 
         if (inputDetecter.rightJoyStickYValue != 0)
         {
+            targetSpeed = maxSpeed * inputDetecter.rightJoyStickYValue;
+            curSpeed = Mathf.Lerp(curSpeed, targetSpeed, speedLerpValue);
+
             if (gearState.isDriveState)
-                characterController.Move(transform.forward * Time.deltaTime * maxSpeed * inputDetecter.rightJoyStickYValue);
+                characterController.Move(transform.forward * Time.deltaTime * curSpeed);
 
             if (gearState.isReverseState)
-                characterController.Move(-transform.forward * Time.deltaTime * maxSpeed * inputDetecter.rightJoyStickYValue);
+                characterController.Move(-transform.forward * Time.deltaTime * curSpeed);
         }
     }
 
     
     private void UseBreakPedal()
     {
+
         if (inputDetecter.leftJoyStickYValue != 0)
-            characterController.Move(transform.position * Time.deltaTime * -inputDetecter.leftJoyStickYValue);
+        {
+            curSpeed = Mathf.Lerp(curSpeed, 0, speedLerpValue * -inputDetecter.leftJoyStickYValue);
+            characterController.Move(transform.forward * Time.deltaTime * -inputDetecter.leftJoyStickYValue);
+        }
 
         if (inputDetecter.rightJoyStickYValue != 0)
-            characterController.Move(transform.position * Time.deltaTime * -inputDetecter.rightJoyStickYValue);
+        {
+            curSpeed = Mathf.Lerp(curSpeed, 0, speedLerpValue * -inputDetecter.rightJoyStickYValue);
+            characterController.Move(transform.forward * Time.deltaTime * -inputDetecter.rightJoyStickYValue);
+        }
     }
 
     private void Handling()
