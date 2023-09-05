@@ -18,12 +18,12 @@ public class CarDriver : MonoBehaviour
     [SerializeField] GameObject handleObj;
     [SerializeField] GameObject handleRotatePivotObj;
 
-    [SerializeField] float maxSpeed;
+    [SerializeField] float maxSpeed; //in LEJTestScene : 30
     [SerializeField] float curSpeed;
     [SerializeField] float targetSpeed;
-    [SerializeField] float speedLerpValue;
-    [SerializeField] float handleRotateSpeed;
-    [SerializeField] float backToZeroSpeed;
+    [SerializeField] float speedLerpValue; //in LEJTestScene : 0.005
+    [SerializeField] float handleRotateSpeed; //in LEJTestScene : 0.5
+    [SerializeField] float backToZeroSpeed; //in LEJTestScene : 0.05
 
     bool isAcceling;
     bool isBreaking;
