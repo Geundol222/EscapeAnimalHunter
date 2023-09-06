@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class BearSmellAction : ActionNode
 {
+    public BearSmellAction(Animator animator) : base(animator)
+    {
+
+    }
+
     public override NodeState Evaluate()
     {
-        if (btBase.RandomAction())
+        if (RandomAction())
         {
-            btBase.animator.SetTrigger("IsSmell");
-
+            Debug.Log("smell is Success");
+            animator.SetTrigger("IsSmell");
             return NodeState.Success;
         }
-
+        Debug.Log("smell is Failure");
         return NodeState.Failure;
     }
 }

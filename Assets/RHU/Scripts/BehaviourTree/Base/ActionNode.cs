@@ -4,10 +4,25 @@ using UnityEngine;
 
 public abstract class ActionNode : Node
 {
-    public BTBase btBase;
+    public Animator animator;
+    protected int random;
 
-    //private void Awake()
-    //{
-    //    btBase = GetComponent<BTBase>();
-    //}
+    public ActionNode(Animator animator)
+    {
+        this.animator = animator;
+    }
+
+    public bool RandomAction(/*int max*/)
+    {
+        random = Random.Range(0, /*max*/10);
+        Debug.Log(random);
+        switch (random)
+        {
+            case 0:
+                return true;
+
+            default:
+                return false;
+        }
+    }
 }

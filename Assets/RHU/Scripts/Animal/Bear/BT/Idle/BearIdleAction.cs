@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class BearIdleAction : ActionNode
 {
+    public BearIdleAction(Animator animator) : base(animator)
+    {
+        
+    }
+
     public override NodeState Evaluate()
     {
-        if (btBase.RandomAction())
-        {
-            btBase.animator.SetTrigger("IsIdle");
+        //if (RandomAction())
+        //{
+        //    animator.SetTrigger("IsIdle");
 
-            return NodeState.Success;
-        }
+        //    return NodeState.Success;
+        //}
 
-        return NodeState.Failure;
+        //return NodeState.Failure;
+
+        animator.SetTrigger("IsIdle");
+
+        return NodeState.Success;
     }
 }

@@ -77,7 +77,7 @@ public class Spawner : MonoBehaviour
                 randomX = -randomX;
                 break;
 
-            default :
+            default:
                 break;
         }
 

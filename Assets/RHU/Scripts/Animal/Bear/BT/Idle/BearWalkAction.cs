@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class BearWalkAction : ActionNode
 {
+    public BearWalkAction(Animator animator) : base(animator)
+    {
+
+    }
+
     public override NodeState Evaluate()
     {
-        if (btBase.RandomAction())
+        if (RandomAction())
         {
-            btBase.animator.SetTrigger("IsWalk");
+            animator.SetTrigger("IsWalk");
 
             return NodeState.Success;
         }

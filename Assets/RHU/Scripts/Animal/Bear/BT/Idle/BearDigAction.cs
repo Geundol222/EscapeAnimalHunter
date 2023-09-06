@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class BearDigAction : ActionNode
 {
+    public BearDigAction(Animator animator) : base(animator)
+    {
+
+    }
+
     public override NodeState Evaluate()
     {
-        if (btBase.RandomAction())
+        if (RandomAction())
         {
-            btBase.animator.SetTrigger("IsDig");
-
+            Debug.Log("dig is Success");
+            animator.SetTrigger("IsDig");
             return NodeState.Success;
         }
-
+        Debug.Log("dig is Success");
         return NodeState.Failure;
     }
 }

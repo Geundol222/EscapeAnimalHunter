@@ -4,21 +4,25 @@ using UnityEngine;
 
 public class BearUnconsciousAction : ActionNode
 {
+    private bool isHit;
     private bool isUnconscious;
+    private int curHp;
 
-    private void Awake()
+    public BearUnconsciousAction(Animator animator, bool isHit ,bool isUnconscious, int curHp) : base(animator)
     {
-        isUnconscious = false;
+        this.isHit = isHit;
+        this.isUnconscious = isUnconscious;
+        this.curHp = curHp;
     }
 
     public override NodeState Evaluate()
     {
-        if (btBase.curHp <= 0 && btBase.isHit)
+        if (curHp <= 0 && isHit)
         {
             if (isUnconscious)
                 return NodeState.Success;
 
-            btBase.animator.SetTrigger("IsUnconscious");
+            animator.SetTrigger("IsUnconscious");
             isUnconscious = true;
 
             return NodeState.Success;

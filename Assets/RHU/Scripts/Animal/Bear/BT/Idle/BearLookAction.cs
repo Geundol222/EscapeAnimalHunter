@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class BearLookAction : ActionNode
 {
+    public BearLookAction(Animator animator) : base(animator)
+    {
+
+    }
+
     public override NodeState Evaluate()
     {
-        if (btBase.RandomAction())
+        if (RandomAction())
         {
-            btBase.animator.SetTrigger("IsLook");
+            animator.SetTrigger("IsLook");
 
             return NodeState.Success;
         }
