@@ -3,34 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Interactions;
 
 public class XRBoltInteractable : XRBaseInteractable
 {
     [SerializeField] Transform boltTransform;
-
-    public UnityEvent<float> OnBoltRotated;
+    [SerializeField] Transform attachPoint;
+    [SerializeField] Gun gun;
+    [SerializeField] float maxAngle;
+    [SerializeField] float minAngle;
+    [SerializeField] float rotationSensitivity;
 
     IXRSelectInteractor selectInteractor;
     float currentAngle = 0.0f;
-    float angleDifference;
 
-    private void Start()
-    {
-        Mathf.Clamp(-angleDifference, 0f, 70f);
-    }
+    Vector3 originPosition;
 
     protected override void OnSelectEntered(SelectEnterEventArgs args)
     {
         base.OnSelectEntered(args);
         selectInteractor = args.interactorObject;
-        currentAngle = FindBoltAngle();
+        originPosition = boltTransform.position;
     }
 
     protected override void OnSelectExited(SelectExitEventArgs args)
     {
         base.OnSelectExited(args);
         selectInteractor = null;
-        currentAngle = FindBoltAngle();
     }
 
     public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
@@ -42,49 +41,70 @@ public class XRBoltInteractable : XRBaseInteractable
             if (isSelected)
             {
                 RotateBolt();
-                if (-angleDifference >= 70f)
-                    boltTransform.position = new Vector3(boltTransform.position.x, boltTransform.position.y, selectInteractor.transform.position.z);
+
+                if (boltTransform.rotation.eulerAngles.z <= minAngle)
+                {
+                    boltTransform.rotation = Quaternion.Euler(0, 0, minAngle);
+                }
+
+                if (boltTransform.rotation.eulerAngles.z >= maxAngle)
+                {
+                    boltTransform.rotation = Quaternion.Euler(0, 0, maxAngle);
+                    boltTransform.position = new Vector3(boltTransform.position.x, boltTransform.position.y, attachPoint.position.z);
+                    ReloadingProcess();
+                }
             }
         }
     }
 
     private void RotateBolt()
     {
-        float totalAngle = FindBoltAngle();
+        attachPoint.position = selectInteractor.transform.position;
 
-        angleDifference = currentAngle - totalAngle;
-        
-        boltTransform.Rotate(transform.forward, -angleDifference);
+        currentAngle = FindBoltAngle();
 
-        currentAngle = totalAngle;
-        OnBoltRotated?.Invoke(angleDifference);
+        //boltTransform.Rotate(new Vector3(0, 0, currentAngle));
+        Mathf.Clamp(currentAngle, minAngle, maxAngle);
+
+        boltTransform.localEulerAngles = new Vector3(0, 0, currentAngle);
     }
 
     private float FindBoltAngle()
     {
         float totalAngle = 0f;
 
-        foreach (IXRSelectInteractor interactor in interactorsSelecting)
-        {
-            Vector2 direction = FindLocalPoint(interactor.transform.position);
-            totalAngle += ConvertToAngle(direction) * FindRotationSensitivity();
-        }
+        Vector2 direction = FindLocalPoint(attachPoint.position);
+
+        totalAngle += ConvertToAngle(direction) * rotationSensitivity;
 
         return totalAngle;
     }
 
     private Vector2 FindLocalPoint(Vector3 position)
     {
-        return transform.InverseTransformPoint(position).normalized;
+        Vector3 localPos3D = transform.InverseTransformPoint(position);
+        Vector2 localPos2D = localPos3D;
+        return localPos2D.normalized;
     }
 
     private float ConvertToAngle(Vector2 direction)
     {
-        return Vector2.SignedAngle(transform.up, direction);
+        return Vector2.SignedAngle(boltTransform.right, direction);
     }
 
-    private float FindRotationSensitivity()
+    private void ReloadingProcess()
     {
-        return 1.0f / interactorsSelecting.Count;
+        if (attachPoint.position.z > originPosition.z)
+        {
+            boltTransform.position = originPosition;
+        }
+        else if (attachPoint.position.z < originPosition.z)
+        {
+            if (originPosition.z - attachPoint.position.z >= 0.4f)
+            {
+                boltTransform.position = new Vector3(boltTransform.position.x, boltTransform.position.y, originPosition.z - 0.4f);
+                gun.IsShoot = false;
+            }
+        }
     }
 }
