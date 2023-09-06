@@ -13,6 +13,7 @@ public class CarDriver : MonoBehaviour
     PlayerInputDetecter inputDetecter;
     SetGearState gearState;
     XRKnobLEJ handleKnob;
+    DetectHandleGrab handleGrab;
 
     [SerializeField] GameObject gearObj;
     [SerializeField] GameObject handleObj;
@@ -42,6 +43,7 @@ public class CarDriver : MonoBehaviour
 
         gearState = gearObj.GetComponent<SetGearState>();
         handleKnob = handleObj.GetComponent<XRKnobLEJ>();
+        handleGrab = handleObj.GetComponent<DetectHandleGrab>();
 
         handleKnob.value = 0.5f;
     }
@@ -67,7 +69,7 @@ public class CarDriver : MonoBehaviour
                 Handling();
             }
         }
-        if (!handleKnob.isRightControllerGripped || !handleKnob.isLeftControllerGripped)
+        if (!handleGrab.isRightGrip|| !handleGrab.isLeftGrip)
             handleKnob.value = Mathf.Lerp(handleKnob.value, 0.5f, backToZeroSpeed);
 
     }
