@@ -216,9 +216,6 @@ public class XRGunDualGrabInteractable : XRBaseInteractable
         var crossRight = Vector3.Cross(up, forward);
         up = Vector3.Cross(forward, crossRight);
 
-        var positionOffset = mainInteractorTransform.InverseTransformDirection(attachOffset);
-        var rotationOffset = Quaternion.Inverse(targetRotation) * mainInteractorTransform.rotation;
-
         //Quaternion newRotation;
         //if (twoHandedRotationMode == TwoHandedRotationMode.FirstHandDirectedTowardsSecondHand)
         //{
