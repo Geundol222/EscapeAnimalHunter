@@ -19,11 +19,17 @@ public class XRBoltInteractable : XRBaseInteractable
 
     Vector3 originPosition;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        originPosition = boltTransform.position;
+    }
+
     protected override void OnSelectEntered(SelectEnterEventArgs args)
     {
         base.OnSelectEntered(args);
         selectInteractor = args.interactorObject;
-        originPosition = boltTransform.position;
+        
     }
 
     protected override void OnSelectExited(SelectExitEventArgs args)
@@ -65,8 +71,6 @@ public class XRBoltInteractable : XRBaseInteractable
         currentAngle = FindBoltAngle();
 
         //boltTransform.Rotate(new Vector3(0, 0, currentAngle));
-        Mathf.Clamp(currentAngle, minAngle, maxAngle);
-
         boltTransform.localEulerAngles = new Vector3(0, 0, currentAngle);
     }
 
@@ -77,6 +81,8 @@ public class XRBoltInteractable : XRBaseInteractable
         Vector2 direction = FindLocalPoint(attachPoint.position);
 
         totalAngle += ConvertToAngle(direction) * rotationSensitivity;
+
+        Mathf.Clamp(totalAngle, minAngle, maxAngle);
 
         return totalAngle;
     }
@@ -90,20 +96,23 @@ public class XRBoltInteractable : XRBaseInteractable
 
     private float ConvertToAngle(Vector2 direction)
     {
-        return Vector2.SignedAngle(transform.right, direction);
+        return Vector2.SignedAngle(transform.InverseTransformDirection(transform.right), direction);
     }
 
     private void ReloadingProcess()
     {
-        if (attachPoint.position.z > originPosition.z)
+        Vector3 localAttach = transform.InverseTransformPoint(attachPoint.position);
+        Vector3 localOrigin = boltTransform.InverseTransformPoint(originPosition);
+
+        if (localAttach.z > localOrigin.z)
         {
-            boltTransform.position = originPosition;
+            boltTransform.localPosition = localOrigin;
         }
-        else if (attachPoint.position.z < originPosition.z)
+        else if (localAttach.z < localOrigin.z)
         {
-            if (originPosition.z - attachPoint.position.z >= 0.4f)
+            if (localOrigin.z - localAttach.z >= 0.4f)
             {
-                boltTransform.position = new Vector3(boltTransform.position.x, boltTransform.position.y, originPosition.z - 0.4f);
+                boltTransform.localPosition = new Vector3(boltTransform.localPosition.x, boltTransform.localPosition.y, localOrigin.z - 0.4f);
                 gun.IsShoot = false;
             }
         }
