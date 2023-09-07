@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BearLookAction : ActionNode
 {
-    public BearLookAction(Animator animator) : base(animator)
+    public BearLookAction(Animal owner) : base(owner)
     {
 
     }

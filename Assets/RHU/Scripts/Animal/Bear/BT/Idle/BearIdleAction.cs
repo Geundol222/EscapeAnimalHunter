@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BearIdleAction : ActionNode
 {
-    public BearIdleAction(Animator animator) : base(animator)
+    public BearIdleAction(Animal owner) : base(owner)
     {
         
     }

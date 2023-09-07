@@ -4,12 +4,14 @@ using UnityEngine;
 
 public abstract class ActionNode : Node
 {
+    public Animal owner;
     public Animator animator;
     protected int random;
 
-    public ActionNode(Animator animator)
+    public ActionNode(Animal owner)
     {
-        this.animator = animator;
+        this.owner = owner;
+        this.animator = owner.animator;
     }
 
     public bool RandomAction(/*int max*/)

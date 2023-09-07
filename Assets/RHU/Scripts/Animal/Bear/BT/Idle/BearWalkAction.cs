@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BearWalkAction : ActionNode
 {
-    public BearWalkAction(Animator animator) : base(animator)
+    public BearWalkAction(Animal owner) : base(owner)
     {
 
     }

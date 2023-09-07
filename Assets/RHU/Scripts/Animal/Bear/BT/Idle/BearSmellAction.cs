@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BearSmellAction : ActionNode
 {
-    public BearSmellAction(Animator animator) : base(animator)
+    public BearSmellAction(Animal owner) : base(owner)
     {
 
     }
