@@ -42,15 +42,16 @@ public class XRBoltInteractable : XRBaseInteractable
             {
                 RotateBolt();
 
-                if (boltTransform.rotation.eulerAngles.z <= minAngle)
+                if (boltTransform.localRotation.eulerAngles.z <= minAngle)
                 {
-                    boltTransform.rotation = Quaternion.Euler(0, 0, minAngle);
+                    boltTransform.localRotation = Quaternion.Euler(0, 0, minAngle);
                 }
 
-                if (boltTransform.rotation.eulerAngles.z >= maxAngle)
+                if (boltTransform.localRotation.eulerAngles.z >= maxAngle)
                 {
-                    boltTransform.rotation = Quaternion.Euler(0, 0, maxAngle);
-                    boltTransform.position = new Vector3(boltTransform.position.x, boltTransform.position.y, attachPoint.position.z);
+                    boltTransform.localRotation = Quaternion.Euler(0, 0, maxAngle);
+                    Vector3 localAttachPoint = transform.InverseTransformPoint(attachPoint.position);
+                    boltTransform.localPosition = new Vector3(boltTransform.localPosition.x, boltTransform.localPosition.y, localAttachPoint.z);
                     ReloadingProcess();
                 }
             }
@@ -89,7 +90,7 @@ public class XRBoltInteractable : XRBaseInteractable
 
     private float ConvertToAngle(Vector2 direction)
     {
-        return Vector2.SignedAngle(boltTransform.right, direction);
+        return Vector2.SignedAngle(transform.right, direction);
     }
 
     private void ReloadingProcess()

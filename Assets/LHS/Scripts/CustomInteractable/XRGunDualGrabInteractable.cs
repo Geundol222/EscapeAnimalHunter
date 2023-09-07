@@ -4,10 +4,17 @@ using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.XR.Interaction.Toolkit;
+using static TwoHandGrabInteractable;
 using static UnityEngine.XR.Interaction.Toolkit.Transformers.XRGeneralGrabTransformer;
 
 public class XRGunDualGrabInteractable : XRBaseInteractable
 {
+    #region Enum
+    public enum TwoHandRotationType { None, First, Second };
+    public enum GrabState { None, Main, Sub, Multi }
+    private GrabState state;
+    #endregion
+
     #region Component
     private Rigidbody rigid;
     #endregion
@@ -15,17 +22,16 @@ public class XRGunDualGrabInteractable : XRBaseInteractable
     #region Inspector
     [SerializeField] Transform mainAttachTransform;
     [SerializeField] Transform subAttachTransform;
-    [SerializeField] TwoHandedRotationMode twoHandedRotationMode;
+    [SerializeField] TwoHandRotationType twoHandRotationType;
     #endregion
-
-    public enum GrabState { None, Main, Sub, Multi }
-    private GrabState state;
 
     private Pose mainPose;
     private Pose subPose;
 
     private IXRInteractor mainInteractor;
     private IXRInteractor subInteractor;
+
+    private bool firstFrameSinceTwoHandedGrab;
 
     protected override void Awake()
     {
@@ -54,10 +60,12 @@ public class XRGunDualGrabInteractable : XRBaseInteractable
             case GrabState.Main:
                 subInteractor = args.interactorObject;
                 state = GrabState.Multi;
+                firstFrameSinceTwoHandedGrab = true;
                 break;
             case GrabState.Sub:
                 mainInteractor = args.interactorObject;
                 state = GrabState.Multi;
+                firstFrameSinceTwoHandedGrab = true;
                 break;
         }
 
@@ -173,89 +181,96 @@ public class XRGunDualGrabInteractable : XRBaseInteractable
 
     private void MultiGrabUpdate()
     {
-        var interactor0 = interactorsSelecting[0];
-        var interactor1 = interactorsSelecting[1];
+        Transform mainInteractorTransform = mainInteractor.GetAttachTransform(this);
+        Transform subInteractorTransform = subInteractor.GetAttachTransform(this);
 
-        var interactor0Transform = interactor0.GetAttachTransform(this);
-        var interactor1Transform = interactor1.GetAttachTransform(this);
+        Pose mainInteractorAttachPose = new Pose(mainInteractorTransform.position, mainInteractorTransform.rotation);
+        Pose subInteractorAttachPose = new Pose(subInteractorTransform.position, subInteractorTransform.rotation);
+        Pose thisTransformPose = new Pose(transform.position, transform.rotation);
 
-        Vector3 newHandleBar = interactor0Transform.InverseTransformPoint(interactor1Transform.position);
+        var attachOffset = thisTransformPose.position - mainAttachTransform.position;
 
-        Quaternion newRotation;
-        if (twoHandedRotationMode == TwoHandedRotationMode.FirstHandDirectedTowardsSecondHand)
+        Quaternion targetRotation;
+        if (twoHandRotationType == TwoHandRotationType.None)
         {
-            newRotation = interactor0Transform.rotation * Quaternion.FromToRotation(m_StartHandleBar, newHandleBar);
+            targetRotation = Quaternion.LookRotation(subInteractorAttachPose.position - mainInteractorAttachPose.position);
         }
+        else if (twoHandRotationType == TwoHandRotationType.First)
+        {
+            targetRotation = Quaternion.LookRotation(subInteractorAttachPose.position - mainInteractorAttachPose.position, mainInteractorAttachPose.up);
+        }
+        else
+        {
+            targetRotation = Quaternion.LookRotation(subInteractorAttachPose.position - mainInteractorAttachPose.position, subInteractorAttachPose.up);
+        }
+
+        var forward = (subInteractorTransform.position - mainInteractorTransform.position).normalized;
+
+        var averageRight = Vector3.Slerp(mainInteractorTransform.right, subInteractorTransform.right, 0.5f);
+        var up = Vector3.Slerp(mainInteractorTransform.up, subInteractorTransform.up, 0.5f);
+
+        var crossUp = Vector3.Cross(forward, averageRight);
+        var angleDiff = Mathf.PingPong(Vector3.Angle(up, forward), 90f);
+        up = Vector3.Slerp(crossUp, up, angleDiff / 90f);
+
+        var crossRight = Vector3.Cross(up, forward);
+        up = Vector3.Cross(forward, crossRight);
+
+        var positionOffset = mainInteractorTransform.InverseTransformDirection(attachOffset);
+        var rotationOffset = Quaternion.Inverse(targetRotation) * mainInteractorTransform.rotation;
+
+        //Quaternion newRotation;
+        //if (twoHandedRotationMode == TwoHandedRotationMode.FirstHandDirectedTowardsSecondHand)
+        //{
+        //    newRotation = interactor0Transform.rotation * Quaternion.FromToRotation(m_StartHandleBar, newHandleBar);
+        //}
+        //else if (twoHandedRotationMode == TwoHandedRotationMode.TwoHandedAverage)
+        //{
+        //    var forward = (interactor1Transform.position - interactor0Transform.position).normalized;
+
+        //    var averageRight = Vector3.Slerp(interactor0Transform.right, interactor1Transform.right, 0.5f);
+        //    var up = Vector3.Slerp(interactor0Transform.up, interactor1Transform.up, 0.5f);
+
+        //    var crossUp = Vector3.Cross(forward, averageRight);
+        //    var angleDiff = Mathf.PingPong(Vector3.Angle(up, forward), 90f);
+        //    up = Vector3.Slerp(crossUp, up, angleDiff / 90f);
+
+        //    var crossRight = Vector3.Cross(up, forward);
+        //    up = Vector3.Cross(forward, crossRight);
+
+        //    if (firstFrameSinceTwoHandedGrab)
+        //    {
+        //        firstFrameSinceTwoHandedGrab = false;
+        //    }
+        //    else
+        //    {
+        //        // We also keep track of whether the up vector was pointing up or down previously, to allow for objects to be flipped through a series of rotations
+        //        // Such as a 180 degree rotation on the y, followed by a 180 degree rotation on the x
+        //        if (Vector3.Dot(up, m_LastTwoHandedUp) <= 0f)
+        //        {
+        //            up = -up;
+        //        }
+        //    }
+
+        //    m_LastTwoHandedUp = up;
+
+        //    var twoHandedRotation = Quaternion.LookRotation(forward, up);
+
+        //    // Given that this rotation method doesn't really consider the first interactor's start rotation, we have to remove the offset pose computed on grab. 
+        //    newRotation = twoHandedRotation * Quaternion.Inverse(m_OffsetPose.rotation);
+        //}
+        //else
+        //{
+        //    newRotation = interactor0Transform.rotation;
+        //}
+
+        //adjustedInteractorPosition = interactor0Transform.position;
+        //adjustedInteractorRotation = newRotation;
+        //return;
 
         /*
          * XRGeneralGrabTransformer->ComputeAdjustedInteractorPose È®ÀÎ
-         * 
-        if (interactorsSelecting.Count == 1 || twoHandedRotationMode == TwoHandedRotationMode.FirstHandOnly)
-        {
-            newHandleBar = m_StartHandleBar;
-            return grabInteractable.interactorsSelecting[0].GetAttachTransform(grabInteractable).GetWorldPose();
-        }
-
-        if (grabInteractable.interactorsSelecting.Count > 1)
-        {
-            var interactor0 = grabInteractable.interactorsSelecting[0];
-            var interactor1 = grabInteractable.interactorsSelecting[1];
-
-            var interactor0Transform = interactor0.GetAttachTransform(grabInteractable);
-            var interactor1Transform = interactor1.GetAttachTransform(grabInteractable);
-
-            newHandleBar = interactor0Transform.InverseTransformPoint(interactor1Transform.position);
-
-            Quaternion newRotation;
-            if (m_TwoHandedRotationMode == TwoHandedRotationMode.FirstHandDirectedTowardsSecondHand)
-            {
-                newRotation = interactor0Transform.rotation * Quaternion.FromToRotation(m_StartHandleBar, newHandleBar);
-            }
-            else if (m_TwoHandedRotationMode == TwoHandedRotationMode.TwoHandedAverage)
-            {
-                var forward = (interactor1Transform.position - interactor0Transform.position).normalized;
-
-                var averageRight = Vector3.Slerp(interactor0Transform.right, interactor1Transform.right, 0.5f);
-                var up = Vector3.Slerp(interactor0Transform.up, interactor1Transform.up, 0.5f);
-
-                var crossUp = Vector3.Cross(forward, averageRight);
-                var angleDiff = Mathf.PingPong(Vector3.Angle(up, forward), 90f);
-                up = Vector3.Slerp(crossUp, up, angleDiff / 90f);
-
-                var crossRight = Vector3.Cross(up, forward);
-                up = Vector3.Cross(forward, crossRight);
-
-                if (m_FirstFrameSinceTwoHandedGrab)
-                {
-                    m_FirstFrameSinceTwoHandedGrab = false;
-                }
-                else
-                {
-                    // We also keep track of whether the up vector was pointing up or down previously, to allow for objects to be flipped through a series of rotations
-                    // Such as a 180 degree rotation on the y, followed by a 180 degree rotation on the x
-                    if (Vector3.Dot(up, m_LastTwoHandedUp) <= 0f)
-                    {
-                        up = -up;
-                    }
-                }
-
-                m_LastTwoHandedUp = up;
-
-                var twoHandedRotation = Quaternion.LookRotation(forward, up);
-
-                // Given that this rotation method doesn't really consider the first interactor's start rotation, we have to remove the offset pose computed on grab. 
-                newRotation = twoHandedRotation * Quaternion.Inverse(m_OffsetPose.rotation);
-            }
-            else
-            {
-                newRotation = interactor0Transform.rotation;
-            }
-
-            return new Pose(interactor0Transform.position, newRotation);
-        }
-
-        newHandleBar = m_StartHandleBar;
-        return Pose.identity;*/
+         */
     }
 
 
