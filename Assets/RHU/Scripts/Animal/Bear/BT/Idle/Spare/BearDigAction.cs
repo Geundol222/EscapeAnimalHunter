@@ -11,11 +11,11 @@ public class BearDigAction : ActionNode
 
     public override NodeState Evaluate()
     {
-        if (RandomAction())
-        {
-            animator.SetTrigger("IsDig");
-            return NodeState.Success;
-        }
+        //if (RandomAction())
+        //{
+        //    animator.SetTrigger("IsDig");
+        //    return NodeState.Success;
+        //}
 
         return NodeState.Failure;
     }

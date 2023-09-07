@@ -9,8 +9,6 @@ public class Bear : Animal
         hitNode.childrenNode = new List<Node>()
         {
             new BearHitAction(this),
-            //new BearHitAction(animator, ref curHp, ref isHit),
-            //new BearHitAction(animator, this),
             new BearUnconsciousAction(this)
         };
 
@@ -22,8 +20,12 @@ public class Bear : Animal
             ////new BearWalkAction(animator)
         };
 
-        idleActionNode = new BearIdleActionNode(this);
+        idleNode.childrenNode = new List<Node>
+        {
+            new BearIdleActionNode(this),
+            new BearWalkAction(this)
+        };
 
-        this.bTBase = new BTBase(hitNode, trackingNode, idleActionNode);
+        this.bTBase = new BTBase(hitNode, trackingNode, idleNode);
     }
 }

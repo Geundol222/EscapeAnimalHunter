@@ -8,13 +8,6 @@ public class BearUnconsciousAction : ActionNode
     public bool IsHit { get { return owner.isHit; } set { owner.isHit = value; } }
     public bool IsUnconscious { get { return owner.isUnconscious; } set { owner.isUnconscious = value; } }
 
-    //public BearUnconsciousAction(Animator animator, int curHp, bool isHit, bool isUnconscious) : base(animator)
-    //{
-    //    this.curHp = curHp;
-    //    this.isHit = isHit;
-    //    this.isUnconscious = isUnconscious;
-    //}
-
     public BearUnconsciousAction(Animal owner) : base(owner)
     {
 

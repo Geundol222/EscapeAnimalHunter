@@ -11,12 +11,12 @@ public class BearLookAction : ActionNode
 
     public override NodeState Evaluate()
     {
-        if (RandomAction())
-        {
-            animator.SetTrigger("IsLook");
+        //if (RandomAction())
+        //{
+        //    animator.SetTrigger("IsLook");
 
-            return NodeState.Success;
-        }
+        //    return NodeState.Success;
+        //}
 
         return NodeState.Failure;
     }

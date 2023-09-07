@@ -11,13 +11,11 @@ public class BearSmellAction : ActionNode
 
     public override NodeState Evaluate()
     {
-        if (RandomAction())
-        {
-            Debug.Log("smell is Success");
-            animator.SetTrigger("IsSmell");
-            return NodeState.Success;
-        }
-        Debug.Log("smell is Failure");
+        //if (RandomAction())
+        //{
+        //    animator.SetTrigger("IsSmell");
+        //    return NodeState.Success;
+        //}
         return NodeState.Failure;
     }
 }

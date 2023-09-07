@@ -14,17 +14,18 @@ public abstract class ActionNode : Node
         this.animator = owner.animator;
     }
 
-    public bool RandomAction(/*int max*/)
+    public int RandomAction(int max)
     {
-        random = Random.Range(0, /*max*/10);
+        //random = Random.Range(0, max);
 
-        switch (random)
-        {
-            case 0:
-                return true;
+        //switch (random)
+        //{
+        //    case 0:
+        //        return true;
 
-            default:
-                return false;
-        }
+        //    default:
+        //        return false;
+        //}
+        return random = Random.Range(0, max);
     }
 }

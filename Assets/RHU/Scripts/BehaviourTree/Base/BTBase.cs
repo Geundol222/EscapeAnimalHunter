@@ -8,35 +8,35 @@ public class BTBase
     public SelectorNode hitNode;
     public SequenceNode trackingNode;
     public SelectorNode getAwayNode;
-    public ActionNode idleActionNode;
+    public SelectorNode idleNode;
 
-    public BTBase(SelectorNode hitNode, SelectorNode getAwayNode, ActionNode idleActionNode)    // ÃÊ½Ä
+    public BTBase(SelectorNode hitNode, SelectorNode getAwayNode, SelectorNode idleNode)    // ÃÊ½Ä
     {
         rootNode = new SelectorNode();
         this.hitNode = hitNode;
         this.getAwayNode = getAwayNode;
-        this.idleActionNode = idleActionNode;
+        this.idleNode = idleNode;
 
         rootNode.childrenNode = new List<Node>()
         {
             this.hitNode,
             this.getAwayNode,
-            this.idleActionNode
+            this.idleNode
         };
     }
 
-    public BTBase(SelectorNode hitNode, SequenceNode trackingNode, ActionNode idleActionNode)   // À°½Ä
+    public BTBase(SelectorNode hitNode, SequenceNode trackingNode, SelectorNode idleActionNode)   // À°½Ä
     {
         rootNode = new SelectorNode();
         this.hitNode = hitNode;
         this.trackingNode = trackingNode;
-        this.idleActionNode = idleActionNode;
+        this.idleNode = idleActionNode;
         
         rootNode.childrenNode = new List<Node>()
         {
             this.hitNode,
             this.trackingNode,
-            this.idleActionNode
+            this.idleNode
         };
     }
 

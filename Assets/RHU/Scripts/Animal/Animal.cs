@@ -18,7 +18,7 @@ public abstract class Animal : MonoBehaviour, IHittable
 
     public SelectorNode hitNode = new SelectorNode();
     public SequenceNode trackingNode = new SequenceNode();
-    public ActionNode idleActionNode;
+    public SelectorNode idleNode = new SelectorNode();
 
     private void Awake()
     {
@@ -27,7 +27,6 @@ public abstract class Animal : MonoBehaviour, IHittable
         isHit = false;
         curHp = data.Animals[(int)animalName].maxHp;
         delayTime = 0;
-
         SetUpBT();
     }
 
@@ -51,9 +50,7 @@ public abstract class Animal : MonoBehaviour, IHittable
 
     IEnumerator HitRoutine(int damage)
     {
-        Debug.Log($"현재 Hp : {curHp}, 맞은 damage : {damage}");
         curHp -= damage;
-        Debug.Log($"맞은 후 Hp{curHp}");
         isHit = true;
 
         yield return new WaitForSeconds(1f);
