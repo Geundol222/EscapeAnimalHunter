@@ -10,15 +10,18 @@ public class CarMover : MonoBehaviour
 
     CharacterController controller;
     float ySpeed;
+    int layerMask;
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
+        layerMask = 1 << LayerMask.NameToLayer("Ground");
     }
     private void Update()
     {
         Fall();
     }
+
 
     private void Fall()
     {
@@ -36,6 +39,6 @@ public class CarMover : MonoBehaviour
     private bool GroundCheck()
     {
         RaycastHit hit;
-        return Physics.SphereCast(transform.position + Vector3.up * castHeight, sphereCastRadius, Vector3.down, out hit, maxDistant);
+        return Physics.SphereCast(transform.position + Vector3.up * castHeight, sphereCastRadius, Vector3.down, out hit, maxDistant, layerMask);
     }
 }

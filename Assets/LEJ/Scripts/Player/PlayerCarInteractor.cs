@@ -15,22 +15,29 @@ public class PlayerCarInteractor : MonoBehaviour
             Interact();
     }
 
+    public void Update()
+    {
+        if (isPlayerTakingCar)
+        {
+            transform.position = carPlayerPosition.position;
+            transform.rotation = carPlayerPosition.rotation;
+        }
+    }
+
     public void Interact()
     {
-        isPlayerTakingCar = !isPlayerTakingCar;
+        isPlayerTakingCar = true;
 
-        characterControllerObj.GetComponent<CharacterController>().enabled = false;
         transform.SetParent(carPlayerPosition);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
+        transform.SetParent(null);
     }
 
     public void DisInteract()
     {
-        isPlayerTakingCar = !isPlayerTakingCar;
+        isPlayerTakingCar = false;
 
-        characterControllerObj.GetComponent<CharacterController>().enabled = true;
-        transform.SetParent(null);
     }
 
 }

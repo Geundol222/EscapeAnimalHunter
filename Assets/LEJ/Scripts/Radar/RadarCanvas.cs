@@ -28,7 +28,7 @@ public class RadarCanvas : MonoBehaviour
 
     private GameObject CreateNewCircle()
     {
-        GameObject circle = Instantiate(circlePrefab, Vector3.zero, Quaternion.Euler(0, 0, 0), transform);
+        GameObject circle = Instantiate(circlePrefab, Vector3.zero, transform.rotation, transform);
         circle.gameObject.transform.localPosition = Vector3.zero;
         circle.gameObject.SetActive(false);
         return circle;
@@ -39,11 +39,16 @@ public class RadarCanvas : MonoBehaviour
         sphereCaster.OnDetect += MakePoint;
     }
 
+    private void OnDisable()
+    {
+        sphereCaster.OnDetect -= MakePoint;
+    }
+
     Coroutine returnCircleRoutine;
     private void MakePoint(Transform animalPosition)
     {
         circles[index].SetActive(true);
-        circles[index].gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3((car.position.z - animalPosition.position.z) * 0.002f, (car.position.x - animalPosition.position.x) * 0.007f, 0f);
+        circles[index].gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3((car.position.x - animalPosition.position.x) * 0.002f, (animalPosition.position.z - car.position.z) * 0.007f, 0f);
         returnCircleRoutine = StartCoroutine(ReturnCircle());
         index++;
         if (index >= circles.Length)
