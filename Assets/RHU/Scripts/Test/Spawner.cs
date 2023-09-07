@@ -88,7 +88,6 @@ public class Spawner : MonoBehaviour
                 break;
         }
 
-        //spawnPoint.transform.position = new Vector3(randomX, 500 , randomZ);
         spawnPoint.transform.Translate(randomX, 500, randomZ);
     }
 

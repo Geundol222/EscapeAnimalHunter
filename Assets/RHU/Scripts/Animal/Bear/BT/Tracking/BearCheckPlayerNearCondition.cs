@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BearTrackingCondition : ActionNode
+public class BearCheckPlayerNearCondition : ActionNode
 {
-    public BearTrackingCondition(Animal owner) : base(owner)
+    public BearCheckPlayerNearCondition(Animal owner) : base(owner)
     {
 
     }

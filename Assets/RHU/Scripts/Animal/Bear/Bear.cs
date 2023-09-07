@@ -14,10 +14,10 @@ public class Bear : Animal
 
         trackingNode.childrenNode = new List<Node>
         {
-            //new BearDigAction(animator),
-            //new BearLookAction(animator),
-            //new BearSmellAction(animator),
-            ////new BearWalkAction(animator)
+            new BearTrackingCondition(this),
+            new BearRunAction(this),
+            new BearCheckPlayerNearCondition(this),
+            new BearAttackAction(this)
         };
 
         idleNode.childrenNode = new List<Node>
