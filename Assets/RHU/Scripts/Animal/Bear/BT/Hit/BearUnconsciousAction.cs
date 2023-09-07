@@ -17,7 +17,7 @@ public class BearUnconsciousAction : ActionNode
 
     public override NodeState Evaluate()
     {
-        if (curHp <= 0 && isHit)
+        if (isHit)
         {
             if (isUnconscious)
                 return NodeState.Success;

@@ -22,10 +22,11 @@ public class Bear : MonoBehaviour, IHittable
 
     //private SelectorNode            attackNode = new SelectorNode();
 
-    public Bear()
-    {
-        this.bTBase = new BTBase(hitNode, trackingNode , idleActionNode);
-    }
+    //public Bear()
+    //{
+    //    idleActionNode = new BearIdleActionNode(animator);
+    //    this.bTBase = new BTBase(hitNode, trackingNode , idleActionNode);
+    //}
 
 
     private void Awake()
@@ -38,11 +39,11 @@ public class Bear : MonoBehaviour, IHittable
 
         hitNode.childrenNode = new List<Node>()
         {
-            new BearHitAction(animator, isHit),
+            new BearHitAction(animator, isHit, curHp),
             new BearUnconsciousAction(animator, isHit, isUnconscious, curHp)
         };
 
-       trackingNode.childrenNode = new List<Node>
+        trackingNode.childrenNode = new List<Node>
         {
             //new BearDigAction(animator),
             //new BearLookAction(animator),
@@ -51,6 +52,8 @@ public class Bear : MonoBehaviour, IHittable
         };
 
         idleActionNode = new BearIdleActionNode(animator);
+
+        this.bTBase = new BTBase(hitNode, trackingNode, idleActionNode);
     }
 
     private void Update()
@@ -74,11 +77,12 @@ public class Bear : MonoBehaviour, IHittable
 
     IEnumerator HitRoutine(int damage)
     {
-        Debug.Log("아프다");
+        Debug.Log($"현재 Hp : {curHp}, 맞은 damage : {damage}");
         curHp -= damage;
+        Debug.Log($"맞은 후 Hp{curHp}");
         isHit = true;
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
 
         isHit = false;
 

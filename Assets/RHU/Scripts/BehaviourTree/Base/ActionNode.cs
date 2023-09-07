@@ -15,7 +15,7 @@ public abstract class ActionNode : Node
     public bool RandomAction(/*int max*/)
     {
         random = Random.Range(0, /*max*/10);
-        Debug.Log(random);
+
         switch (random)
         {
             case 0:
