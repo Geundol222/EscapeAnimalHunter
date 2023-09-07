@@ -12,8 +12,8 @@ public class Spawner : MonoBehaviour
     [SerializeField] AnimalSpawnList[] animalSpawnList;
 
     [Header("SpawnRange")]
-    [SerializeField][Range(0, 100)] int maxRadius;            // 플레이어를 기준으로 도넛 모양의 범위에 생성하기위해 maxRadius에서 minRadius를 제외한 위치에 생성
-    [SerializeField][Range(0, 100)] int minRadius;
+    [SerializeField][Range(0, 1000)] int maxRadius;            // 플레이어를 기준으로 도넛 모양의 범위에 생성하기위해 maxRadius에서 minRadius를 제외한 위치에 생성
+    [SerializeField][Range(0, 1000)] int minRadius;
 
     [Header("Etc")]
     [SerializeField] LayerMask groundLayer;
@@ -23,11 +23,6 @@ public class Spawner : MonoBehaviour
     {
         public AnimalData.AnimalName animalName;    // 지정한 동물
         public int spawnCount;                      // 생성할 개수
-    }
-
-    private void Awake()
-    {
-
     }
 
     private void Start()
@@ -93,17 +88,16 @@ public class Spawner : MonoBehaviour
                 break;
         }
 
-        spawnPoint.transform.position = new Vector3(randomX, 30 , randomZ);
+        //spawnPoint.transform.position = new Vector3(randomX, 500 , randomZ);
+        spawnPoint.transform.Translate(randomX, 500, randomZ);
     }
 
     private RaycastHit GroundCheck()    // Ray에 부딛힌 땅의 위치를 반환
     {
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(spawnPoint.transform.position, Vector3.down, out hitInfo, 50, groundLayer))
-        {
+        if (Physics.Raycast(spawnPoint.transform.position, Vector3.down, out hitInfo, 1000, groundLayer))
             return hitInfo;
-        }
 
         hitInfo = new RaycastHit();
         Debug.Log("Not Found Ground Layer");
