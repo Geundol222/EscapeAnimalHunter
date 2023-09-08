@@ -5,7 +5,7 @@ using UnityEngine;
 public class BearRunAction : ActionNode
 {
     public float TrackingTime { get { return owner.trackingTime; } set { owner.trackingTime = value; } }
-    public bool IsTracking { get { return owner.isTracking; } set { owner.isTracking = value; } }
+    public bool IsHostile { get { return owner.isHostile; } set { owner.isHostile = value; } }
 
     public BearRunAction(Animal owner) : base(owner)
     {
@@ -26,7 +26,7 @@ public class BearRunAction : ActionNode
         }
 
         TrackingTime = 0;
-        animator.SetBool("IsTracking", IsTracking = false);
+        animator.SetBool("IsHostile", IsHostile = false);
         Debug.Log("Run false");
         return NodeState.Failure;
     }

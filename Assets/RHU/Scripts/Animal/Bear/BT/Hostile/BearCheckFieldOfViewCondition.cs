@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class BearCheckFieldOfViewCondition : ActionNode
 {
+    private FieldOfView filedOfView;
+
     public BearCheckFieldOfViewCondition(Animal owner) : base(owner)
     {
-
+        filedOfView = owner.GetComponentInChildren<FieldOfView>();
     }
 
     public override NodeState Evaluate()
     {
-        throw new System.NotImplementedException();
+        if (filedOfView.FindPlayer())
+            return NodeState.Success;
+
+        return NodeState.Failure;
     }
 }

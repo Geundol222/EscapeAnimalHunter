@@ -12,38 +12,34 @@ public class FieldOfView : MonoBehaviour
     [SerializeField] LayerMask obstacleMask;
     [NonSerialized] public bool foundPlayer;
 
-    public void FindPlayer()
+    public bool FindPlayer()
     {
-        // 1. 범위 안에 있는지
-        Collider[] colliders = Physics.OverlapSphere(transform.position, range, targetMask);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, range, targetMask);            // 1. 범위 안에 있는지
+
         foreach (Collider collider in colliders)
         {
-            // 2. 앞에 있는지
-            Vector3 dirTarget = (collider.transform.position - transform.position).normalized;
-            if (Vector3.Dot(transform.forward, dirTarget) < Mathf.Cos(angle * 0.5f * Mathf.Deg2Rad)) // Dot은 내적
-            {                                                                             // 호도법      
-                continue;
-            }
-            // 3. 중간에 장애물이 없는지
-            float distToTarget = Vector3.Distance(transform.position, collider.transform.position);
-            if (Physics.Raycast(transform.position, dirTarget, distToTarget, obstacleMask))
-            {
-                continue;
-            }
+            Vector3 dirTarget = (collider.transform.position - transform.position).normalized;          // 2. 앞에 있는지
+            if (Vector3.Dot(transform.forward, dirTarget) < Mathf.Cos(angle * 0.5f * Mathf.Deg2Rad))    // Dot은 내적
+                continue;                                                               // 호도법
 
-            foundPlayer = true;
+            float distToTarget = Vector3.Distance(transform.position, collider.transform.position);
+            
+            if (Physics.Raycast(transform.position, dirTarget, distToTarget, obstacleMask))             // 3. 중간에 장애물이 없는지
+                continue;
+
             Debug.Log(foundPlayer);
             Debug.DrawRay(transform.position, dirTarget * distToTarget, Color.red);
-            return;
+
+            return foundPlayer = true;
         }
-        foundPlayer = false;
+
+        return foundPlayer = false;
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, range);
-
         Vector3 rightDir = AngleToDir(transform.eulerAngles.y + angle * 0.5f);
         Vector3 leftDir = AngleToDir(transform.eulerAngles.y - angle * 0.5f);
         Debug.DrawRay(transform.position, rightDir * range, Color.red);
@@ -53,6 +49,7 @@ public class FieldOfView : MonoBehaviour
     private Vector3 AngleToDir(float angle)
     {
         float radian = angle * Mathf.Deg2Rad;
+
         return new Vector3(Mathf.Sin(radian), 0, Mathf.Cos(radian));
     }
 }

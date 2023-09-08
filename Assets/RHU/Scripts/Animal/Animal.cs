@@ -15,11 +15,11 @@ public abstract class Animal : MonoBehaviour, IHittable
     [HideInInspector] public float trackingTime = 0;
     [HideInInspector] public bool isHit;
     [HideInInspector] public bool isUnconscious;
-    [HideInInspector] public bool isTracking;
+    [HideInInspector] public bool isHostile;
     [HideInInspector] public float delayTime;
 
     public SelectorNode hitNode = new SelectorNode();
-    public SequenceNode trackingNode = new SequenceNode();
+    public SequenceNode hostileNode = new SequenceNode();
     public SelectorNode idleNode = new SelectorNode();
 
     protected void Awake()
@@ -29,7 +29,7 @@ public abstract class Animal : MonoBehaviour, IHittable
         isHit = false;
         trackingTime = 0;
         isUnconscious = false;
-        isTracking = false;
+        isHostile = false;
         curHp = data.Animals[(int)animalName].maxHp;
         delayTime = 0;
         SetUpBT();

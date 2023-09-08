@@ -12,9 +12,9 @@ public class Bear : Animal
             new BearUnconsciousAction(this)
         };
 
-        trackingNode.childrenNode = new List<Node>
+        hostileNode.childrenNode = new List<Node>
         {
-            new BearTrackingCondition(this),
+            new BearHostileCondition(this),
             new BearRunAction(this),
             new BearCheckFieldOfViewCondition(this),
             new BearAttackAction(this)
@@ -26,6 +26,6 @@ public class Bear : Animal
             new BearWalkAction(this)
         };
 
-        this.bTBase = new BTBase(hitNode, trackingNode, idleNode);
+        this.bTBase = new BTBase(hitNode, hostileNode, idleNode);
     }
 }

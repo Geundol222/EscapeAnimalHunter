@@ -6,7 +6,7 @@ public class BearHitAction : ActionNode
 {
     public int CurHp { get { return owner.curHp; } set { owner.curHp = value; } }
     public bool IsHit { get { return owner.isHit; } set { owner.isHit = value; } }
-    public bool IsTracking { get { return owner.isTracking; } set { owner.isTracking = value; } }
+    public bool IsHostile { get { return owner.isHostile; } set { owner.isHostile = value; } }
 
     public BearHitAction(Animal owner) : base(owner)
     {
@@ -18,7 +18,7 @@ public class BearHitAction : ActionNode
         if (IsHit && CurHp >= 1)
         {
             animator.SetTrigger("IsHit");
-            animator.SetBool("IsTracking", IsTracking = true);
+            animator.SetBool("IsHostile", IsHostile = true);
 
             return NodeState.Success;
         }
