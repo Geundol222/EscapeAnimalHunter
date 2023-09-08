@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class BearHostileCondition : ActionNode
 {
-    public int CurHp { get { return owner.curHp; } set { owner.curHp = value; } }
-    public float TrackingTime { get { return owner.trackingTime; } set { owner.trackingTime = value; } }
-    public bool IsHostile { get { return owner.isHostile; } set { owner.isHostile = value; } }
+    private bool IsHostile { get { return owner.isHostile; } }
 
     public BearHostileCondition(Animal owner) : base(owner)
     {

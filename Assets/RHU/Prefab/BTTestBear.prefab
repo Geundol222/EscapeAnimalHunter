@@ -142,58 +142,6 @@ Transform:
   m_Father: {fileID: 6468432719766966398}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &998179350863990496
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 998179350863990499}
-  - component: {fileID: 998179350863990498}
-  m_Layer: 0
-  m_Name: FieldOfView
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &998179350863990499
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 998179350863990496}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1466800644951711528}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &998179350863990498
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 998179350863990496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25e779163d9f52241a533337e910e2d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  range: 150
-  angle: 84
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 8
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 512
 --- !u!1 &1418529855555926387
 GameObject:
   m_ObjectHideFlags: 0
@@ -741,6 +689,7 @@ GameObject:
   - component: {fileID: 1515103717997011744}
   - component: {fileID: 1465729228637230289}
   - component: {fileID: 998179349996960013}
+  - component: {fileID: 2660165743708697694}
   m_Layer: 6
   m_Name: BTTestBear
   m_TagString: Animal
@@ -762,7 +711,6 @@ Transform:
   m_Children:
   - {fileID: 7037777170853128977}
   - {fileID: 1460737792743896506}
-  - {fileID: 998179350863990499}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -817,14 +765,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 435d3c564271fe34a820f0c86f306423, type: 2}
   animalName: 1
-  animator: {fileID: 0}
-  colliders: []
-  curHp: 0
-  trackingTime: 0
-  isHit: 0
-  isUnconscious: 0
-  isHostile: 0
-  delayTime: 0
+--- !u!114 &2660165743708697694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465729228637230290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25e779163d9f52241a533337e910e2d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 150
+  angle: 90
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 8
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &1674021466903017570
 GameObject:
   m_ObjectHideFlags: 0

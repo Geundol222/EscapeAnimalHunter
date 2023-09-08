@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BearRunAction : ActionNode
 {
-    public float TrackingTime { get { return owner.trackingTime; } set { owner.trackingTime = value; } }
-    public bool IsHostile { get { return owner.isHostile; } set { owner.isHostile = value; } }
-    public bool IsTracking { get { return owner.isTracking; } set { owner.isTracking= value; } }
+    private float TrackingTime { get { return owner.trackingTime; } set { owner.trackingTime = value; } }
+    private bool IsTracking { get { return owner.isTracking; } }
+    private bool IsHostile { set { owner.isHostile = value; } }
 
     public BearRunAction(Animal owner) : base(owner)
     {

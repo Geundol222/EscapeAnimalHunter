@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class BearTrackingAction : ActionNode
 {
-    public float TrackingTime { get { return owner.trackingTime; } set { owner.trackingTime = value; } }
-    public bool IsTracking { get { return owner.isTracking; } set { owner.isTracking = value; } }
-    private FieldOfView fieldOfView;
+    private FieldOfView fieldOfView { get { return owner.fieldOfView; } }
+    private float TrackingTime { set { owner.trackingTime = value; } }
+    private bool IsTracking { set { owner.isTracking = value; } }
 
     public BearTrackingAction(Animal owner) : base(owner)
     {
-        fieldOfView = owner.GetComponentInChildren<FieldOfView>();
+
     }
 
     public override NodeState Evaluate()

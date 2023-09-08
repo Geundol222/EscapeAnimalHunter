@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class BearUnconsciousAction : ActionNode
 {
-    public int CurHp { get { return owner.curHp; } set { owner.curHp = value; } }
-    public bool IsHit { get { return owner.isHit; } set { owner.isHit = value; } }
-    public bool IsUnconscious { get { return owner.isUnconscious; } set { owner.isUnconscious = value; } }
+    private bool IsHit { get { return owner.isHit; } }
+    private bool IsUnconscious { get { return owner.isUnconscious; } set { owner.isUnconscious = value; } }
 
     public BearUnconsciousAction(Animal owner) : base(owner)
     {

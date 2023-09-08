@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BearHitAction : ActionNode
 {
-    public int CurHp { get { return owner.curHp; } set { owner.curHp = value; } }
-    public bool IsHit { get { return owner.isHit; } set { owner.isHit = value; } }
-    public bool IsHostile { get { return owner.isHostile; } set { owner.isHostile = value; } }
+    private int CurHp { get { return owner.curHp; } }
+    private bool IsHit { get { return owner.isHit; } }
+    private bool IsHostile { set { owner.isHostile = value; } }
 
     public BearHitAction(Animal owner) : base(owner)
     {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,15 +10,17 @@ public abstract class Animal : MonoBehaviour, IHittable
 
     [SerializeField] public AnimalData data;
     [SerializeField] public AnimalName animalName;
-    [HideInInspector] public Animator animator;
-    [HideInInspector] public Collider[] colliders;
-    [HideInInspector] public int curHp;
-    [HideInInspector] public float trackingTime = 0;
-    [HideInInspector] public bool isHit;
-    [HideInInspector] public bool isUnconscious;
-    [HideInInspector] public bool isHostile;
-    [HideInInspector] public bool isTracking;
-    [HideInInspector] public float delayTime;
+    [NonSerialized] public Animator animator;
+    [NonSerialized] public Collider[] colliders;
+    [NonSerialized] public FieldOfView fieldOfView;
+    [NonSerialized] public int curHp;
+    [NonSerialized] public float trackingTime = 0;
+    [NonSerialized] public bool isHit;
+    [NonSerialized] public bool isUnconscious;
+    [NonSerialized] public bool isHostile;
+    [NonSerialized] public bool isTracking;
+    [NonSerialized] public bool isAttack;
+    [NonSerialized] public float delayTime;
 
     public SelectorNode hitNode = new SelectorNode();
     public SequenceNode hostileNode = new SequenceNode();
@@ -27,6 +30,7 @@ public abstract class Animal : MonoBehaviour, IHittable
     {
         animator = GetComponent<Animator>();
         colliders = GetComponentsInChildren<Collider>();
+        fieldOfView = GetComponent<FieldOfView>();
         isHit = false;
         trackingTime = 0;
         isUnconscious = false;
