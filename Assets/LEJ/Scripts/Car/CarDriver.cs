@@ -8,7 +8,7 @@ using UnityEngine.XR.Content.Interaction;
 public class CarDriver : MonoBehaviour
 {
     [SerializeField] GameObject player;
-    CharacterController characterController;
+    Rigidbody rb;
     PlayerCarInteractor carInteractor;
     PlayerInputDetecter inputDetecter;
     SetGearState gearState;
@@ -20,7 +20,6 @@ public class CarDriver : MonoBehaviour
     [SerializeField] GameObject handleRotatePivotObj;
 
     [SerializeField] float maxSpeed; //in LEJTestScene : 30
-    [SerializeField] float curSpeed;
     [SerializeField] float accelLerpValue; //in LEJTestScene : 0.01
     [SerializeField] float breakLerpValue;
     [SerializeField] float handleRotateSpeed; //in LEJTestScene : 0.5
@@ -34,8 +33,7 @@ public class CarDriver : MonoBehaviour
 
     private void Awake()
     {
-        characterController = GetComponent<CharacterController>();
-        characterController.enabled = false;
+        rb = GetComponent<Rigidbody>();
 
         player = GameObject.FindWithTag("Player");
         carInteractor = player.GetComponent<PlayerCarInteractor>();
@@ -48,10 +46,8 @@ public class CarDriver : MonoBehaviour
         handleKnob.value = 0.5f;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (player.GetComponent<PlayerCarInteractor>().isPlayerTakingCar)
-            characterController.enabled = true;
 
         if (gearState.isDriveState || gearState.isReverseState)
         {
@@ -88,17 +84,7 @@ public class CarDriver : MonoBehaviour
                 isAcceling = false;
                 isBreaking = true;
             }
-            else
-            {
-                curSpeed = Mathf.Lerp(curSpeed, 0, accelLerpValue);
-                characterController.Move(transform.forward * Time.deltaTime * curSpeed);
-            }
-
-
-            if (curSpeed < 1f)
-                isMoving = false;
-            else
-                isMoving = true;
+            
         }
     }
 
@@ -106,30 +92,12 @@ public class CarDriver : MonoBehaviour
     {
         if (inputDetecter.leftJoyStickYValue != 0)
         {
-            curSpeed += maxSpeed * inputDetecter.leftJoyStickYValue * accelLerpValue;
-
-            if (curSpeed > maxSpeed)
-                curSpeed = maxSpeed;
-
-            if (gearState.isDriveState)
-                characterController.Move(transform.forward * Time.deltaTime * curSpeed);
-
-            if (gearState.isReverseState)
-                characterController.Move(-transform.forward * Time.deltaTime * curSpeed);
+            rb.AddForce(new Vector3(0, 0, inputDetecter.leftJoyStickYValue * maxSpeed));
         }
 
         if (inputDetecter.rightJoyStickYValue != 0)
         {
-            curSpeed += maxSpeed * inputDetecter.rightJoyStickYValue * accelLerpValue;
-
-            if (curSpeed > maxSpeed)
-                curSpeed = maxSpeed;
-
-            if (gearState.isDriveState)
-                characterController.Move(transform.forward * Time.deltaTime * curSpeed);
-
-            if (gearState.isReverseState)
-                characterController.Move(-transform.forward * Time.deltaTime * curSpeed);
+            rb.AddForce(new Vector3(0, 0, inputDetecter.rightJoyStickYValue * maxSpeed));
         }
     }
 
@@ -139,29 +107,13 @@ public class CarDriver : MonoBehaviour
 
         if (inputDetecter.leftJoyStickYValue != 0)
         {
-            curSpeed += maxSpeed * inputDetecter.leftJoyStickYValue * breakLerpValue;
-            if (curSpeed < 0)
-                curSpeed = 0;
-
-            if (gearState.isDriveState)
-                characterController.Move(transform.forward * Time.deltaTime * curSpeed);
-
-            if (gearState.isReverseState)
-                characterController.Move(-transform.forward * Time.deltaTime * curSpeed);
+            rb.AddForce(new Vector3(0, 0, -inputDetecter.leftJoyStickYValue * maxSpeed));
 
         }
 
         if (inputDetecter.rightJoyStickYValue != 0)
         {
-            curSpeed += maxSpeed * inputDetecter.rightJoyStickYValue * breakLerpValue;
-            if (curSpeed < 0)
-                curSpeed = 0;
-
-            if (gearState.isDriveState)
-                characterController.Move(transform.forward * Time.deltaTime * curSpeed);
-
-            if (gearState.isReverseState)
-                characterController.Move(-transform.forward * Time.deltaTime * curSpeed);
+            rb.AddForce(new Vector3(0, 0, -inputDetecter.rightJoyStickYValue * maxSpeed));
         }
     }
 
@@ -169,8 +121,7 @@ public class CarDriver : MonoBehaviour
     {
         SetHandleValue();
 
-        if (isMoving)
-            transform.RotateAround(transform.position, new Vector3(0f, 1f, 0f), -handleRotateSpeed * setHandleValue);
+        transform.RotateAround(transform.position, new Vector3(0f, 1f, 0f), -handleRotateSpeed * setHandleValue);
     }
 
     private void SetHandleValue()

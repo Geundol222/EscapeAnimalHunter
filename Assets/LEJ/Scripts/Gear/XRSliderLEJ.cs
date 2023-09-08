@@ -107,6 +107,7 @@ namespace UnityEngine.XR.Content.Interaction
 
         void UpdateSliderPosition()
         {
+            
             // Put anchor position into slider space
             var localPosition = transform.InverseTransformPoint(m_Interactor.GetAttachTransform(this).position);
             var sliderValue = Mathf.Clamp01((localPosition.x - m_MinPosition) / (m_MaxPosition - m_MinPosition));
