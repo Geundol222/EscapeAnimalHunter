@@ -9,22 +9,27 @@ public abstract class Animal : MonoBehaviour, IHittable
 
     [SerializeField] public AnimalData data;
     [SerializeField] public AnimalName animalName;
-    [HideInInspector]public Animator animator;
-    [HideInInspector]public Collider[] colliders;
-    [HideInInspector]public int curHp;
-    [HideInInspector]public bool isHit;
-    [HideInInspector]public bool isUnconscious;
-    [HideInInspector]public float delayTime;
+    [HideInInspector] public Animator animator;
+    [HideInInspector] public Collider[] colliders;
+    [HideInInspector] public int curHp;
+    [HideInInspector] public float trackingTime = 0;
+    [HideInInspector] public bool isHit;
+    [HideInInspector] public bool isUnconscious;
+    [HideInInspector] public bool isTracking;
+    [HideInInspector] public float delayTime;
 
     public SelectorNode hitNode = new SelectorNode();
     public SequenceNode trackingNode = new SequenceNode();
     public SelectorNode idleNode = new SelectorNode();
 
-    private void Awake()
+    protected void Awake()
     {
         animator = GetComponent<Animator>();
         colliders = GetComponentsInChildren<Collider>();
         isHit = false;
+        trackingTime = 0;
+        isUnconscious = false;
+        isTracking = false;
         curHp = data.Animals[(int)animalName].maxHp;
         delayTime = 0;
         SetUpBT();
@@ -36,7 +41,7 @@ public abstract class Animal : MonoBehaviour, IHittable
     {
         delayTime += Time.deltaTime;
 
-        if (delayTime >= 0.5f)
+        if (delayTime >= 0.5f && !isUnconscious)
         {
             bTBase.Update();
             delayTime = 0;
@@ -53,7 +58,7 @@ public abstract class Animal : MonoBehaviour, IHittable
         curHp -= damage;
         isHit = true;
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         isHit = false;
 

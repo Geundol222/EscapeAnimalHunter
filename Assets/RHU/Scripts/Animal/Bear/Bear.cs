@@ -16,7 +16,7 @@ public class Bear : Animal
         {
             new BearTrackingCondition(this),
             new BearRunAction(this),
-            new BearCheckPlayerNearCondition(this),
+            new BearCheckFieldOfViewCondition(this),
             new BearAttackAction(this)
         };
 
