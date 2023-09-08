@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class TestPo : MonoBehaviour
 {
     [SerializeField] XROrigin player;
     [SerializeField] Transform pos;
     [SerializeField] bool carBoarding;
+    [SerializeField] Transform look;
 
     public Vector3 poos;
 
@@ -19,11 +21,9 @@ public class TestPo : MonoBehaviour
 
     public void Test()
     {
-        carBoarding = true;
-        if (carBoarding)
-        {
-            player.transform.position = poos;
-            player.transform.Rotate(0,-90,0);
-        }
+
+        player.transform.position = poos;
+        transform.LookAt(look);
     }
+        
 }
