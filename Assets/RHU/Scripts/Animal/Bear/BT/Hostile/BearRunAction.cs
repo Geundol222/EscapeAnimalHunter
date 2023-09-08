@@ -6,6 +6,7 @@ public class BearRunAction : ActionNode
 {
     public float TrackingTime { get { return owner.trackingTime; } set { owner.trackingTime = value; } }
     public bool IsHostile { get { return owner.isHostile; } set { owner.isHostile = value; } }
+    public bool IsTracking { get { return owner.isTracking; } set { owner.isTracking= value; } }
 
     public BearRunAction(Animal owner) : base(owner)
     {
@@ -14,20 +15,21 @@ public class BearRunAction : ActionNode
 
     public override NodeState Evaluate()
     {
-        if (TrackingTime <= 1f)
+        if (TrackingTime <= 15f)
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Run_Bear"))
+            random = 8;
+
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Run_Bear") && !IsTracking)
                 animator.SetInteger("RandomRun", RandomRun());      // Animator에서 0 == Left Run, 1 == Right Run, 나머지는 run 계속 재생
             
             TrackingTime += Time.deltaTime;
-            Debug.Log($"TrackingTme : {TrackingTime}");
             
-            return NodeState.Running;
+            return NodeState.Success;
         }
 
         TrackingTime = 0;
         animator.SetBool("IsHostile", IsHostile = false);
-        Debug.Log("Run false");
+
         return NodeState.Failure;
     }
 

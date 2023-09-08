@@ -16,6 +16,7 @@ public abstract class Animal : MonoBehaviour, IHittable
     [HideInInspector] public bool isHit;
     [HideInInspector] public bool isUnconscious;
     [HideInInspector] public bool isHostile;
+    [HideInInspector] public bool isTracking;
     [HideInInspector] public float delayTime;
 
     public SelectorNode hitNode = new SelectorNode();
@@ -39,13 +40,15 @@ public abstract class Animal : MonoBehaviour, IHittable
 
     private void Update()
     {
-        delayTime += Time.deltaTime;
+        //delayTime += Time.deltaTime;
 
-        if (delayTime >= 0.5f && !isUnconscious)
-        {
-            bTBase.Update();
-            delayTime = 0;
-        }
+        //if (delayTime >= 0.5f && !isUnconscious)
+        //{
+        //    bTBase.Update();
+        //    delayTime = 0;
+        //}
+
+        bTBase.Update();
     }
 
     public void TakeHit(int damage)

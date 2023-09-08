@@ -6,11 +6,28 @@ using UnityEngine;
 public class FieldOfView : MonoBehaviour
 {
     [Header("FieldOfView")]
-    [SerializeField] float range;
-    [SerializeField, Range(0, 360)] float angle;
-    [SerializeField] LayerMask targetMask;
-    [SerializeField] LayerMask obstacleMask;
+    [SerializeField] public float range;
+    [SerializeField, Range(0, 360)] public float angle;
+    [SerializeField] public LayerMask targetMask;
+    [SerializeField] public LayerMask obstacleMask;
     [NonSerialized] public bool foundPlayer;
+    [NonSerialized] public Transform playerTransform;
+
+    //[Header("FieldOfView")]
+    //public float range;
+    //public float angle;
+    //public LayerMask targetMask;
+    //public LayerMask obstacleMask;
+    //public bool foundPlayer;
+
+    //private void Awake()
+    //{
+    //    range = 150;
+    //    angle = 90;
+    //    targetMask = LayerMask.NameToLayer("Player");
+    //    obstacleMask = LayerMask.NameToLayer("Object");
+    //    foundPlayer = false;
+    //}
 
     public bool FindPlayer()
     {
@@ -29,6 +46,7 @@ public class FieldOfView : MonoBehaviour
 
             Debug.Log(foundPlayer);
             Debug.DrawRay(transform.position, dirTarget * distToTarget, Color.red);
+            playerTransform = collider.transform;
 
             return foundPlayer = true;
         }
