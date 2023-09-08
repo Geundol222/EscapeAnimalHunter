@@ -7,7 +7,7 @@ namespace UnityEngine.XR.Content.Interaction
     /// <summary>
     /// An interactable that follows the position of the interactor on a single axis
     /// </summary>
-    public class XRSlider : XRBaseInteractable
+    public class XRSliderLEJ : XRBaseInteractable
     {
         public bool isGrabbing;
         public UnityAction OnStopGrabbing;
@@ -107,6 +107,7 @@ namespace UnityEngine.XR.Content.Interaction
 
         void UpdateSliderPosition()
         {
+            
             // Put anchor position into slider space
             var localPosition = transform.InverseTransformPoint(m_Interactor.GetAttachTransform(this).position);
             var sliderValue = Mathf.Clamp01((localPosition.x - m_MinPosition) / (m_MaxPosition - m_MinPosition));
