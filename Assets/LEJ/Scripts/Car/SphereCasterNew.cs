@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class SphereCasterNew : MonoBehaviour
 {
-    [SerializeField] float radiusMax; //15f
+    [SerializeField] public float radiusMax; //15f
     [SerializeField] float radiusGrowUpSpeed; //10f
     public UnityAction<Transform> OnDetect;
 

@@ -48,7 +48,7 @@ public class RadarCanvas : MonoBehaviour
     private void MakePoint(Transform animalPosition)
     {
         circles[index].SetActive(true);
-        circles[index].gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3((car.position.x - animalPosition.position.x) * 0.002f, (animalPosition.position.z - car.position.z) * 0.007f, 0f);
+        circles[index].gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3((car.position.x - animalPosition.position.x) * (0.02f / sphereCaster.radiusMax), (animalPosition.position.z - car.position.z) * (0.07f / sphereCaster.radiusMax), 0f);
         returnCircleRoutine = StartCoroutine(ReturnCircle());
         index++;
         if (index >= circles.Length)
