@@ -6,7 +6,8 @@ using UnityEngine;
 public class FieldOfView : MonoBehaviour
 {
     [Header("FieldOfView")]
-    [SerializeField] public float range;
+    [SerializeField] public float trackingRange;
+    [SerializeField] public float attackRange;
     [SerializeField, Range(0, 360)] public float angle;
     [SerializeField] public LayerMask targetMask;
     [SerializeField] public LayerMask obstacleMask;
@@ -14,7 +15,7 @@ public class FieldOfView : MonoBehaviour
     [NonSerialized] public Transform playerTransform;
 
     //[Header("FieldOfView")]
-    //public float range;
+    //public float trackingRange;
     //public float angle;
     //public LayerMask targetMask;
     //public LayerMask obstacleMask;
@@ -22,7 +23,7 @@ public class FieldOfView : MonoBehaviour
 
     //private void Awake()
     //{
-    //    range = 150;
+    //    trackingRange = 150;
     //    angle = 90;
     //    targetMask = LayerMask.NameToLayer("Player");
     //    obstacleMask = LayerMask.NameToLayer("Object");
@@ -31,9 +32,10 @@ public class FieldOfView : MonoBehaviour
 
     public bool FindPlayer()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, range, targetMask);            // 1. 범위 안에 있는지
+        Collider[] trackingColliders = Physics.OverlapSphere(transform.position, trackingRange, targetMask);            // 1. 범위 안에 있는지
+        Collider[] attackColliders = Physics.OverlapSphere(transform.position, trackingRange, targetMask);
 
-        foreach (Collider collider in colliders)
+        foreach (Collider collider in trackingColliders)
         {
             Vector3 dirTarget = (collider.transform.position - transform.position).normalized;          // 2. 앞에 있는지
             if (Vector3.Dot(transform.forward, dirTarget) < Mathf.Cos(angle * 0.5f * Mathf.Deg2Rad))    // Dot은 내적
@@ -57,11 +59,17 @@ public class FieldOfView : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, range);
-        Vector3 rightDir = AngleToDir(transform.eulerAngles.y + angle * 0.5f);
-        Vector3 leftDir = AngleToDir(transform.eulerAngles.y - angle * 0.5f);
-        Debug.DrawRay(transform.position, rightDir * range, Color.red);
-        Debug.DrawRay(transform.position, leftDir * range, Color.red);
+        Gizmos.DrawWireSphere(transform.position, trackingRange);
+        Vector3 rightDir1 = AngleToDir(transform.eulerAngles.y + angle * 0.5f);
+        Vector3 leftDir1 = AngleToDir(transform.eulerAngles.y - angle * 0.5f);
+        Debug.DrawRay(transform.position, rightDir1 * trackingRange, Color.red);
+        Debug.DrawRay(transform.position, leftDir1 * trackingRange, Color.red);
+
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Vector3 rightDir2 = AngleToDir(transform.eulerAngles.y + angle * 0.5f);
+        Vector3 leftDir2 = AngleToDir(transform.eulerAngles.y - angle * 0.5f);
+        Debug.DrawRay(transform.position, rightDir2 * attackRange, Color.blue);
+        Debug.DrawRay(transform.position, leftDir2 * attackRange, Color.blue);
     }
 
     private Vector3 AngleToDir(float angle)

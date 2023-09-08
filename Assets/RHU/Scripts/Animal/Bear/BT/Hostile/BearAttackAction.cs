@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class BearAttackAction : ActionNode
 {
+    private bool IsAttack { get { return owner.isAttack; } set { owner.isAttack = value; } }
+    private FieldOfView fieldOfView { get { return owner.fieldOfView; } }
+
     public BearAttackAction(Bear owner) : base(owner)
     {
-
+        
     }
 
     public override NodeState Evaluate()
