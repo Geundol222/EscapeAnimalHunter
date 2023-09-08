@@ -1,81 +1,283 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Security;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Transformers;
 
 public class XRGunGrabInteractable : XRGrabInteractable
 {
-    [SerializeField] Transform gunHandleAttach;
-    [SerializeField] Transform gunBodyAttach;
+    [SerializeField, Range(0f, 1f)]
+    float m_LerpParameter = 0.5f;
 
-    IXRSelectInteractor[] interactors;
-
-    private void Start()
+    public float lerpParameter
     {
-        interactors = new IXRSelectInteractor[2];
+        get => m_LerpParameter;
+        set => m_LerpParameter = value;
+    }
+
+    [SerializeField]
+    float m_Dot;
+
+    public enum SlerpMethod
+    {
+        BuiltIn,
+        Alternate,
+        Hybrid,
+    }
+
+    [SerializeField]
+    SlerpMethod m_SlerpMethod;
+
+    [SerializeField]
+    bool m_SlerpShortWay;
+
+    readonly List<Pose> k_InteractorPoses = new List<Pose>();
+    protected List<Pose> interactorPoses => k_InteractorPoses;
+
+    readonly List<IXRSelectInteractor> m_SecondaryInteractors = new List<IXRSelectInteractor>();
+    protected List<IXRSelectInteractor> secondaryInteractors => m_SecondaryInteractors;
+
+    protected bool m_SecondarySelection;
+    protected bool secondarySelection => m_SecondarySelection;
+
+    protected override void Awake()
+    {
         base.Awake();
+
+        // We must have an attach point, so make one if it's not set or is the object itself
+        if (attachTransform == null || attachTransform == transform)
+        {
+            var newAttach = new GameObject("Attach").transform;
+            newAttach.parent = transform;
+            attachTransform = newAttach;
+        }
     }
 
-    //protected override void OnSelectEntered(SelectEnterEventArgs args)
-    //{
-    //    base.OnSelectEntered(args);
-    //    SetPriority(args);
-    //    SetFirstAttachPoint(args);
-    //}
-
-    public void SetPriority(SelectEnterEventArgs args)
+    protected override void OnSelectEntering(SelectEnterEventArgs args)
     {
-        if (interactors.Length >= 2)
-            return;
-
-        if (interactorsSelecting.Count <= 1 || ReferenceEquals(args.interactorObject, interactorsSelecting[0]))
+        // No grab? Use base
+        if (!isSelected)
         {
-            interactors[0] = args.interactorObject;
+            base.OnSelectEntering(args);
+            return;
+        }
+
+        // Existing grab? Just store the interactor
+        m_SecondaryInteractors.Add(args.interactorObject);
+        m_SecondarySelection = true;
+    }
+
+    protected override void OnSelectEntered(SelectEnterEventArgs args)
+    {
+        // Pre-existing selection - we ignore this
+        if (!m_SecondarySelection)
+        {
+            base.OnSelectEntered(args);
         }
         else
         {
-            interactors[1] = args.interactorObject;
-        }
-    }
-
-    public override Transform GetAttachTransform(IXRInteractor interactor)
-    {
-        bool isFirst = interactorsSelecting.Count <= 1 || ReferenceEquals(interactor, interactorsSelecting[0]);
-           
-        if (!isFirst)
-        {
-            return secondaryAttachTransform;
+            // Hack - If using a dynamic attach, re-trigger the recentering code
+            RecenterDynamicAttach();
         }
 
-        return attachTransform != null ? attachTransform : base.GetAttachTransform(interactor);
+        m_SecondarySelection = false;
     }
 
-    public void SetFirstAttachPoint(SelectEnterEventArgs args)
+    protected override void OnSelectExiting(SelectExitEventArgs args)
     {
-        if (attachTransform == gunBodyAttach && args.interactorObject == interactors[0])
+        // If a secondary selection is exiting, just remove from the list
+        var index = m_SecondaryInteractors.IndexOf(args.interactorObject);
+        if (index == -1)
         {
-            attachTransform = gunHandleAttach;
-            secondaryAttachTransform = gunBodyAttach;
+            base.OnSelectExiting(args);
+            return;
+        }
+
+        RemoveSecondarySelection(index);
+        m_SecondarySelection = true;
+    }
+
+    protected override void OnSelectExited(SelectExitEventArgs args)
+    {
+        // secondary selection - ignore
+        if (!m_SecondarySelection)
+        {
+            base.OnSelectExited(args);
+
+            // Transfer the secondary interactor over to this object if it exists
+            // If not, disable the secondary interactable so it doesn't go around stealing inputs early
+            if (m_SecondaryInteractors.Count > 0)
+            {
+                var primaryInteractor = m_SecondaryInteractors[0];
+                RemoveSecondarySelection(0);
+
+                Pose? attachTransformPose = null;
+                Pose? originalAttachTransformPose = null;
+                Transform originalAttachTransform = null;
+                if (primaryInteractor is XRRayInteractor)
+                {
+                    attachTransformPose = new Pose(GetAttachTransform(primaryInteractor).position, GetAttachTransform(primaryInteractor).rotation);
+                    originalAttachTransform = primaryInteractor.transform.Find($"[{primaryInteractor.transform.name}] Original Attach");
+                    if (originalAttachTransform != null)
+                        originalAttachTransformPose = new Pose(originalAttachTransform.position, originalAttachTransform.rotation);
+                }
+
+                interactionManager.SelectEnter(primaryInteractor, this);
+
+                if (attachTransformPose.HasValue)
+                    GetAttachTransform(primaryInteractor).SetPositionAndRotation(attachTransformPose.Value.position, attachTransformPose.Value.rotation);
+
+                if (originalAttachTransformPose.HasValue)
+                    originalAttachTransform.SetPositionAndRotation(originalAttachTransformPose.Value.position, originalAttachTransformPose.Value.rotation);
+            }
         }
         else
-            return;
+        {
+            m_SecondarySelection = false;
+
+            // Hack - If using a dynamic attach, re-trigger the recentering code
+            RecenterDynamicAttach();
+        }
     }
 
-    //protected override void OnSelectExited(SelectExitEventArgs args)
-    //{
-    //    base.OnSelectExited(args);
-    //    SetSecondAttachPoint(args);
-    //}
-
-    public void SetSecondAttachPoint(SelectExitEventArgs args)
+    /// <summary>
+    /// Remove the secondary selection at the given index from the list 
+    /// </summary>
+    /// <param name="index">Selection index</param>
+    private void RemoveSecondarySelection(int index)
     {
-        if (attachTransform == gunHandleAttach && args.interactorObject == interactors[0])
+        m_SecondaryInteractors.RemoveAt(index);
+    }
+
+    // Process function that looks for secondary interactor and mediates the attach point
+    public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
+    {
+        // Cache the local position of the attach transform as we may be messing with it
+        var localAttachPosition = attachTransform.localPosition;
+        var localAttachRotation = attachTransform.localRotation;
+
+        if (isSelected)
         {
-            attachTransform = interactors[1].transform;
-            secondaryAttachTransform = null;
+            // If the secondary interactors are available perform multi-grab processing
+            if (m_SecondaryInteractors.Count > 0)
+            {
+                var primaryTransform = GetAttachTransform(interactorsSelecting[0]);
+
+                k_InteractorPoses.Clear();
+
+                // The first interactor pose is the identity, as everything is in primary-interactor space
+                k_InteractorPoses.Add(new Pose(primaryTransform.position, primaryTransform.rotation));
+
+                // For each secondary interactor
+                // We transform the secondary attach point as if the primary interactor has complete control
+                // We then tranform the secondary interactor positions into this local space
+                for (var i = 0; i < m_SecondaryInteractors.Count; i++)
+                {
+                    var secondaryTransform = GetAttachTransform(m_SecondaryInteractors[i]);
+                    k_InteractorPoses.Add(new Pose(secondaryTransform.position, secondaryTransform.rotation));
+                }
+
+                var finalPose = ProcessesMultiGrab(k_InteractorPoses);
+
+                // Put final pose into primary transform space
+                attachTransform.position = attachTransform.position + (primaryTransform.position - finalPose.position);
+                attachTransform.rotation = attachTransform.rotation * Quaternion.Inverse(Quaternion.Inverse(primaryTransform.rotation) * finalPose.rotation);
+            }
         }
-        else
-            return;
+
+        base.ProcessInteractable(updatePhase);
+
+        // Restore the attach transform back to normal
+        attachTransform.localPosition = localAttachPosition;
+        attachTransform.localRotation = localAttachRotation;
+    }
+
+    /// <summary>
+    /// Process multiple grab influences down to a single pose
+    /// </summary>
+    /// <param name="influences">Poses of all interactors selecting this object, in world space.  Sorted in chronological order. There will always be at least two poses.</param>
+    /// <param name="relativeInfluences">Poses of all interactors selecting this object, relative to their individual attach points</param>
+    /// <returns>The desired 'final' pose to be used to position the interactable</returns>
+    public virtual Pose ProcessesMultiGrab(List<Pose> influences)
+    {
+        m_Dot = Quaternion.Dot(influences[0].rotation, influences[1].rotation);
+
+        // Average positions and rotations together
+        var position = Vector3.Lerp(influences[0].position, influences[1].position, m_LerpParameter);
+        var rotation = Slerp(influences[0].rotation, influences[1].rotation, m_LerpParameter);
+        var finalPose = new Pose(position, rotation);
+
+        return finalPose;
+    }
+
+    void RecenterDynamicAttach()
+    {
+        // Hack - If using a dynamic attach, re-trigger the recentering code
+        var dynamicAttach = attachTransform.GetComponent<DynamicAttach>();
+        if (dynamicAttach != null && dynamicAttach.enabled)
+        {
+            var primaryTransform = GetAttachTransform(interactorsSelecting[0]);
+            if (m_SecondaryInteractors.Count > 0)
+            {
+                k_InteractorPoses.Clear();
+
+                // The first interactor pose is the identity, as everything is in primary-interactor space
+                k_InteractorPoses.Add(new Pose(primaryTransform.position, primaryTransform.rotation));
+
+                // For each secondary interactor
+                // We transform the secondary attach point as if the primary interactor has complete control
+                // We then tranform the secondary interactor positions into this local space
+                for (var i = 0; i < m_SecondaryInteractors.Count; i++)
+                {
+                    var secondaryTransform = GetAttachTransform(m_SecondaryInteractors[i]);
+                    k_InteractorPoses.Add(new Pose(secondaryTransform.position, secondaryTransform.rotation));
+                }
+
+                var finalPose = ProcessesMultiGrab(k_InteractorPoses);
+                dynamicAttach.Recenter(finalPose.position, finalPose.rotation);
+            }
+            else
+                dynamicAttach.Recenter(primaryTransform.position, primaryTransform.rotation);
+        }
+    }
+
+    static Quaternion Invert(Quaternion q)
+    {
+        return new Quaternion(-q.x, -q.y, -q.z, -q.w);
+    }
+
+    Quaternion Slerp(Quaternion p, Quaternion q, float t)
+    {
+        switch (m_SlerpMethod)
+        {
+            case SlerpMethod.BuiltIn:
+                return Quaternion.Slerp(p, q, t);
+            case SlerpMethod.Alternate:
+                return Slerp(p, q, t, m_SlerpShortWay);
+            case SlerpMethod.Hybrid:
+                return m_Dot < 0f ? Slerp(p, q, t, m_SlerpShortWay) : Quaternion.Slerp(p, q, t);
+            default:
+                throw new NotImplementedException("Invalid SlerpMethod");
+        }
+    }
+
+    static Quaternion Slerp(Quaternion p, Quaternion q, float t, bool shortWay)
+    {
+        float dot = Quaternion.Dot(p, q);
+        float sign = (shortWay && dot < 0.0f) ? -1f : 1f;
+        float angle = Mathf.Acos(dot * sign);
+        float division = 1f / Mathf.Sin(angle);
+        float t0 = Mathf.Sin((1f - t) * angle) * division * sign;
+        float t1 = Mathf.Sin((t) * angle) * division;
+        return new Quaternion(
+            p.x * t0 + q.x * t1,
+            p.y * t0 + q.y * t1,
+            p.z * t0 + q.z * t1,
+            p.w * t0 + q.w * t1
+        );
     }
 }

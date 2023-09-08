@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Animal
   layers:
   - Default
   - TransparentFX
@@ -11,13 +12,13 @@ TagManager:
   - Player
   - Water
   - UI
-  - Animal
   - Grab
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Bolt
+  - Ground
+  - NotGround
+  - Carnivore
+  - Herbivore
+  - Bullet
   - 
   - 
   - 
