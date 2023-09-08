@@ -6,7 +6,7 @@
             "id": "b77be5c4-240f-4695-823e-a986edbf486b",
             "actions": [
                 {
-                    "name": "RightTriggerPressed",
+                    "name": "RightGripPressed",
                     "type": "PassThrough",
                     "id": "496f192f-26c2-4ac3-937e-544c1609d68b",
                     "expectedControlType": "Button",
@@ -15,7 +15,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "LeftTriggerPressed",
+                    "name": "LeftGripPressed",
                     "type": "PassThrough",
                     "id": "33c67ebf-f4dc-405b-9cc6-eed511278fd5",
                     "expectedControlType": "Button",
@@ -31,28 +31,37 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "LeftJoyStick",
+                    "type": "Value",
+                    "id": "8bc2ab6d-812d-481b-ba6a-ce614e4f26f8",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
                 {
                     "name": "",
                     "id": "f004ce00-5be7-42c6-b0c5-3ed53f617e43",
-                    "path": "<XRController>{RightHand}/triggerPressed",
+                    "path": "<XRController>{RightHand}/gripPressed",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "RightTriggerPressed",
+                    "action": "RightGripPressed",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "0a4489e3-dbf3-4c43-975b-0f48d66c6e5f",
-                    "path": "<XRController>{LeftHand}/triggerPressed",
+                    "path": "<XRController>{LeftHand}/gripPressed",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "LeftTriggerPressed",
+                    "action": "LeftGripPressed",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -64,6 +73,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "RightJoyStick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8441131d-290e-4c0d-9f1e-48b0e4b42b54",
+                    "path": "<XRController>{LeftHand}/primary2DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftJoyStick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

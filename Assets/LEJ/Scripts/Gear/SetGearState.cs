@@ -10,11 +10,11 @@ public class SetGearState : MonoBehaviour
     [SerializeField] public bool isNeutralState;
     [SerializeField] public bool isDriveState;
 
-    XRSlider slider;
+    XRSliderLEJ slider;
 
     private void Awake()
     {
-        slider = GetComponent<XRSlider>();
+        slider = GetComponent<XRSliderLEJ>();
         slider.value = 0f;
     }
 
