@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8166518103568379345}
   - component: {fileID: 6872912441333210332}
   - component: {fileID: 7506125065514030748}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -241,7 +241,10 @@ MonoBehaviour:
   bulletSpeed: 100
   groundMask:
     serializedVersion: 2
-    m_Bits: 256
-  animalMask:
+    m_Bits: 128
+  carnivoreMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1024
+  herbivoreMask:
+    serializedVersion: 2
+    m_Bits: 2048

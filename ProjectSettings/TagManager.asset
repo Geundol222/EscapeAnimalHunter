@@ -12,13 +12,13 @@ TagManager:
   - Player
   - Water
   - UI
-  - Animal
   - Grab
-  - Ground
-  - SecondHandGrab
   - Bolt
-  - 
-  - 
+  - Ground
+  - NotGround
+  - Carnivore
+  - Herbivore
+  - Bullet
   - 
   - 
   - 

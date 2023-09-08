@@ -9,7 +9,8 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField] float bulletSpeed;
     [SerializeField] LayerMask groundMask;
-    [SerializeField] LayerMask animalMask;
+    [SerializeField] LayerMask carnivoreMask;
+    [SerializeField] LayerMask herbivoreMask;
 
     Rigidbody rb;
 

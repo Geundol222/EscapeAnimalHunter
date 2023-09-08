@@ -120,7 +120,7 @@ public class XRGunGrabInteractable : XRGrabInteractable
                 Transform originalAttachTransform = null;
                 if (primaryInteractor is XRRayInteractor)
                 {
-                    attachTransformPose = new Pose(primaryInteractor.GetAttachTransform(this).position, primaryInteractor.GetAttachTransform(this).rotation);
+                    attachTransformPose = new Pose(GetAttachTransform(primaryInteractor).position, GetAttachTransform(primaryInteractor).rotation);
                     originalAttachTransform = primaryInteractor.transform.Find($"[{primaryInteractor.transform.name}] Original Attach");
                     if (originalAttachTransform != null)
                         originalAttachTransformPose = new Pose(originalAttachTransform.position, originalAttachTransform.rotation);
@@ -129,7 +129,7 @@ public class XRGunGrabInteractable : XRGrabInteractable
                 interactionManager.SelectEnter(primaryInteractor, this);
 
                 if (attachTransformPose.HasValue)
-                    primaryInteractor.GetAttachTransform(this).SetPositionAndRotation(attachTransformPose.Value.position, attachTransformPose.Value.rotation);
+                    GetAttachTransform(primaryInteractor).SetPositionAndRotation(attachTransformPose.Value.position, attachTransformPose.Value.rotation);
 
                 if (originalAttachTransformPose.HasValue)
                     originalAttachTransform.SetPositionAndRotation(originalAttachTransformPose.Value.position, originalAttachTransformPose.Value.rotation);
@@ -165,7 +165,7 @@ public class XRGunGrabInteractable : XRGrabInteractable
             // If the secondary interactors are available perform multi-grab processing
             if (m_SecondaryInteractors.Count > 0)
             {
-                var primaryTransform = interactorsSelecting[0].GetAttachTransform(this);
+                var primaryTransform = GetAttachTransform(interactorsSelecting[0]);
 
                 k_InteractorPoses.Clear();
 
@@ -177,7 +177,7 @@ public class XRGunGrabInteractable : XRGrabInteractable
                 // We then tranform the secondary interactor positions into this local space
                 for (var i = 0; i < m_SecondaryInteractors.Count; i++)
                 {
-                    var secondaryTransform = m_SecondaryInteractors[i].GetAttachTransform(this);
+                    var secondaryTransform = GetAttachTransform(m_SecondaryInteractors[i]);
                     k_InteractorPoses.Add(new Pose(secondaryTransform.position, secondaryTransform.rotation));
                 }
 
@@ -220,7 +220,7 @@ public class XRGunGrabInteractable : XRGrabInteractable
         var dynamicAttach = attachTransform.GetComponent<DynamicAttach>();
         if (dynamicAttach != null && dynamicAttach.enabled)
         {
-            var primaryTransform = interactorsSelecting[0].GetAttachTransform(this);
+            var primaryTransform = GetAttachTransform(interactorsSelecting[0]);
             if (m_SecondaryInteractors.Count > 0)
             {
                 k_InteractorPoses.Clear();
@@ -233,7 +233,7 @@ public class XRGunGrabInteractable : XRGrabInteractable
                 // We then tranform the secondary interactor positions into this local space
                 for (var i = 0; i < m_SecondaryInteractors.Count; i++)
                 {
-                    var secondaryTransform = m_SecondaryInteractors[i].GetAttachTransform(this);
+                    var secondaryTransform = GetAttachTransform(m_SecondaryInteractors[i]);
                     k_InteractorPoses.Add(new Pose(secondaryTransform.position, secondaryTransform.rotation));
                 }
 
