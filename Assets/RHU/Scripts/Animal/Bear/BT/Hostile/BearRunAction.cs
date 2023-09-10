@@ -17,10 +17,8 @@ public class BearRunAction : ActionNode
     {
         if (TrackingTime <= 15f)
         {
-            random = 8;
-
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Run_Bear") && !IsTracking)
-                animator.SetInteger("RandomRun", RandomRun());      // Animator에서 0 == Left Run, 1 == Right Run, 나머지는 run 계속 재생
+                animator.SetInteger("RandomRun", RandomRun());
             
             TrackingTime += Time.deltaTime;
             
@@ -35,13 +33,13 @@ public class BearRunAction : ActionNode
 
     private int RandomRun()
     {
-        RandomAction(9);
+        RandomAction(8);
 
         if (random <= 1)
-            return 0;
-        else if (2 <= random && random <= 3)
             return 1;
+        else if (2 <= random && random <= 3)
+            return 2;
 
-        return random;
+        return 0;                               // Animator에서 1 == Left Run, 2 == Right Run, 나머지는 run 계속 재생
     }
 }

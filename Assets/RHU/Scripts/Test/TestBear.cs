@@ -42,7 +42,7 @@ public class TestBear : MonoBehaviour, IHittable
             return;
 
         isAlive = false;
-        animator.SetBool("IsUnconscious", true);
+        animator.SetBool("IsDie", true);
     }
 
     public void TakeHit(int damage)

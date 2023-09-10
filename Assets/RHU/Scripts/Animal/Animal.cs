@@ -15,12 +15,10 @@ public abstract class Animal : MonoBehaviour, IHittable
     [NonSerialized] public FieldOfView fieldOfView;
     [NonSerialized] public int curHp;
     [NonSerialized] public float trackingTime = 0;
-    [NonSerialized] public bool isHit;
-    [NonSerialized] public bool isUnconscious;
-    [NonSerialized] public bool isHostile;
-    [NonSerialized] public bool isTracking;
-    [NonSerialized] public bool isAttack;
-    [NonSerialized] public float delayTime;
+    [NonSerialized] public bool isHit = false;
+    [NonSerialized] public bool isDie = false;
+    [NonSerialized] public bool isHostile = false;
+    [NonSerialized] public bool isTracking = false;
 
     public SelectorNode hitNode = new SelectorNode();
     public SequenceNode hostileNode = new SequenceNode();
@@ -31,12 +29,7 @@ public abstract class Animal : MonoBehaviour, IHittable
         animator = GetComponent<Animator>();
         colliders = GetComponentsInChildren<Collider>();
         fieldOfView = GetComponent<FieldOfView>();
-        isHit = false;
-        trackingTime = 0;
-        isUnconscious = false;
-        isHostile = false;
         curHp = data.Animals[(int)animalName].maxHp;
-        delayTime = 0;
         SetUpBT();
     }
 
@@ -44,15 +37,8 @@ public abstract class Animal : MonoBehaviour, IHittable
 
     private void Update()
     {
-        //delayTime += Time.deltaTime;
-
-        //if (delayTime >= 0.5f && !isUnconscious)
-        //{
-        //    bTBase.Update();
-        //    delayTime = 0;
-        //}
-
-        bTBase.Update();
+        if (!isDie)
+            bTBase.Update();
     }
 
     public void TakeHit(int damage)

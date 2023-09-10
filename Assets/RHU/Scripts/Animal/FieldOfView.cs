@@ -5,35 +5,18 @@ using UnityEngine;
 
 public class FieldOfView : MonoBehaviour
 {
-    [Header("FieldOfView")]
     [SerializeField] public float trackingRange;
     [SerializeField] public float attackRange;
-    [SerializeField, Range(0, 360)] public float angle;
+    [SerializeField, Range(0, 360)] public float trackingAngle;
+    [SerializeField, Range(0, 360)] public float attackAngle;
     [SerializeField] public LayerMask targetMask;
     [SerializeField] public LayerMask obstacleMask;
     [NonSerialized] public bool foundPlayer;
     [NonSerialized] public Transform playerTransform;
 
-    //[Header("FieldOfView")]
-    //public float trackingRange;
-    //public float angle;
-    //public LayerMask targetMask;
-    //public LayerMask obstacleMask;
-    //public bool foundPlayer;
-
-    //private void Awake()
-    //{
-    //    trackingRange = 150;
-    //    angle = 90;
-    //    targetMask = LayerMask.NameToLayer("Player");
-    //    obstacleMask = LayerMask.NameToLayer("Object");
-    //    foundPlayer = false;
-    //}
-
-    public bool FindPlayer()
+    private bool FindPlayer(float range, float angle)
     {
-        Collider[] trackingColliders = Physics.OverlapSphere(transform.position, trackingRange, targetMask);            // 1. 범위 안에 있는지
-        Collider[] attackColliders = Physics.OverlapSphere(transform.position, trackingRange, targetMask);
+        Collider[] trackingColliders = Physics.OverlapSphere(transform.position, range, targetMask);    // 1. 범위 안에 있는지
 
         foreach (Collider collider in trackingColliders)
         {
@@ -56,18 +39,28 @@ public class FieldOfView : MonoBehaviour
         return foundPlayer = false;
     }
 
+    public bool TrackingFOV()
+    {
+        return FindPlayer(trackingRange, trackingAngle);
+    }
+
+    public bool AttackFOV()
+    {
+        return FindPlayer(attackRange, attackAngle);
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, trackingRange);
-        Vector3 rightDir1 = AngleToDir(transform.eulerAngles.y + angle * 0.5f);
-        Vector3 leftDir1 = AngleToDir(transform.eulerAngles.y - angle * 0.5f);
+        Gizmos.DrawWireSphere(transform.position, trackingRange);                           // tracking
+        Vector3 rightDir1 = AngleToDir(transform.eulerAngles.y + trackingAngle * 0.5f);
+        Vector3 leftDir1 = AngleToDir(transform.eulerAngles.y - trackingAngle * 0.5f);
         Debug.DrawRay(transform.position, rightDir1 * trackingRange, Color.red);
         Debug.DrawRay(transform.position, leftDir1 * trackingRange, Color.red);
 
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-        Vector3 rightDir2 = AngleToDir(transform.eulerAngles.y + angle * 0.5f);
-        Vector3 leftDir2 = AngleToDir(transform.eulerAngles.y - angle * 0.5f);
+        Gizmos.DrawWireSphere(transform.position, attackRange);                             // attack
+        Vector3 rightDir2 = AngleToDir(transform.eulerAngles.y + attackAngle * 0.5f);
+        Vector3 leftDir2 = AngleToDir(transform.eulerAngles.y - attackAngle * 0.5f);
         Debug.DrawRay(transform.position, rightDir2 * attackRange, Color.blue);
         Debug.DrawRay(transform.position, leftDir2 * attackRange, Color.blue);
     }

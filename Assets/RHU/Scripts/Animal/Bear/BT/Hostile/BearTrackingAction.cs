@@ -17,12 +17,12 @@ public class BearTrackingAction : ActionNode
     {
         TrackingTime = 0;
 
-        if (fieldOfView.FindPlayer())
+        if (fieldOfView.TrackingFOV())
         {
             IsTracking = true;
             owner.transform.LookAt(fieldOfView.playerTransform);
 
-            return NodeState.Running;
+            return NodeState.Success;
         }
 
         return NodeState.Failure;

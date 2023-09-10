@@ -6,7 +6,7 @@ public class TestBullet : MonoBehaviour
 {
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Animal"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Carnivore") || collision.gameObject.layer == LayerMask.NameToLayer("Herbivore"))
         {
             IHittable hittable = collision.gameObject.GetComponent<IHittable>();
             hittable?.TakeHit(1);

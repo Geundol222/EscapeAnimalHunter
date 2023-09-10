@@ -13,7 +13,7 @@ public class BearWalkAction : ActionNode
     {
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Walk_Bear"))
         {
-            animator.SetInteger("RandomWalk", RandomWalk());    // Animator에서 0 == Left Walk, 1 == Right Walk, 2 == IdleState로 이동, 나머지는 Walk 계속 재생
+            animator.SetInteger("RandomWalk", RandomWalk());
 
             return NodeState.Running;
         }
@@ -28,6 +28,6 @@ public class BearWalkAction : ActionNode
         if (random == 2 || random == 3)
             return 2;
 
-        return random;
+        return random;                  // Animator에서 0 == Left Walk, 1 == Right Walk, 2 == IdleState로 이동, 나머지는 Walk 계속 재생
     }
 }

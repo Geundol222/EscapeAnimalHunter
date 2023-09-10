@@ -14,7 +14,7 @@ public class BearCheckFieldOfViewCondition : ActionNode
 
     public override NodeState Evaluate()
     {
-        if (fieldOfView.FindPlayer())
+        if (fieldOfView.TrackingFOV())
         {
 
             return NodeState.Success;
