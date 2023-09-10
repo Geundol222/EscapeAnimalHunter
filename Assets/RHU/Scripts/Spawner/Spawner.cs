@@ -40,8 +40,8 @@ public class Spawner : MonoBehaviour
                 GameObject prefab = FindAnimalPrefab(spawnList.animalName);
                 RaycastHit hit = GroundCheck();
                 spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x, hit.point.y, spawnPoint.transform.position.z);
-                GameManager.Resource.Instantiate(prefab, spawnPoint.transform.position, Quaternion.Euler(0, Random.Range(-180, 180), 0));
-            }
+                GameManager.Resource.Instantiate<GameObject>(prefab, spawnPoint.transform.position, Quaternion.Euler(0, Random.Range(-180, 180), 0), true);
+            }   // TODO : Resources/Prefabs에 추가 필요 Prefabs/AnimalName, $"Prefabs/{spawnList.animalName}"
         }
     }
 
