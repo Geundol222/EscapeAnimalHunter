@@ -63,12 +63,16 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
         Main, Sub, Multi
     }
 
+    [SerializeField] Transform gripTransform;
+
     private PoseState state;
     private IXRInteractor mainInteractor;
     private IXRInteractor subInteractor;
 
     public override void OnGrab(XRGrabInteractable grabInteractable)
     {
+        base.OnGrab(grabInteractable);
+
         mainInteractor = grabInteractable.firstInteractorSelecting;
     }
 
@@ -154,8 +158,10 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
 
     private void UpdateTargetSub(XRGrabInteractable grabInteractable, ref Pose targetPose)
     {
-        Transform interactorAttachTransform = subInteractor.GetAttachTransform(grabInteractable);
-        Pose interactorAttachPose = new Pose(interactorAttachTransform.position, interactorAttachTransform.rotation);
+        grabInteractable.attachTransform = subInteractor.transform;
+
+        Transform interactorAttachTransform = grabInteractable.attachTransform;
+        Pose interactorAttachPose = new Pose(interactorAttachTransform.position, transform.rotation);
         Pose thisTransformPose = new Pose(transform.position, transform.rotation);
 
         // Calculate offset of the grab interactable's position relative to its attach transform
@@ -175,13 +181,18 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
     {
         Debug.Assert(grabInteractable.interactorsSelecting.Count > 1, this);
 
+        grabInteractable.attachTransform = gripTransform;
+
         Transform primaryAttachTransform = mainInteractor.GetAttachTransform(grabInteractable);
         Pose primaryAttachPose = new Pose(primaryAttachTransform.position, primaryAttachTransform.rotation);
         Transform secondaryAttachTransform = subInteractor.GetAttachTransform(grabInteractable);
         Pose secondaryAttachPose = new Pose(secondaryAttachTransform.position, secondaryAttachTransform.rotation);
 
         // When multi-selecting, adjust the effective interactorAttachPose with our default 2-hand algorithm.
-        // Default to the primary interactor.
+        // Default to the primary interactor.\
+
+        var avrAttachPositionOffset = transform.position - grabInteractable.attachTransform.position;
+        var avrAttachRotationOffset = Quaternion.Inverse(Quaternion.Inverse(grabInteractable.secondaryAttachTransform.rotation) * grabInteractable.attachTransform.rotation);
         var interactorAttachPose = primaryAttachPose;
 
         switch (m_MultiSelectPosition)
@@ -276,14 +287,14 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
         else if (m_MultiSelectRotation == PoseContributor.Average)
         {
             // Average rotation does not use offset and keeps objects between two attach points (controllers).
-            targetPose.position = interactorAttachPose.position;
+            targetPose.position = interactorAttachPose.position + avrAttachPositionOffset;
         }
         else
         {
             Assert.IsTrue(false, $"Unhandled {nameof(PoseContributor)}={m_MultiSelectRotation}.");
         }
 
-        targetPose.rotation = interactorAttachPose.rotation;
+        targetPose.rotation = interactorAttachPose.rotation * avrAttachRotationOffset;
     }
 
 }
