@@ -7,14 +7,17 @@ public class SphereCasterNew : MonoBehaviour
 {
     [SerializeField] public float radiusMax; //15f
     [SerializeField] float radiusGrowUpSpeed; //10f
-    public UnityAction<Transform> OnDetect;
+    public UnityAction<Transform, bool> OnDetectCarnivore;
+    public UnityAction<Transform, bool> OnDetectHerbivore;
 
     float maxDistance = 0.1f;
     float curRadius;
-    int layerMask;
+    int layerMaskForCarnivore;
+    int layerMaskForHerbivore;
     private void Start()
     {
-        layerMask = 1 << LayerMask.NameToLayer("Radar");
+        layerMaskForCarnivore = 1 << LayerMask.NameToLayer("Carnivore");
+        layerMaskForHerbivore = 1 << LayerMask.NameToLayer("Herbivore");
         curRadius = radiusMax;
     }
 
@@ -26,13 +29,17 @@ public class SphereCasterNew : MonoBehaviour
             curRadius = 0;
 
         RaycastHit[] hits;
-        hits = Physics.SphereCastAll(transform.position, curRadius, transform.forward, maxDistance, layerMask);
+        hits = Physics.SphereCastAll(transform.position, curRadius, transform.forward, maxDistance, layerMaskForHerbivore);
+
+        for (int i = 0; i < hits.Length; i++)
+            OnDetectHerbivore?.Invoke(hits[i].transform, false);
+
+        hits = Physics.SphereCastAll(transform.position, curRadius, transform.forward, maxDistance, layerMaskForCarnivore);
 
         for (int i = 0; i < hits.Length; i++)
         {
-            OnDetect?.Invoke(hits[i].transform);
+            OnDetectCarnivore?.Invoke(hits[i].transform, true);
         }
-
     }
 
     private void OnDrawGizmos()
