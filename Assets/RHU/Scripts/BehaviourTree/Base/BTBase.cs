@@ -8,9 +8,9 @@ public class BTBase
     public SelectorNode hitNode;
     public SequenceNode trackingNode;
     public SelectorNode getAwayNode;
-    public SelectorNode idleNode;
+    public ActionNode idleNode;
 
-    public BTBase(SelectorNode hitNode, SelectorNode getAwayNode, SelectorNode idleNode)    // ÃÊ½Ä
+    public BTBase(SelectorNode hitNode, SelectorNode getAwayNode, ActionNode idleNode)    // ÃÊ½Ä
     {
         rootNode = new SelectorNode();
         this.hitNode = hitNode;
@@ -25,7 +25,7 @@ public class BTBase
         };
     }
 
-    public BTBase(SelectorNode hitNode, SequenceNode trackingNode, SelectorNode idleActionNode)   // À°½Ä
+    public BTBase(SelectorNode hitNode, SequenceNode trackingNode, ActionNode idleActionNode)   // À°½Ä
     {
         rootNode = new SelectorNode();
         this.hitNode = hitNode;

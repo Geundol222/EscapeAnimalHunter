@@ -21,11 +21,7 @@ public class Moose : Animal
             new AttackAction(this)                  // FieldOfView
         };
 
-        idleNode.childrenNode = new List<Node>
-        {
-            new IdleActionNode(this),
-            new WalkAction(this)
-        };
+        idleNode = new IdleAction(this);
 
         this.bTBase = new BTBase(hitNode, hostileNode, idleNode);
     }

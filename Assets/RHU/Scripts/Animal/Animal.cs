@@ -23,7 +23,7 @@ public abstract class Animal : MonoBehaviour, IHittable
 
     public SelectorNode hitNode = new SelectorNode();
     public SequenceNode hostileNode = new SequenceNode();
-    public SelectorNode idleNode = new SelectorNode();
+    public IdleAction idleNode;
 
     protected void Awake()
     {
@@ -31,6 +31,10 @@ public abstract class Animal : MonoBehaviour, IHittable
         colliders = GetComponentsInChildren<Collider>();
         fieldOfView = GetComponent<FieldOfView>();
         curHp = data.Animals[(int)animalName].maxHp;
+
+        //hitNode = new SelectorNode();
+        //hostileNode = new SequenceNode();
+        //idleNode = new IdleAction
         SetUpBT();
     }
 
