@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HostileCondition : ActionNode
 {
-    private bool IsHostile { get { return owner.isHostile; } }
+    private bool IsWary { get { return owner.isWary; } }
 
     public HostileCondition(Animal owner) : base(owner)
     {
@@ -13,7 +13,7 @@ public class HostileCondition : ActionNode
 
     public override NodeState Evaluate()
     {
-        if (IsHostile)
+        if (IsWary)
             return NodeState.Success;
 
         return NodeState.Failure;

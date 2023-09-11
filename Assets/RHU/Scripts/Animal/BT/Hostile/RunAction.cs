@@ -6,7 +6,7 @@ public class RunAction : ActionNode
 {
     private float TrackingTime { get { return owner.trackingTime; } set { owner.trackingTime = value; } }
     private bool IsTracking { get { return owner.isTracking; } }
-    private bool IsHostile { set { owner.isHostile = value; } }
+    private bool IsWary { set { owner.isWary = value; } }
 
     public RunAction(Animal owner) : base(owner)
     {
@@ -26,7 +26,7 @@ public class RunAction : ActionNode
         }
 
         TrackingTime = 0;
-        animator.SetBool("IsHostile", IsHostile = false);
+        animator.SetBool("IsWary", IsWary = false);
 
         return NodeState.Failure;
     }

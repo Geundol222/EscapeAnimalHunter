@@ -6,8 +6,6 @@ using static AnimalData;
 
 public abstract class Animal : MonoBehaviour, IHittable
 {
-    public BTBase bTBase;
-
     [SerializeField] public AnimalData data;
     [SerializeField] public AnimalName animalName;
     [NonSerialized] public Animator animator;
@@ -17,11 +15,13 @@ public abstract class Animal : MonoBehaviour, IHittable
     [NonSerialized] public float trackingTime = 0;
     [NonSerialized] public bool isHit = false;
     [NonSerialized] public bool isDie = false;
-    [NonSerialized] public bool isHostile = false;
+    [NonSerialized] public bool isWary = false;
     [NonSerialized] public bool isTracking = false;
     [NonSerialized] public float bulletDirection = 0;
 
+    public BTBase bTBase;
     public SelectorNode hitNode = new SelectorNode();
+    public SelectorNode getAwayNode = new SelectorNode();
     public SequenceNode hostileNode = new SequenceNode();
     public IdleAction idleNode;
 

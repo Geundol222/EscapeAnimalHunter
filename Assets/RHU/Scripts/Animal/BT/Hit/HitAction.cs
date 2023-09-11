@@ -6,7 +6,7 @@ public class HitAction : ActionNode
 {
     private int CurHp { get { return owner.curHp; } }
     private bool IsHit { get { return owner.isHit; } }
-    private bool IsHostile { set { owner.isHostile = value; } }
+    private bool IsWary { set { owner.isWary = value; } }
 
     public HitAction(Animal owner) : base(owner)
     {
@@ -18,7 +18,7 @@ public class HitAction : ActionNode
         if (IsHit && CurHp >= 1)
         {
             animator.SetTrigger("IsHit");
-            animator.SetBool("IsHostile", IsHostile = true);
+            animator.SetBool("IsWary", IsWary = true);
 
             return NodeState.Success;
         }
