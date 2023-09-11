@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
+    private static DataManager data;
     private static PoolManager pool;
     private static ResourceManager resource;
     private static UIManager ui;
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
     private static SoundManager sound;
 
     public static GameManager Instance { get { return instance; } }
+    public static DataManager Data { get { return data; } }
     public static PoolManager Pool { get { return pool; } }
     public static ResourceManager Resource { get { return resource; } }
     public static UIManager UI { get { return ui; } }
@@ -45,6 +47,11 @@ public class GameManager : MonoBehaviour
         resourceObj.name = "ResourceManager";
         resourceObj.transform.parent = transform;
         resource = resourceObj.AddComponent<ResourceManager>();
+
+        GameObject dataObj = new GameObject();
+        dataObj.name = "DataManager";
+        dataObj.transform.parent = transform;
+        data = dataObj.AddComponent<DataManager>();
 
         GameObject poolObj = new GameObject();
         poolObj.name = "PoolManager";

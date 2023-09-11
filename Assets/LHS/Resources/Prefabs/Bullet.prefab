@@ -239,12 +239,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpeed: 100
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 128
   carnivoreMask:
     serializedVersion: 2
     m_Bits: 1024
   herbivoreMask:
     serializedVersion: 2
     m_Bits: 2048
+  damage: 1

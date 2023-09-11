@@ -74,6 +74,16 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
         base.OnGrab(grabInteractable);
 
         mainInteractor = grabInteractable.firstInteractorSelecting;
+
+        grabInteractable.lastSelectExited.AddListener(OnDrop);
+    }
+
+    public void OnDrop(SelectExitEventArgs args)
+    {
+        XRGrabInteractable grabInteractable = GetComponent<XRGrabInteractable>();
+
+        grabInteractable.attachTransform = gripTransform;
+        args.interactableObject.lastSelectExited.RemoveListener(OnDrop);
     }
 
     public override void OnGrabCountChanged(XRGrabInteractable grabInteractable, Pose targetPose, Vector3 localScale)
@@ -93,7 +103,7 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
                 state = PoseState.Sub;
             }
         }
-        else // (grabInteractable.interactorsSelecting.Count == 2)
+        else if (grabInteractable.interactorsSelecting.Count == 2)
         {
             if (ReferenceEquals(mainInteractor, grabInteractable.interactorsSelecting[0]))
             {
