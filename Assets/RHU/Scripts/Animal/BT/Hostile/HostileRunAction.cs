@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RunAction : ActionNode
+public class HostileRunAction : ActionNode
 {
     private float TrackingTime { get { return owner.trackingTime; } set { owner.trackingTime = value; } }
     private bool IsTracking { get { return owner.isTracking; } }
     private bool IsWary { set { owner.isWary = value; } }
 
-    public RunAction(Animal owner) : base(owner)
+    public HostileRunAction(Animal owner) : base(owner)
     {
 
     }
@@ -17,7 +17,7 @@ public class RunAction : ActionNode
     {
         if (TrackingTime <= 15f)
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Run_Bear") && !IsTracking)
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Run") && !IsTracking)
                 animator.SetInteger("RandomRun", RandomRun());
             
             TrackingTime += Time.deltaTime;

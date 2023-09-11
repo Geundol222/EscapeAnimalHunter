@@ -14,13 +14,9 @@ public class Moose : Animal
             new DieAction(this)                     // IsHit, IsDie
         };
 
-        hostileNode.childrenNode = new List<Node>
+        getAwayNode.childrenNode = new List<Node>
         {
-            new HostileCondition(this),             // IsWary
-            new RunAction(this),                    // TrackingTime, TrackingTime, IsWary
-            new CheckFieldOfViewCondition(this),    // FieldOfView, IsTracking
-            new TrackingAction(this),               // FieldOfView, TrackingTime, IsTracking
-            new AttackAction(this)                  // FieldOfView
+
         };
 
         idleNode = new IdleAction(this);
