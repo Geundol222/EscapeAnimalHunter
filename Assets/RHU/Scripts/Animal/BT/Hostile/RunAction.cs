@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BearRunAction : ActionNode
+public class RunAction : ActionNode
 {
     private float TrackingTime { get { return owner.trackingTime; } set { owner.trackingTime = value; } }
     private bool IsTracking { get { return owner.isTracking; } }
     private bool IsHostile { set { owner.isHostile = value; } }
 
-    public BearRunAction(Animal owner) : base(owner)
+    public RunAction(Animal owner) : base(owner)
     {
 
     }

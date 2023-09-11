@@ -29,7 +29,6 @@ public class FieldOfView : MonoBehaviour
             if (Physics.Raycast(transform.position, dirTarget, distToTarget, obstacleMask))             // 3. 중간에 장애물이 없는지
                 continue;
 
-            Debug.Log(foundPlayer);
             Debug.DrawRay(transform.position, dirTarget * distToTarget, Color.red);
             playerTransform = collider.transform;
 

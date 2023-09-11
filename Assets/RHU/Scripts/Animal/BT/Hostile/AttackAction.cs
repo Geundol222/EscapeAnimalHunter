@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BearAttackAction : ActionNode
+public class AttackAction : ActionNode
 {
     private FieldOfView fieldOfView { get { return owner.fieldOfView; } }
 
-    public BearAttackAction(Bear owner) : base(owner)
+    public AttackAction(Animal owner) : base(owner)
     {
         
     }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bear : Animal
+public class Moose : Animal
 {
     public override void SetUpBT()
     {

@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BearHostileCondition : ActionNode
+public class HostileCondition : ActionNode
 {
     private bool IsHostile { get { return owner.isHostile; } }
 
-    public BearHostileCondition(Animal owner) : base(owner)
+    public HostileCondition(Animal owner) : base(owner)
     {
 
     }

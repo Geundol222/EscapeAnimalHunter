@@ -19,6 +19,7 @@ public abstract class Animal : MonoBehaviour, IHittable
     [NonSerialized] public bool isDie = false;
     [NonSerialized] public bool isHostile = false;
     [NonSerialized] public bool isTracking = false;
+    [NonSerialized] public float bulletDirection = 0;
 
     public SelectorNode hitNode = new SelectorNode();
     public SequenceNode hostileNode = new SequenceNode();
@@ -39,6 +40,15 @@ public abstract class Animal : MonoBehaviour, IHittable
     {
         if (!isDie)
             bTBase.Update();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        //if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
+        //{
+        //    bulletDirection = Quaternion.FromToRotation(Vector3.up, collision.transform.position - transform.position).eulerAngles.y;
+        //    Debug.Log(bulletDirection);
+        //}
     }
 
     public void TakeHit(int damage)

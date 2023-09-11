@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BearHitAction : ActionNode
+public class HitAction : ActionNode
 {
     private int CurHp { get { return owner.curHp; } }
     private bool IsHit { get { return owner.isHit; } }
     private bool IsHostile { set { owner.isHostile = value; } }
 
-    public BearHitAction(Animal owner) : base(owner)
+    public HitAction(Animal owner) : base(owner)
     {
         
     }
