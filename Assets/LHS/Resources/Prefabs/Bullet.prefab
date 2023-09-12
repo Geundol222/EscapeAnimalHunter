@@ -44,7 +44,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1076268427689873602}
-  m_Mesh: {fileID: 5283261607579422976, guid: eb0d646fbbe49b14680ec897f0e4947b, type: 3}
+  m_Mesh: {fileID: 5283261607579422976, guid: fa28f16cc1cb47f4aa37aa40576842ce, type: 3}
 --- !u!23 &1580570088132833559
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -238,11 +238,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55bb2cbdefc960b45868157828ab19c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 100
   carnivoreMask:
     serializedVersion: 2
     m_Bits: 1024
   herbivoreMask:
     serializedVersion: 2
     m_Bits: 2048
-  damage: 1

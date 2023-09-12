@@ -1,30 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CarUpgradeCanvas : MonoBehaviour
+public class BulletUpgradeCanvas : MonoBehaviour
 {
-    [SerializeField] GameObject durabilityMeter;
+    [SerializeField] GameObject damageMeter;
     [SerializeField] GameObject speedMeter;
     [SerializeField] Button okButton;
     [SerializeField] TMP_Text costText;
 
-    List<Image> durabilityImages;
+    List<Image> damageImages;
     List<Image> speedImages;
 
     private void Awake()
     {
-        durabilityImages = new List<Image>();
+        damageImages = new List<Image>();
         speedImages = new List<Image>();
 
         costText.text = "0";
 
-        for (int i = 0; i < durabilityMeter.transform.childCount; i++)
+        for (int i = 0; i < damageMeter.transform.childCount; i++)
         {
-            durabilityImages.Add(durabilityMeter.transform.GetChild(i).gameObject.GetComponent<Image>());
+            damageImages.Add(damageMeter.transform.GetChild(i).gameObject.GetComponent<Image>());
         }
 
         for (int i = 0; i < speedMeter.transform.childCount; i++)
@@ -52,40 +51,40 @@ public class CarUpgradeCanvas : MonoBehaviour
         costText.text = DataManager.Upgrade.applyCost.ToString();
     }
 
-    public void DurabilityUp()
+    public void DamageUp()
     {
         if (!okButton.gameObject.activeSelf)
             okButton.gameObject.SetActive(true);
 
-        if (DataManager.Upgrade.durabilityIndex >= durabilityImages.Count - 1)
+        if (DataManager.Upgrade.damageIndex >= damageImages.Count - 1)
         {
-            DataManager.Upgrade.durabilityIndex = durabilityImages.Count - 1;
+            DataManager.Upgrade.damageIndex = damageImages.Count - 1;
             return;
         }
 
-        DataManager.Upgrade.DurabilityUp();
+        DataManager.Upgrade.DamageUp();
 
-        durabilityImages[DataManager.Upgrade.durabilityIndex].color = Color.white;
+        damageImages[DataManager.Upgrade.damageIndex].color = Color.white;
 
         IncreaseCost();
     }
 
-    public void DurabilityDown()
+    public void DamageDown()
     {
-        durabilityImages[DataManager.Upgrade.durabilityIndex].color = Color.black; 
+        damageImages[DataManager.Upgrade.damageIndex + 1].color = Color.black;
 
-        if (DataManager.Upgrade.durabilityIndex <= 0)
+        if (DataManager.Upgrade.damageIndex <= 0)
         {
-            if (DataManager.Upgrade.carSpeedIndex <= 0)
+            if (DataManager.Upgrade.bulletSpeedIndex <= 0)
                 okButton.gameObject.SetActive(false);
 
-            DataManager.Upgrade.durabilityIndex = 0;
-            durabilityImages[0].color = Color.black;
+            DataManager.Upgrade.damageIndex = 0;
+            damageImages[0].color = Color.black;
             return;
         }
 
-        DataManager.Upgrade.DurabilityDown();
-        
+        DataManager.Upgrade.DamageDown();
+
         DecreaseCost();
     }
 
@@ -94,15 +93,15 @@ public class CarUpgradeCanvas : MonoBehaviour
         if (!okButton.gameObject.activeSelf)
             okButton.gameObject.SetActive(true);
 
-        if (DataManager.Upgrade.carSpeedIndex >= speedImages.Count - 1)
+        if (DataManager.Upgrade.bulletSpeedIndex >= speedImages.Count - 1)
         {
-            DataManager.Upgrade.carSpeedIndex = speedImages.Count - 1;
+            DataManager.Upgrade.bulletSpeedIndex = speedImages.Count - 1;
             return;
         }
 
-        DataManager.Upgrade.CarSpeedUp();
+        DataManager.Upgrade.BulletSpeedUp();
 
-        speedImages[DataManager.Upgrade.carSpeedIndex].color = Color.white;
+        speedImages[DataManager.Upgrade.bulletSpeedIndex].color = Color.white;
 
         IncreaseCost();
     }
@@ -111,17 +110,17 @@ public class CarUpgradeCanvas : MonoBehaviour
     {
         speedImages[DataManager.Upgrade.carSpeedIndex].color = Color.black;
 
-        if (DataManager.Upgrade.carSpeedIndex <= 0)
+        if (DataManager.Upgrade.bulletSpeedIndex <= 0)
         {
-            if (DataManager.Upgrade.durabilityIndex <= 0)
+            if (DataManager.Upgrade.damageIndex <= 0)
                 okButton.gameObject.SetActive(false);
 
-            DataManager.Upgrade.carSpeedIndex = 0;
+            DataManager.Upgrade.bulletSpeedIndex = 0;
             speedImages[0].color = Color.black;
             return;
         }
 
-        DataManager.Upgrade.CarSpeedDown();
+        DataManager.Upgrade.BulletSpeedDown();
 
         DecreaseCost();
     }
@@ -129,6 +128,9 @@ public class CarUpgradeCanvas : MonoBehaviour
     public void PressOkButton()
     {
         DataManager.Upgrade.applyCost = 0;
+
+        DataManager.Bullet.damage *= DataManager.Upgrade.bulletCostMagFirst;
+        DataManager.Bullet.bulletSpeed *= DataManager.Upgrade.bulletCostMagSecond;
 
         GameManager.Data.RemoveCost(DataManager.Upgrade.applyCost);
     }
