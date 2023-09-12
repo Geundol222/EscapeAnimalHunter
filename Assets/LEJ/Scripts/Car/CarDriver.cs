@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR.Content.Interaction;
 
 public class CarDriver : MonoBehaviour
@@ -16,11 +17,20 @@ public class CarDriver : MonoBehaviour
     XRKnobLEJ handleKnob;
     DetectHandleGrab handleGrab;
 
+    public UnityAction OnMaxSpeedChanged;
+
     [SerializeField] GameObject gearObj;
     [SerializeField] GameObject handleObj;
     [SerializeField] GameObject handleRotatePivotObj;
 
     [SerializeField] float maxSpeed; //in LEJTestScene : 30
+    public float MaxSpeed { get { return maxSpeed; }
+        set 
+        { 
+            maxSpeed = value;
+            OnMaxSpeedChanged?.Invoke();
+        }
+    }
     [SerializeField] float accelLerpValue; //in LEJTestScene : 0.01
     [SerializeField] float breakLerpValue;
     [SerializeField] float handleRotateSpeed; //in LEJTestScene : 0.5

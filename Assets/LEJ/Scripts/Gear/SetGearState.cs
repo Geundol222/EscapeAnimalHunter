@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR.Content.Interaction;
 
 public class SetGearState : MonoBehaviour
@@ -11,6 +12,7 @@ public class SetGearState : MonoBehaviour
     [SerializeField] public bool isDriveState;
 
     XRSliderLEJ slider;
+    public UnityAction<string> OnCurGearStateChanged;
 
     private void Awake()
     {
@@ -36,21 +38,25 @@ public class SetGearState : MonoBehaviour
         {
             slider.value = 0f;
             isParkState = true;
+            OnCurGearStateChanged?.Invoke("Park");
         }
         else if (slider.value >= 0.3f && slider.value < 0.6f)
         {
             slider.value = 0.5f;
             isReverseState = true;
+            OnCurGearStateChanged?.Invoke("Reverse");
         }
         else if (slider.value >= 0.6f && slider.value < 0.9f)
         {
             slider.value = 0.75f;
             isNeutralState = true;
+            OnCurGearStateChanged?.Invoke("Neutral");
         }
         else
         {
             slider.value = 1f;
             isDriveState = true;
+            OnCurGearStateChanged?.Invoke("Drive");
         }
     }
 

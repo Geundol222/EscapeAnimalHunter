@@ -6,44 +6,44 @@ using UnityEngine.Events;
 public class CarDamager : MonoBehaviour, IHittable
 {
     [SerializeField] Transform parkingPosition;
-    [SerializeField] float maxDamage;
-    public UnityAction OnCurDamageChanged;
-    [SerializeField] float curDamage;
-    public float CurDamage
+    [SerializeField] float maxHp;
+    public UnityAction OnCurHpChanged;
+    [SerializeField] float curHp;
+    public float CurHp
     {
-        get { return curDamage; }
+        get { return curHp; }
         set
         {
-            curDamage = value;
-            OnCurDamageChanged?.Invoke();
+            curHp = value;
+            OnCurHpChanged?.Invoke();
         }
     }
 
     public void OnEnable()
     {
-        OnCurDamageChanged += CheckCurDamage;
+        OnCurHpChanged += CheckCurDamage;
     }
 
     public void OnDisable()
     {
-        OnCurDamageChanged -= CheckCurDamage;
+        OnCurHpChanged -= CheckCurDamage;
     }
 
     public void Awake()
     {
-        curDamage = maxDamage;
+        curHp = maxHp;
     }
 
     public void TakeHit(int damage)
     {
-        curDamage -= damage;
+        curHp -= damage;
 
         throw new System.NotImplementedException();
     }
 
     public void CheckCurDamage()
     {
-        if (curDamage <= 0)
+        if (curHp <= 0)
         {
             ReturnToSwamp();
         }
