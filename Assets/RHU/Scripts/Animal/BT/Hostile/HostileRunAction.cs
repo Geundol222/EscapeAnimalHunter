@@ -17,15 +17,19 @@ public class HostileRunAction : ActionNode
     {
         if (TrackingTime <= 15f)
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Run") && !IsTracking)
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Run") &&
+                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f &&
+                !IsTracking)
                 animator.SetInteger("RandomRun", RandomRun());
-            
+            else
+                animator.SetInteger("RandomRun", 0);
+
             TrackingTime += Time.deltaTime;
             
             return NodeState.Success;
         }
 
-        TrackingTime = 0;
+        TrackingTime = 0;                                       // 15f 동안 Player 못 찾았을때 IsWary = false
         animator.SetBool("IsWary", IsWary = false);
 
         return NodeState.Failure;
