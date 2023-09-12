@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "AniamlData", menuName = "Data/Animal")]
 public class AnimalData : ScriptableObject
 {
-    public enum AnimalName { None, Bear, Moose };
+    public enum AnimalName { Bear, Moose };
 
     [SerializeField] private AnimalInfo[] animals;
     public AnimalInfo[] Animals { get { return animals; } }

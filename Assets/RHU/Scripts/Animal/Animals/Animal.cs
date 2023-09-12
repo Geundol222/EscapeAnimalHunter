@@ -18,7 +18,7 @@ public abstract class Animal : MonoBehaviour, IHittable
     [NonSerialized] public bool isWary = false;
     [NonSerialized] public bool isTracking = false;
     [NonSerialized] public float bulletDirection = 0;
-
+    private int groundLayer;
     public BTBase bTBase;
     public SelectorNode hitNode = new SelectorNode();
     public SelectorNode getAwayNode = new SelectorNode();
@@ -31,6 +31,7 @@ public abstract class Animal : MonoBehaviour, IHittable
         colliders = GetComponentsInChildren<Collider>();
         fieldOfView = GetComponent<FieldOfView>();
         curHp = data.Animals[(int)animalName].maxHp;
+        groundLayer = LayerMask.NameToLayer("Grouond");
 
         //hitNode = new SelectorNode();
         //hostileNode = new SequenceNode();
@@ -44,6 +45,8 @@ public abstract class Animal : MonoBehaviour, IHittable
     {
         if (!isDie)
             bTBase.Update();
+        
+        //StepOnGround();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -53,6 +56,17 @@ public abstract class Animal : MonoBehaviour, IHittable
         //    bulletDirection = Quaternion.FromToRotation(Vector3.up, collision.transform.position - transform.position).eulerAngles.y;
         //    Debug.Log(bulletDirection);
         //}
+    }
+
+    private void StepOnGround()
+    {
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(transform.position, Vector3.down, out hitInfo, 20, 1 << groundLayer))
+        {
+            transform.position = new Vector3(transform.position.x, hitInfo.point.y, transform.position.z);
+            Debug.Log("step");
+        }
     }
 
     public void TakeHit(int damage)

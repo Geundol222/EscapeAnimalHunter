@@ -19,7 +19,7 @@ public class Moose : Animal
 
         };
 
-        idleNode = new IdleAction(this);
+        idleNode = new IdleAction(this);            // IsWary
 
         this.bTBase = new BTBase(hitNode, hostileNode, idleNode);
     }
