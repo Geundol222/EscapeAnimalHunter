@@ -5,8 +5,8 @@ using UnityEngine.InputSystem;
 
 public class Hand : MonoBehaviour
 {
-    [SerializeField] private InputActionProperty triggerAction;
-    [SerializeField] private InputActionProperty gripAction; 
+    [SerializeField] public InputActionProperty triggerAction;
+    [SerializeField] public InputActionProperty gripAction; 
 
     private Animator animator;
 
@@ -19,6 +19,7 @@ public class Hand : MonoBehaviour
     {
         float triggerValue = triggerAction.action.ReadValue<float>();
         float gripValue = gripAction.action.ReadValue<float>();
+
 
         animator.SetFloat("Triger", triggerValue);
         animator.SetFloat("Grip", gripValue);
