@@ -5,9 +5,7 @@ using UnityEngine;
 public class Moose : Animal
 {
     public override void SetUpBT()
-    {
-        bTBase = new BTBase(hitNode, getAwayNode, idleNode);
-
+    {   
         hitNode.childrenNode = new List<Node>()
         {                                           // 사용하는 Owner의 변수
             new HitAction(this),                    // CurHp, IsHit, IsWary
@@ -16,11 +14,11 @@ public class Moose : Animal
 
         getAwayNode.childrenNode = new List<Node>
         {
-
+            new GetAwayAction(this)                 // WaryTime, IsWary
         };
 
         idleNode = new IdleAction(this);            // IsWary
 
-        this.bTBase = new BTBase(hitNode, hostileNode, idleNode);
+        bTBase = new BTBase(hitNode, getAwayNode, idleNode);
     }
 }

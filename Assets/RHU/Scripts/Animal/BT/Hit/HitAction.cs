@@ -22,6 +22,7 @@ public class HitAction : ActionNode
 
             return NodeState.Success;
         }
+
         return NodeState.Failure;
     }
 }

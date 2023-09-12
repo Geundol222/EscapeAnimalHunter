@@ -25,12 +25,12 @@ public class BTBase
         };
     }
 
-    public BTBase(SelectorNode hitNode, SequenceNode trackingNode, ActionNode idleActionNode)   // À°½Ä
+    public BTBase(SelectorNode hitNode, SequenceNode trackingNode, ActionNode idleNode)   // À°½Ä
     {
         rootNode = new SelectorNode();
         this.hitNode = hitNode;
         this.trackingNode = trackingNode;
-        this.idleNode = idleActionNode;
+        this.idleNode = idleNode;
         
         rootNode.childrenNode = new List<Node>()
         {

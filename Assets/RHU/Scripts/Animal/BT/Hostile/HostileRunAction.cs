@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HostileRunAction : ActionNode
 {
-    private float TrackingTime { get { return owner.trackingTime; } set { owner.trackingTime = value; } }
+    private float WaryTime { get { return owner.waryTime; } set { owner.waryTime = value; } }
     private bool IsTracking { get { return owner.isTracking; } }
     private bool IsWary { set { owner.isWary = value; } }
 
@@ -15,7 +15,7 @@ public class HostileRunAction : ActionNode
 
     public override NodeState Evaluate()
     {
-        if (TrackingTime <= 15f)
+        if (WaryTime <= 15f)
         {
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Run") &&
                 animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f &&
@@ -24,12 +24,12 @@ public class HostileRunAction : ActionNode
             else
                 animator.SetInteger("RandomRun", 0);
 
-            TrackingTime += Time.deltaTime;
+            WaryTime += Time.deltaTime;
             
             return NodeState.Success;
         }
 
-        TrackingTime = 0;                                       // 15f 동안 Player 못 찾았을때 IsWary = false
+        WaryTime = 0;                                       // 15f 동안 Player 못 찾았을때 IsWary = false
         animator.SetBool("IsWary", IsWary = false);
 
         return NodeState.Failure;

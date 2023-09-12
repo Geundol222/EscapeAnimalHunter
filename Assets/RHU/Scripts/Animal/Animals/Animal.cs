@@ -13,7 +13,7 @@ public abstract class Animal : MonoBehaviour, IHittable
     [NonSerialized] public Animator animator;
     [NonSerialized] public Collider[] colliders;
     [NonSerialized] public int curHp;
-    [NonSerialized] public float trackingTime = 0;
+    [NonSerialized] public float waryTime = 0;
     [NonSerialized] public bool isHit = false;
     [NonSerialized] public bool isDie = false;
     [NonSerialized] public bool isWary = false;
@@ -44,13 +44,20 @@ public abstract class Animal : MonoBehaviour, IHittable
     }
     private void OnCollisionEnter(Collision collision)
     {
-        //if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
-        //{
-        //    bulletDirection = Quaternion.FromToRotation(Vector3.up, collision.transform.position - transform.position).eulerAngles.y;
-        //    Debug.Log(bulletDirection);
-        //}
+        foreach (ContactPoint i in collision.contacts)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
+            {
+                Debug.Log("ÃÑ¾Ë Ãæµ¹");
+
+                Debug.Log($"i.Point : {i.point}");
+                Debug.Log($"i.Point : {i.normal}");
+                Debug.Log($"i.Point : {i.otherCollider.gameObject.transform.position}");
+            }
+        }
 
     }
+
 
     //private void StepOnGround()
     //{
@@ -74,7 +81,7 @@ public abstract class Animal : MonoBehaviour, IHittable
 
         while (true)
         {
-            if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 20, GroundLayer))                
+            if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 1, GroundLayer))                
                 transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
 
             yield return new WaitForEndOfFrame();
@@ -97,4 +104,5 @@ public abstract class Animal : MonoBehaviour, IHittable
 
         yield break;
     }
+
 }

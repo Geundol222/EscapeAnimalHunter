@@ -5,7 +5,7 @@ using UnityEngine;
 public class TrackingAction : ActionNode
 {
     private FieldOfView fieldOfView { get { return owner.fieldOfView; } }
-    private float TrackingTime { set { owner.trackingTime = value; } }
+    private float WaryTime { set { owner.waryTime = value; } }
     private bool IsTracking { set { owner.isTracking = value; } }
 
     public TrackingAction(Animal owner) : base(owner)
@@ -15,7 +15,7 @@ public class TrackingAction : ActionNode
 
     public override NodeState Evaluate()
     {
-        TrackingTime = 0;
+        WaryTime = 0;
 
         if (fieldOfView.TrackingFOV())
         {

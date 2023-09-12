@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
-public class DieAction : ActionNode
+public class RunToDieAction : DieAction
 {
-    protected bool IsHit { get { return owner.isHit; } }
-    protected bool IsDie { get { return owner.isDie; } set { owner.isDie = value; } }
+    private bool IsWary { get { return owner.isWary; } }
 
-    public DieAction(Animal owner) : base(owner)
+    public RunToDieAction(Animal owner) : base(owner)
     {
-
     }
 
     public override NodeState Evaluate()
@@ -19,8 +18,10 @@ public class DieAction : ActionNode
             if (IsDie)
                 return NodeState.Running;
 
+            if (!IsWary)
+                animator.SetInteger("RandomDie", RandomAction(1));
+                
             animator.SetBool("IsDie", IsDie = true);
-            animator.SetInteger("RandomDie", RandomAction(1));
 
             return NodeState.Running;
         }
