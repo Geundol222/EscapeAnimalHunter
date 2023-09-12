@@ -9,9 +9,9 @@ public abstract class Animal : MonoBehaviour, IHittable
     [SerializeField] public AnimalData data;
     [SerializeField] public AnimalName animalName;
     [SerializeField] private Transform footCenter;
+    [SerializeField] public FieldOfView fieldOfView;
     [NonSerialized] public Animator animator;
     [NonSerialized] public Collider[] colliders;
-    [NonSerialized] public FieldOfView fieldOfView;
     [NonSerialized] public int curHp;
     [NonSerialized] public float trackingTime = 0;
     [NonSerialized] public bool isHit = false;
@@ -19,7 +19,6 @@ public abstract class Animal : MonoBehaviour, IHittable
     [NonSerialized] public bool isWary = false;
     [NonSerialized] public bool isTracking = false;
     [NonSerialized] public float bulletDirection = 0;
-    private int groundLayer;
     [SerializeField] LayerMask GroundLayer;
     public BTBase bTBase;
     public SelectorNode hitNode = new SelectorNode();
@@ -31,14 +30,9 @@ public abstract class Animal : MonoBehaviour, IHittable
     {
         animator = GetComponent<Animator>();
         colliders = GetComponentsInChildren<Collider>();
-        fieldOfView = GetComponent<FieldOfView>();
         curHp = data.Animals[(int)animalName].maxHp;
-        groundLayer = LayerMask.NameToLayer("Grouond");
-
-        //hitNode = new SelectorNode();
-        //hostileNode = new SequenceNode();
-        //idleNode = new IdleAction
         SetUpBT();
+        StartCoroutine(StepOnGrounRoutine());
     }
 
     public abstract void SetUpBT();
@@ -47,10 +41,7 @@ public abstract class Animal : MonoBehaviour, IHittable
     {
         if (!isDie)
             bTBase.Update();
-        
-        StepOnGround();
     }
-
     private void OnCollisionEnter(Collision collision)
     {
         //if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
@@ -58,30 +49,35 @@ public abstract class Animal : MonoBehaviour, IHittable
         //    bulletDirection = Quaternion.FromToRotation(Vector3.up, collision.transform.position - transform.position).eulerAngles.y;
         //    Debug.Log(bulletDirection);
         //}
+
     }
 
-    private void StepOnGround()
+    //private void StepOnGround()
+    //{
+    //    RaycastHit hitInfo;
+
+    //    if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 20, /*1 << groundLayer*/GroundLayer))
+    //    {
+    //        Debug.Log($"normal : {hitInfo.normal}");
+    //        Debug.DrawRay(footCenter.position, Vector3.down * 20, Color.red);
+    //        Debug.DrawRay(hitInfo.point, hitInfo.normal * 20, Color.blue);
+
+    //        Debug.Log($"Dot : {Vector3.Dot(footCenter.position, hitInfo.normal)}");
+
+    //        transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+    //    }
+    //}
+
+    IEnumerator StepOnGrounRoutine()
     {
         RaycastHit hitInfo;
-        float rotationX = 0;
 
-        if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 20, /*1 << groundLayer*/GroundLayer))
+        while (true)
         {
-            Debug.Log(hitInfo.normal);
-            Debug.DrawRay(footCenter.position, Vector3.down * 20, Color.red);
-            Debug.DrawRay(hitInfo.point, hitInfo.normal * 20, Color.blue);
+            if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 20, GroundLayer))                
+                transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
 
-            Debug.Log(Vector3.Dot(footCenter.position, hitInfo.normal));
-
-            transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
-
-            //if (Math.Abs(hitInfo.normal.y) >= 0.5f)
-            //    rotationX = 50 * Math.Sign(hitInfo.normal.x);
-            //else
-            //    rotationX = hitInfo.normal.x;
-
-            //transform.rotation = Quaternion.Euler(rotationX * 100, transform.rotation.y, transform.rotation.z);
-            //Debug.Log("step");
+            yield return new WaitForEndOfFrame();
         }
     }
 

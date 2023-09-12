@@ -20,5 +20,6 @@ public class AnimalData : ScriptableObject
         public int walkSpeed;
         public int runSpeed;
         public int damage;
+        public int cost;
     }
 }

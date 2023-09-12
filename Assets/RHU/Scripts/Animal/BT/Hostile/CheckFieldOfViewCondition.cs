@@ -15,10 +15,7 @@ public class CheckFieldOfViewCondition : ActionNode
     public override NodeState Evaluate()
     {
         if (fieldOfView.TrackingFOV())
-        {
-
             return NodeState.Success;
-        }
 
         IsTracking = false;
 

@@ -9,7 +9,7 @@ public class TestBullet : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Carnivore") || collision.gameObject.layer == LayerMask.NameToLayer("Herbivore"))
         {
             IHittable hittable = collision.gameObject.GetComponent<IHittable>();
-            hittable?.TakeHit(0);
+            hittable?.TakeHit(1);
         }
     }
 }
