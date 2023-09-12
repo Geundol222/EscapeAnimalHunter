@@ -8,6 +8,7 @@ public abstract class Animal : MonoBehaviour, IHittable
 {
     [SerializeField] public AnimalData data;
     [SerializeField] public AnimalName animalName;
+    [SerializeField] private Transform footCenter;
     [NonSerialized] public Animator animator;
     [NonSerialized] public Collider[] colliders;
     [NonSerialized] public FieldOfView fieldOfView;
@@ -19,6 +20,7 @@ public abstract class Animal : MonoBehaviour, IHittable
     [NonSerialized] public bool isTracking = false;
     [NonSerialized] public float bulletDirection = 0;
     private int groundLayer;
+    [SerializeField] LayerMask GroundLayer;
     public BTBase bTBase;
     public SelectorNode hitNode = new SelectorNode();
     public SelectorNode getAwayNode = new SelectorNode();
@@ -46,7 +48,7 @@ public abstract class Animal : MonoBehaviour, IHittable
         if (!isDie)
             bTBase.Update();
         
-        //StepOnGround();
+        StepOnGround();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -61,11 +63,25 @@ public abstract class Animal : MonoBehaviour, IHittable
     private void StepOnGround()
     {
         RaycastHit hitInfo;
+        float rotationX = 0;
 
-        if (Physics.Raycast(transform.position, Vector3.down, out hitInfo, 20, 1 << groundLayer))
+        if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 20, /*1 << groundLayer*/GroundLayer))
         {
-            transform.position = new Vector3(transform.position.x, hitInfo.point.y, transform.position.z);
-            Debug.Log("step");
+            Debug.Log(hitInfo.normal);
+            Debug.DrawRay(footCenter.position, Vector3.down * 20, Color.red);
+            Debug.DrawRay(hitInfo.point, hitInfo.normal * 20, Color.blue);
+
+            Debug.Log(Vector3.Dot(footCenter.position, hitInfo.normal));
+
+            transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+
+            //if (Math.Abs(hitInfo.normal.y) >= 0.5f)
+            //    rotationX = 50 * Math.Sign(hitInfo.normal.x);
+            //else
+            //    rotationX = hitInfo.normal.x;
+
+            //transform.rotation = Quaternion.Euler(rotationX * 100, transform.rotation.y, transform.rotation.z);
+            //Debug.Log("step");
         }
     }
 

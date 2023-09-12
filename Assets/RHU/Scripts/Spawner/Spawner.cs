@@ -42,7 +42,7 @@ public class Spawner : MonoBehaviour
                 RandomSpawnPoint();
                 RaycastHit hit = GroundCheck();
                 spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x, hit.point.y, spawnPoint.transform.position.z);
-                GameManager.Resource.Instantiate<GameObject>($"Prefabs/{spawnList.animalName}", spawnPoint.transform.position, Quaternion.Euler(0, Random.Range(-180, 180), 0), true);
+                GameManager.Resource.Instantiate<GameObject>($"Prefabs/Animals/{spawnList.animalName}", spawnPoint.transform.position, Quaternion.Euler(0, Random.Range(-180, 180), 0), true);
             }
         }
     }
