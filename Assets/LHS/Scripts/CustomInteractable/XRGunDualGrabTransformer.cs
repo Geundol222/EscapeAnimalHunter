@@ -65,9 +65,18 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
 
     [SerializeField] Transform gripTransform;
 
+    [SerializeField] GameObject leftHand;
+    [SerializeField] GameObject rightHand;
+
     private PoseState state;
     private IXRInteractor mainInteractor;
     private IXRInteractor subInteractor;
+
+    private void Awake()
+    {
+        leftHand.SetActive(false);
+        rightHand.SetActive(false);
+    }
 
     public override void OnGrab(XRGrabInteractable grabInteractable)
     {
@@ -149,6 +158,9 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
 
     private void UpdateTargetMain(XRGrabInteractable grabInteractable, ref Pose targetPose)
     {
+        leftHand.SetActive(false);
+        rightHand.SetActive(true);
+
         Transform interactorAttachTransform = mainInteractor.GetAttachTransform(grabInteractable);
         Pose interactorAttachPose = new Pose(interactorAttachTransform.position, interactorAttachTransform.rotation);
         Pose thisTransformPose = new Pose(transform.position, transform.rotation);
@@ -168,6 +180,9 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
 
     private void UpdateTargetSub(XRGrabInteractable grabInteractable, ref Pose targetPose)
     {
+        leftHand.SetActive(true);
+        rightHand.SetActive(false);
+
         grabInteractable.attachTransform = subInteractor.transform;
 
         Transform interactorAttachTransform = grabInteractable.attachTransform;
@@ -189,7 +204,8 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
 
     void UpdateTargetMulti(XRGrabInteractable grabInteractable, ref Pose targetPose)
     {
-        Debug.Assert(grabInteractable.interactorsSelecting.Count > 1, this);
+        leftHand.SetActive(true);
+        rightHand.SetActive(true);
 
         grabInteractable.attachTransform = gripTransform;
 

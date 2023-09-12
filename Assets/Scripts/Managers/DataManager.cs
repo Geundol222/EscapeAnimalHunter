@@ -1,19 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class DataManager : MonoBehaviour
 {
-    private int curMoney = 0;
+    private static BulletManager bullet;
+
+    public static BulletManager Bullet { get { return bullet; } }
+
+    private void Awake()
+    {
+        InitData();
+    }
+
+    private void InitData()
+    {
+        GameObject bulletObj = new GameObject();
+        bulletObj.name = "BulletManager";
+        bulletObj.transform.parent = transform;
+        bullet = bulletObj.AddComponent<BulletManager>();
+    }
+
+    public int money = 0;
 
     public void GetCost(int cost)
     {
-        curMoney += cost;
+        money += cost;
     }
 
     public void RemoveCost(int cost)
     {
-        curMoney -= cost;
+        money -= cost;
     }
 }

@@ -6,15 +6,15 @@ using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 
 public class Bullet : MonoBehaviour
-{
-    [SerializeField] float bulletSpeed;
+{    
     [SerializeField] LayerMask carnivoreMask;
     [SerializeField] LayerMask herbivoreMask;
 
     Rigidbody rb;
 
-    public int damage;
+    private int damage;
 
+    private float bulletSpeed;
     private float fireAngle;
     private float tipAngle;
     private float maxHeight = 0f;
@@ -31,6 +31,9 @@ public class Bullet : MonoBehaviour
 
     private void Start()
     {
+        damage = DataManager.Bullet.damage;
+        bulletSpeed = DataManager.Bullet.bulletSpeed;
+
         xSpeed = transform.forward.x * bulletSpeed;
         ySpeed = transform.forward.y * bulletSpeed;
         zSpeed = transform.forward.z * bulletSpeed;
@@ -111,7 +114,7 @@ public class Bullet : MonoBehaviour
         yield break;
     }
 
-    void StopProjectile()
+    private void StopProjectile()
     {
         // Stop the projectile
         enabled = false;
