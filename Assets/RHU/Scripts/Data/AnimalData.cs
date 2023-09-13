@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "AniamlData", menuName = "Data/Animal")]
 public class AnimalData : ScriptableObject
 {
-    public enum AnimalName { None, Bear, Moose };
+    public enum AnimalName { Bear, Moose };
 
     [SerializeField] private AnimalInfo[] animals;
     public AnimalInfo[] Animals { get { return animals; } }
@@ -17,8 +17,7 @@ public class AnimalData : ScriptableObject
         public GameObject prefab;
 
         public int maxHp;
-        public int walkSpeed;
-        public int runSpeed;
         public int damage;
+        public int cost;
     }
 }
