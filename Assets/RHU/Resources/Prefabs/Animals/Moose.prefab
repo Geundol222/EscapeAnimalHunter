@@ -1907,7 +1907,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25e779163d9f52241a533337e910e2d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackingRange: 150
+  trackingRange: 100
   attackRange: 0
   trackingAngle: 120
   attackAngle: 0

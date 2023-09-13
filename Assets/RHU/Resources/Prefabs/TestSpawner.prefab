@@ -45,15 +45,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0660fc8fb0559e4aabec526bf3fdce3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPoint: {fileID: 1965082147909871401}
+  spawnPoint: {fileID: 1965082147909871400}
   focusPoint: {fileID: 0}
-  animalSpawnList:
+  animalSpawnArray:
   - animalName: 0
     spawnCount: 5
   - animalName: 1
     spawnCount: 3
-  maxRadius: 150
-  minRadius: 50
+  maxRange: 100
+  minRange: 50
 --- !u!1 &1965082147909871401
 GameObject:
   m_ObjectHideFlags: 0
