@@ -6,30 +6,34 @@ using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 
 public class Bullet : MonoBehaviour
-{
-    [SerializeField] float bulletSpeed;
-    [SerializeField] LayerMask groundMask;
+{    
     [SerializeField] LayerMask carnivoreMask;
     [SerializeField] LayerMask herbivoreMask;
 
     Rigidbody rb;
 
-    float fireAngle;
-    float tipAngle;
-    float maxHeight = 0f;
-    float duration = 0f;
+    private int damage;
 
-    float grav;
+    private float bulletSpeed;
+    private float fireAngle;
+    private float tipAngle;
+    private float maxHeight = 0f;
+    private float duration = 0f;
 
-    float xSpeed;
-    float zSpeed;
-    float ySpeed;
+    private float grav;
 
-    Vector3 initialPosition;
-    Vector3 initialVelocity;
+    private float xSpeed;
+    private float zSpeed;
+    private float ySpeed;
+
+    private Vector3 initialPosition;
+    private Vector3 initialVelocity;
 
     private void Start()
     {
+        damage = DataManager.Bullet.damage;
+        bulletSpeed = DataManager.Bullet.bulletSpeed;
+
         xSpeed = transform.forward.x * bulletSpeed;
         ySpeed = transform.forward.y * bulletSpeed;
         zSpeed = transform.forward.z * bulletSpeed;
@@ -79,15 +83,38 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (groundMask.IsContain(collision.gameObject.layer))
+        if (carnivoreMask.IsContain(collision.gameObject.layer) || herbivoreMask.IsContain(collision.gameObject.layer))
         {
-            StopAllCoroutines();
+            StopCoroutine(BulletFlyRoutine());
+            StopProjectile();
+            transform.parent = collision.gameObject.transform;
+
+            StartCoroutine(DamageRoutine(collision));
+        }
+        else
+        {
+            StopCoroutine(BulletFlyRoutine());
             StopProjectile();
             GameManager.Resource.Destroy(gameObject, 10f);
         }
     }
 
-    void StopProjectile()
+    IEnumerator DamageRoutine(Collision collision)
+    {
+        int tickCount = 0;
+
+        while (tickCount < 4)
+        {
+            IHittable hittable = collision.gameObject.GetComponent<IHittable>();
+            hittable?.TakeHit(damage);
+            tickCount++;
+            yield return new WaitForSeconds(1f);
+        }
+
+        yield break;
+    }
+
+    private void StopProjectile()
     {
         // Stop the projectile
         enabled = false;

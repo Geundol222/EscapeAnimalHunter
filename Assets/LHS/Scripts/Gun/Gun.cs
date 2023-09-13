@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    [SerializeField] int damage;
     [SerializeField] Camera scopeCamera;
     [SerializeField] Bullet bullet;
 
