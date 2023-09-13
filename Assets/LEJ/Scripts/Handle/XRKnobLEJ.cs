@@ -227,7 +227,6 @@ namespace UnityEngine.XR.Content.Interaction
             UpdateRotation(true);
         }
 
-
         void EndGrab(SelectExitEventArgs args)
         {
             m_Interactor = null;
