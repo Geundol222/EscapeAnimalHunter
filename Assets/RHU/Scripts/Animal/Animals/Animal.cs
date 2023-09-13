@@ -22,7 +22,7 @@ public abstract class Animal : MonoBehaviour, IHittable
     [SerializeField] LayerMask GroundLayer;
     public BTBase bTBase;
     public SelectorNode hitNode = new SelectorNode();
-    public SelectorNode getAwayNode = new SelectorNode();
+    public SequenceNode getAwayNode = new SequenceNode();
     public SequenceNode hostileNode = new SequenceNode();
     public IdleAction idleNode;
 
