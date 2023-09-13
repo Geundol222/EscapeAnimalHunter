@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ICrusher
 {
-    void Crusher(float mass, float speed, Transform target);
+    public void Crusher(float mass, float speed, Vector3 targetsForward);
 }

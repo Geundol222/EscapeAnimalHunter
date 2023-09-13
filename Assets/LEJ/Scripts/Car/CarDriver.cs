@@ -69,6 +69,10 @@ public class CarDriver : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (rb.velocity.magnitude > maxSpeed)
+        {
+            rb.velocity = rb.velocity.normalized * maxSpeed;
+        }
 
         if (gearState.isDriveState || gearState.isReverseState)
         {
@@ -91,6 +95,10 @@ public class CarDriver : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// 컨트롤러의 조이스틱 value에 따라 엑셀(0 ~ 1)인지 브레이크(0 ~ -1)인지 판단
+    /// </summary>
+
     private void WhichPedalIsUsing()
     {
         if (carInteractor.isPlayerTakingCar)
@@ -109,22 +117,45 @@ public class CarDriver : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 만약 엑셀 페달을 밟고 있다면 기어 상태에 따라 전진, 후진함
+    /// </summary>
     private void UseAccelPedal()
     {
-        if (inputDetecter.leftJoyStickYValue != 0)
+        if (gearState.isDriveState)
         {
-            CurSpeed = inputDetecter.leftJoyStickYValue * maxSpeed;
-            rb.AddForce(new Vector3(0, 0, CurSpeed));
+            if (inputDetecter.leftJoyStickYValue != 0)
+            {
+                CurSpeed = inputDetecter.leftJoyStickYValue * maxSpeed;
+                rb.AddForce(new Vector3(0, 0, CurSpeed));
+            }
+
+            if (inputDetecter.rightJoyStickYValue != 0)
+            {
+                CurSpeed = inputDetecter.rightJoyStickYValue * maxSpeed;
+                rb.AddForce(new Vector3(0, 0, CurSpeed));
+            }
         }
 
-        if (inputDetecter.rightJoyStickYValue != 0)
+        if (gearState.isReverseState)
         {
-            CurSpeed = inputDetecter.rightJoyStickYValue * maxSpeed;
-            rb.AddForce(new Vector3(0, 0, CurSpeed));
+            if (inputDetecter.leftJoyStickYValue != 0)
+            {
+                CurSpeed = inputDetecter.leftJoyStickYValue * maxSpeed;
+                rb.AddForce(new Vector3(0, 0, -CurSpeed));
+            }
+
+            if (inputDetecter.rightJoyStickYValue != 0)
+            {
+                CurSpeed = inputDetecter.rightJoyStickYValue * maxSpeed;
+                rb.AddForce(new Vector3(0, 0, -CurSpeed));
+            }
         }
     }
 
-    
+    /// <summary>
+    /// 
+    /// </summary>
     private void UseBreakPedal()
     {
 

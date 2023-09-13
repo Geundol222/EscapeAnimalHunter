@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CarDecorator : MonoBehaviour
 {
+    // ¹Ì¿Ï
+
     [SerializeField] GameObject materialObj; //contains 5 objects
 
     [SerializeField] Dictionary<string, Material> materials = new Dictionary<string, Material>();

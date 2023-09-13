@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Content.Interaction;
 
 public class CarDataManager : MonoBehaviour
 {
@@ -23,13 +24,6 @@ public class CarDataManager : MonoBehaviour
     float time;
     [SerializeField] GameObject gear;
 
-    public void Awake()
-    {
-        car.GetComponent<CarReturner>().ReturnToBaseCamp();
-        car.GetComponent<CarDamager>().CurHp = carMaxHP;
-        
-    }
-
     public void Update()
     {
         DamagedByTime();
@@ -49,6 +43,20 @@ public class CarDataManager : MonoBehaviour
         gear.GetComponent<SetGearState>().OnCurGearStateChanged -= SetGearStateInThisScript;
     }
 
+    /// <summary>
+    /// 씬이 초기화 될 때 차의 설정을 위한 함수
+    /// </summary>
+    public void CarInit()
+    {
+        car.GetComponent<CarDamager>().CurHp = carCurHP;
+        car.GetComponent<CarDriver>().MaxSpeed = carCurMaxSpeed;
+        car.GetComponent<CarReturner>().ReturnToBaseCamp();
+        gear.GetComponent<XRSliderLEJ>().value = 0;
+    }
+
+    /// <summary>
+    /// 지속적으로 차의 내구도를 닳게 함 차의 체력이 30 이하면 내구도 닳는 쿨타임이 짧아짐
+    /// </summary>
     public void DamagedByTime()
     {
         if (car.GetComponent<CarDamager>().CurHp> 0 && carCurState == GearState.Drive || carCurState == GearState.Reverse)
@@ -76,6 +84,10 @@ public class CarDataManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 차의 현재 체력을 세팅하고 차량 수리 가능 상태를 조정함
+    /// </summary>
+    /// <param name="value"></param>
     public void SetHP(int value)
     {
         car.GetComponent<CarDamager>().CurHp = value;
@@ -86,15 +98,28 @@ public class CarDataManager : MonoBehaviour
             canRepair = true;
     }
 
+    /// <summary>
+    /// 코스트를 입력하면 차량을 수리해주는 함수
+    /// </summary>
+    /// <param name="cost">코스트</param>
     public void RepairCar(int cost)
     {
         SetHP(cost / 5);
     }
 
+    /// <summary>
+    /// 차량 업그레이드 시 차량이 받을 데미지를 설정하는 함수
+    /// </summary>
+    /// <param name="value">차량이 받을 데미지의 값</param>
     public void SetDamageAmount(int value)
     {
         damageAmount = value;
     }
+
+    /// <summary>
+    /// 차량의 최대속도 업그레이드 시 호출해야하는 함수
+    /// </summary>
+    /// <param name="value"></param>
 
     public void SetMaxSpeed(float value)
     {
@@ -106,12 +131,21 @@ public class CarDataManager : MonoBehaviour
             canUpgrade = true;
     }
 
+    /// <summary>
+    /// 차량의 현재 외관 상태를 패턴으로 설정(색을 바꾸는 것과 구분하기 위함)
+    /// </summary>
+    /// <param name="patternName">메터리얼 이름</param>
+
     public void ChangeExteriorToPattern(string patternName)
     {
         Material matToChange = car.GetComponent<CarDecorator>().FindMaterial(patternName);
         car.GetComponent<CarDecorator>().ChangeMaterial(matToChange);
     }
 
+    /// <summary>
+    /// 차량의 현재 외관 상태를 메터리얼 색상 변경 모드로 바꿈
+    /// </summary>
+    /// <param name="colorName"></param>
     public void ChangeExteriorColor(string colorName)
     {
         Color colorToChange = car.GetComponent<CarDecorator>().FindColor(colorName);

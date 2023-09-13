@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UHDSeter : MonoBehaviour
 {
@@ -10,8 +11,11 @@ public class UHDSeter : MonoBehaviour
     
     [SerializeField] TMP_Text speedText;
     [SerializeField] TMP_Text maxSpeedText;
-    [SerializeField] TMP_Text durabilityText;
     [SerializeField] GameObject durabilityGauge;
+
+    [SerializeField] Material emissionRed;
+
+    int durabilityToTen;
 
     private void Awake()
     {
@@ -46,7 +50,7 @@ public class UHDSeter : MonoBehaviour
 
     void SetDurabilityGauge()
     {
-        int durabilityToTen = car.GetComponent<CarDamager>().MaxHp / 10;
+        durabilityToTen = car.GetComponent<CarDamager>().MaxHp / 10;
         int setActiveCount = 0;
         
         if (car.GetComponent<CarDamager>().CurHp <= 0)
@@ -56,7 +60,7 @@ public class UHDSeter : MonoBehaviour
 
         for (int i = 1; i < 11; i++)
         {
-            if (car.GetComponent<CarDamager>().CurHp < i * durabilityToTen)
+            if (car.GetComponent<CarDamager>().CurHp > i * durabilityToTen)
                 setActiveCount++;
         }
 
@@ -71,6 +75,9 @@ public class UHDSeter : MonoBehaviour
                 durabilityGauge.transform.GetChild(i).gameObject.SetActive(true);
             else
                 durabilityGauge.transform.GetChild(i).gameObject.SetActive(false);
+
+            if (car.GetComponent<CarDamager>().CurHp < durabilityToTen)
+                durabilityGauge.transform.GetChild(0).gameObject.GetComponent<Image>().material = emissionRed;
         }
     }
 
