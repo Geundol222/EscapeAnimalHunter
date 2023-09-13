@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RadarCanvas : MonoBehaviour
 {
     [SerializeField] Transform car;
     [SerializeField] SphereCasterNew sphereCaster;
+    [SerializeField] GameObject pointGreen;
     [SerializeField] GameObject circlePrefab;
 
     [SerializeField] GameObject[] circles = new GameObject[10];
     int index;
+    int layerMaskForCarnivore;
 
     private void Awake()
     {
@@ -36,19 +39,27 @@ public class RadarCanvas : MonoBehaviour
 
     private void OnEnable()
     {
-        sphereCaster.OnDetect += MakePoint;
+        sphereCaster.OnDetectHerbivore += MakePoint;
+        sphereCaster.OnDetectCarnivore += MakePoint;
     }
 
     private void OnDisable()
     {
-        sphereCaster.OnDetect -= MakePoint;
+        sphereCaster.OnDetectHerbivore -= MakePoint;
+        sphereCaster.OnDetectCarnivore -= MakePoint;
     }
 
     Coroutine returnCircleRoutine;
-    private void MakePoint(Transform animalPosition)
+    private void MakePoint(Transform animalPosition, bool isCarnivore)
     {
         circles[index].SetActive(true);
         circles[index].gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3((car.position.x - animalPosition.position.x) * (0.02f / sphereCaster.radiusMax), (animalPosition.position.z - car.position.z) * (0.07f / sphereCaster.radiusMax), 0f);
+        
+        if (isCarnivore)
+            circles[index].gameObject.GetComponent<Image>().color = Color.red;
+        else
+            circles[index].gameObject.GetComponent<Image>().color = Color.green;
+
         returnCircleRoutine = StartCoroutine(ReturnCircle());
         index++;
         if (index >= circles.Length)
