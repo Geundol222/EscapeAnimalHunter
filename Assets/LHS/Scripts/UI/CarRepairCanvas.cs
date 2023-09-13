@@ -31,7 +31,7 @@ public class CarRepairCanvas : MonoBehaviour
     {
         okButton.gameObject.SetActive(false);
 
-        // enableRepariValue = DataManager.Car.maxHp - DataManager.Car.curHp;
+        enableRepairValue = DataManager.Car.carMaxHP - DataManager.Car.carCurHP;
 
         enableRepairText.text = enableRepairValue.ToString();
 
@@ -59,13 +59,13 @@ public class CarRepairCanvas : MonoBehaviour
     public void PressOkButton()
     {
         GameManager.Data.Money -= cost;
-        // DataManager.Car.curHp += sliderValue;
+        DataManager.Car.SetHP(sliderValue);
 
         okButton.gameObject.SetActive(false);
 
         cost = 0;
         sliderValue = 0;
-        // enableRepairValue = DataManager.Car.maxHp - DataManager.Car.curHp;
+        enableRepairValue = DataManager.Car.carMaxHP - DataManager.Car.carCurHP;
 
         costText.text = cost.ToString();
         sliderText.text = sliderValue.ToString();

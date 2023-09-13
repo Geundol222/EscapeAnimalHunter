@@ -5,7 +5,7 @@ using UnityEngine.XR.Content.Interaction;
 
 public class CarDataManager : MonoBehaviour
 {
-    [SerializeField] GameObject car;
+    GameObject car;
     [SerializeField] float damageTime;
     [SerializeField] int damageAmount;
     [SerializeField] int maxUpgradableSpeed = 55;
@@ -22,18 +22,43 @@ public class CarDataManager : MonoBehaviour
     public bool canRepair = false;
 
     float time;
-    [SerializeField] GameObject gear;
+    GameObject gear;
+
+    private void Awake()
+    {
+        StartCoroutine(FindRoutine());
+    }
+
+    IEnumerator FindRoutine()
+    {
+        yield return new WaitUntil(() => { return GameObject.Find("Car"); });
+
+        car = GameObject.Find("Car");
+        gear = car.transform.Find("Gear").gameObject;
+
+        yield break;
+    }
 
     public void Update()
     {
-        DamagedByTime();
+        if (car != null)
+            DamagedByTime();
     }
 
     public void OnEnable()
     {
+        StartCoroutine(EnableRoutine());
+    }
+
+    IEnumerator EnableRoutine()
+    {
+        yield return new WaitUntil(() => { return car != null; });
+
         car.GetComponent<CarDriver>().OnMaxSpeedChanged += SetCurMaxSpeedInThisScript;
         car.GetComponent<CarDamager>().OnCurHpChanged += SetCurHPInThisScript;
         gear.GetComponent<SetGearState>().OnCurGearStateChanged += SetGearStateInThisScript;
+
+        yield break;
     }
 
     public void OnDisable()
@@ -59,7 +84,7 @@ public class CarDataManager : MonoBehaviour
     /// </summary>
     public void DamagedByTime()
     {
-        if (car.GetComponent<CarDamager>().CurHp> 0 && carCurState == GearState.Drive || carCurState == GearState.Reverse)
+        if (car.GetComponent<CarDamager>().CurHp > 0 && carCurState == GearState.Drive || carCurState == GearState.Reverse)
         {
             if (car.GetComponent<CarDamager>().CurHp > 30)
             {

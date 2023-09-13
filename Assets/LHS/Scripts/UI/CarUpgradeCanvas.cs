@@ -151,6 +151,9 @@ public class CarUpgradeCanvas : MonoBehaviour
     {
         DataManager.Upgrade.applyCost = 0;
 
+        DataManager.Car.carMaxHP += duraPlus;
+        DataManager.Car.SetMaxSpeed(speedPlus);
+
         GameManager.Data.Money -= DataManager.Upgrade.applyCost;
     }
 

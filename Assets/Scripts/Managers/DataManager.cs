@@ -5,9 +5,11 @@ public class DataManager : MonoBehaviour
 {
     private static BulletManager bullet;
     private static UpgradeManager upgrade;
+    private static CarDataManager car;
 
     public static BulletManager Bullet { get { return bullet; } }
     public static UpgradeManager Upgrade { get {  return upgrade; } }
+    public static CarDataManager Car { get { return car; } }
 
     private void Awake()
     {
@@ -25,6 +27,11 @@ public class DataManager : MonoBehaviour
         upgradeObj.name = "UpgradeManager";
         upgradeObj.transform.parent = transform;
         upgrade = upgradeObj.AddComponent<UpgradeManager>();
+
+        GameObject carObj = new GameObject();
+        carObj.name = "CarDataManager";
+        carObj.transform.parent = transform;
+        car = carObj.AddComponent<CarDataManager>();
     }
     
     private int money = 0;

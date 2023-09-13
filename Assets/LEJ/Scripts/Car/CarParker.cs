@@ -5,19 +5,13 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class CarParker : MonoBehaviour
 {
-    [SerializeField] string parkingPointLayerName;
-    int parkingPointLayerMask;
+    [SerializeField] LayerMask parkingPointLayer;
     public bool isParking;
     public bool isInBaseCamp;
 
-    private void Start()
-    {
-        parkingPointLayerMask = 1 << LayerMask.NameToLayer(parkingPointLayerName);
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.gameObject.layer == parkingPointLayerMask)
+        if (parkingPointLayer.IsContain(other.transform.gameObject.layer))
         {
             isInBaseCamp = true;
         }
@@ -25,7 +19,7 @@ public class CarParker : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.transform.gameObject.layer == parkingPointLayerMask)
+        if (parkingPointLayer.IsContain(other.transform.gameObject.layer))
         {
             isInBaseCamp = false;
         }

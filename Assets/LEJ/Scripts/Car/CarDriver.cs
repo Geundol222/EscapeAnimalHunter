@@ -127,13 +127,13 @@ public class CarDriver : MonoBehaviour
             if (inputDetecter.leftJoyStickYValue != 0)
             {
                 CurSpeed = inputDetecter.leftJoyStickYValue * maxSpeed;
-                rb.AddForce(new Vector3(0, 0, CurSpeed));
+                rb.AddForce(transform.forward * CurSpeed);
             }
 
             if (inputDetecter.rightJoyStickYValue != 0)
             {
                 CurSpeed = inputDetecter.rightJoyStickYValue * maxSpeed;
-                rb.AddForce(new Vector3(0, 0, CurSpeed));
+                rb.AddForce(transform.forward * CurSpeed);
             }
         }
 
@@ -142,13 +142,13 @@ public class CarDriver : MonoBehaviour
             if (inputDetecter.leftJoyStickYValue != 0)
             {
                 CurSpeed = inputDetecter.leftJoyStickYValue * maxSpeed;
-                rb.AddForce(new Vector3(0, 0, -CurSpeed));
+                rb.AddForce(transform.forward * -CurSpeed);
             }
 
             if (inputDetecter.rightJoyStickYValue != 0)
             {
                 CurSpeed = inputDetecter.rightJoyStickYValue * maxSpeed;
-                rb.AddForce(new Vector3(0, 0, -CurSpeed));
+                rb.AddForce(transform.forward * -CurSpeed);
             }
         }
     }
@@ -158,17 +158,16 @@ public class CarDriver : MonoBehaviour
     /// </summary>
     private void UseBreakPedal()
     {
-
         if (inputDetecter.leftJoyStickYValue != 0)
         {
             CurSpeed = -inputDetecter.leftJoyStickYValue * maxSpeed;
-            rb.AddForce(new Vector3(0, 0, CurSpeed));
+            rb.AddForce(transform.forward * CurSpeed);
         }
 
         if (inputDetecter.rightJoyStickYValue != 0)
         {
             CurSpeed = -inputDetecter.rightJoyStickYValue * maxSpeed;
-            rb.AddForce(new Vector3(0, 0, CurSpeed));
+            rb.AddForce(transform.forward * CurSpeed);
         }
     }
 
