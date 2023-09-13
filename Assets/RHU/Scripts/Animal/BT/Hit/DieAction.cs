@@ -20,9 +20,9 @@ public class DieAction : ActionNode
                 return NodeState.Running;
 
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Run") &&
-                animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Run_Moose") &&
-                animator.GetCurrentAnimatorStateInfo(0).IsName("Run Left_Moose") &&
-                animator.GetCurrentAnimatorStateInfo(0).IsName("Run Right_Moose")
+                animator.GetCurrentAnimatorStateInfo(0).IsName("Jump Run") &&
+                animator.GetCurrentAnimatorStateInfo(0).IsName("Run Left") &&
+                animator.GetCurrentAnimatorStateInfo(0).IsName("Run Right")
                 )
                 animator.SetInteger("RandomDie", 2);
             else
