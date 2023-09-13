@@ -9,8 +9,8 @@ public class CarDataManager : MonoBehaviour
     [SerializeField] int damageAmount;
     [SerializeField] int maxUpgradableSpeed = 55;
 
-    public float carCurHP;
-    public float carMaxHP;
+    public int carCurHP;
+    public int carMaxHP;
     public float carCurMaxSpeed;
     public string carCurExterior;
     public enum GearState { Parking, Neutral, Drive, Reverse };
@@ -21,17 +21,13 @@ public class CarDataManager : MonoBehaviour
     public bool canRepair = false;
 
     float time;
-    GameObject gear;
+    [SerializeField] GameObject gear;
 
     public void Awake()
     {
         car.GetComponent<CarReturner>().ReturnToBaseCamp();
-
-        foreach (GameObject child in car.transform)
-        {
-            if (child.name == "Gear")
-                gear = child;
-        }
+        car.GetComponent<CarDamager>().CurHp = carMaxHP;
+        
     }
 
     public void Update()

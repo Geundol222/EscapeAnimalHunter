@@ -36,6 +36,16 @@ public class CarDriver : MonoBehaviour
     [SerializeField] float handleRotateSpeed; //in LEJTestScene : 0.5
     [SerializeField] float backToZeroSpeed; //in LEJTestScene : 0.01
 
+    public UnityAction OnCurSpeedChanged;
+    [SerializeField] private float curSpeed;
+    public float CurSpeed { get { return curSpeed; }
+        set 
+        {
+            curSpeed = value;
+            OnCurSpeedChanged?.Invoke();
+        }
+    }
+
     bool isAcceling;
     bool isBreaking;
     float setHandleValue;
@@ -47,7 +57,7 @@ public class CarDriver : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         player = GameObject.FindWithTag("Player");
-        carInteractor = player.GetComponent<PlayerCarInteractor>();
+        carInteractor = player.GetComponent<PlayerCarInteractor>();      
         inputDetecter = player.GetComponent<PlayerInputDetecter>();
 
         gearState = gearObj.GetComponent<SetGearState>();
@@ -103,12 +113,14 @@ public class CarDriver : MonoBehaviour
     {
         if (inputDetecter.leftJoyStickYValue != 0)
         {
-            rb.AddForce(new Vector3(0, 0, inputDetecter.leftJoyStickYValue * maxSpeed));
+            CurSpeed = inputDetecter.leftJoyStickYValue * maxSpeed;
+            rb.AddForce(new Vector3(0, 0, CurSpeed));
         }
 
         if (inputDetecter.rightJoyStickYValue != 0)
         {
-            rb.AddForce(new Vector3(0, 0, inputDetecter.rightJoyStickYValue * maxSpeed));
+            CurSpeed = inputDetecter.rightJoyStickYValue * maxSpeed;
+            rb.AddForce(new Vector3(0, 0, CurSpeed));
         }
     }
 
@@ -118,13 +130,14 @@ public class CarDriver : MonoBehaviour
 
         if (inputDetecter.leftJoyStickYValue != 0)
         {
-            rb.AddForce(new Vector3(0, 0, -inputDetecter.leftJoyStickYValue * maxSpeed));
-
+            CurSpeed = -inputDetecter.leftJoyStickYValue * maxSpeed;
+            rb.AddForce(new Vector3(0, 0, CurSpeed));
         }
 
         if (inputDetecter.rightJoyStickYValue != 0)
         {
-            rb.AddForce(new Vector3(0, 0, -inputDetecter.rightJoyStickYValue * maxSpeed));
+            CurSpeed = -inputDetecter.rightJoyStickYValue * maxSpeed;
+            rb.AddForce(new Vector3(0, 0, CurSpeed));
         }
     }
 
@@ -132,7 +145,8 @@ public class CarDriver : MonoBehaviour
     {
         SetHandleValue();
 
-        transform.RotateAround(transform.position, new Vector3(0f, 1f, 0f), -handleRotateSpeed * setHandleValue);
+        if (curSpeed > 0)
+            transform.RotateAround(transform.position, new Vector3(0f, 1f, 0f), -handleRotateSpeed * setHandleValue);
     }
 
     private void SetHandleValue()

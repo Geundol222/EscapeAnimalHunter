@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +7,20 @@ using UnityEngine.Events;
 public class CarDamager : MonoBehaviour, IHittable
 {
     [SerializeField] Transform parkingPosition;
-    [SerializeField] float maxHp;
+    
+    [SerializeField] int maxHp;
+    public int MaxHp
+    {
+        get { return maxHp; }
+        set
+        {
+            maxHp = value;
+        }
+    }
+
     public UnityAction OnCurHpChanged;
-    [SerializeField] float curHp;
-    public float CurHp
+    [SerializeField] int curHp;
+    public int CurHp
     {
         get { return curHp; }
         set
@@ -33,6 +44,7 @@ public class CarDamager : MonoBehaviour, IHittable
     {
         curHp = maxHp;
     }
+
 
     public void TakeHit(int damage)
     {
