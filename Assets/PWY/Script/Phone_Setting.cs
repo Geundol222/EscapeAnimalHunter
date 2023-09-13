@@ -7,6 +7,13 @@ using UnityEngine.UI;
 
 public class Phone_Setting : MonoBehaviour
 {
+    /// <summary>
+    /// 미싱날경우 경로
+    /// Audio
+    /// PWY/SFX/PhoneAudiu
+    /// 
+    /// 
+    /// </summary>
     [Header("Audio")]
     [SerializeField] AudioMixer phoneAudio;
     [SerializeField] Slider audio_Master;           // 전체소리
@@ -38,9 +45,9 @@ public class Phone_Setting : MonoBehaviour
     public float y_Brightness;
 
     // 핸드폰 크기
-    [Range(-2.3f,-5f)]
+    [Range(2.3f, 5f)]
     public float phoneSizeX;
-    [Range(-2.3f, -5f)]
+    [Range(2.3f, 5f)]
     public float phoneSizeY;
 
 
@@ -50,8 +57,8 @@ public class Phone_Setting : MonoBehaviour
         audio_Vibration.value = 1 ;
         audio_CameraShutter.value = 1;
 
-        phone_SizeX.value = -2.3f;
-        phone_SizeY.value = -2.3f;
+        phone_SizeX.value = 2.3f;
+        phone_SizeY.value = 2.3f;
 
         brightness_X.value = 90;
     }

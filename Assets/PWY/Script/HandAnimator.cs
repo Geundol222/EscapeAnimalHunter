@@ -9,16 +9,9 @@ using UnityEngine.XR.Interaction.Toolkit.Inputs;
 public class HandAnimator : MonoBehaviour
 {
     [SerializeField] Animator left_Animator;
-
     [SerializeField] Animator right_Animator;
 
-    private void Awake()
-    {
-        // animator = GetComponent<Animator>();
-        // animator1 = GetComponent<Animator>();
-    }
-
-    public void Grip(SelectEnterEventArgs args)
+    public void Phone_Grip(SelectEnterEventArgs args)
     {
         if (args.interactorObject.transform.gameObject.name == "Right Direct Interactor")
         {
@@ -34,7 +27,7 @@ public class HandAnimator : MonoBehaviour
         }
     }
 
-    public void Drop(SelectExitEventArgs args)
+    public void Phone_Drop(SelectExitEventArgs args)
     {
         if (args.interactorObject.transform.gameObject.name == "Right Direct Interactor")
         {
