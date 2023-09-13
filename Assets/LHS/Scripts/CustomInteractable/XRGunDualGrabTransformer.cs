@@ -91,6 +91,9 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
     {
         XRGrabInteractable grabInteractable = GetComponent<XRGrabInteractable>();
 
+        leftHand.SetActive(false);
+        rightHand.SetActive(false);
+
         grabInteractable.attachTransform = gripTransform;
         args.interactableObject.lastSelectExited.RemoveListener(OnDrop);
     }

@@ -41,65 +41,105 @@ public class UpgradeManager : MonoBehaviour
 
     public void DurabilityUp()
     {
-        durabilityIndex++;
-        carCostMagFirst++;
+        if (durabilityIndex >= 9)
+            durabilityIndex = 9;
+        else
+        {
+            durabilityIndex++;
+            carCostMagFirst++;
 
-        IncreaseCost(20);
+            IncreaseCost(20);
+        }
     }
 
     public void DurabilityDown()
     {
-        durabilityIndex--;
-        carCostMagFirst--;
+        if (durabilityIndex <= 0)
+            durabilityIndex = 0;
+        else
+        {
+            durabilityIndex--;
+            carCostMagFirst--;
 
-        DecreaseCost(20);
+            DecreaseCost(20);
+        }        
     }
 
     public void CarSpeedUp()
     {
-        carSpeedIndex++;
-        carCostMagSecond++;
+        if (carSpeedIndex >= 9)
+            carSpeedIndex = 9;
+        else
+        {
+            carSpeedIndex++;
+            carCostMagSecond++;
 
-        IncreaseCost(20);
+            IncreaseCost(20);
+        }
     }
 
     public void CarSpeedDown()
     {
-        carSpeedIndex--;
-        carCostMagSecond--;
+        if (carSpeedIndex <= 0)
+            carSpeedIndex = 0;
+        else
+        {
+            carSpeedIndex--;
+            carCostMagSecond--;
 
-        DecreaseCost(20);
+            DecreaseCost(20);
+        }
     }
 
     public void DamageUp()
     {
-        damageIndex++;
-        bulletCostMagFirst++;
+        if (damageIndex >= 9)
+            damageIndex = 9;
+        else
+        {
+            damageIndex++;
+            bulletCostMagFirst++;
 
-        IncreaseCost(20);
+            IncreaseCost(20);
+        }
     }
 
     public void DamageDown()
     {
-        damageIndex--;
-        bulletCostMagFirst--;
+        if (damageIndex <= 0)
+            damageIndex = 0;
+        else
+        {
+            damageIndex--;
+            bulletCostMagFirst--;
 
-        DecreaseCost(20);
+            DecreaseCost(20);
+        }
     }
 
     public void BulletSpeedUp()
     {
-        bulletSpeedIndex++;
-        bulletCostMagSecond++;
+        if (bulletSpeedIndex >= 9)
+            bulletSpeedIndex = 9;
+        else
+        {
+            bulletSpeedIndex++;
+            bulletCostMagSecond++;
 
-        IncreaseCost(20);
+            IncreaseCost(20);
+        }
     }
 
     public void BulletSpeedDown()
     {
-        bulletSpeedIndex--;
-        bulletCostMagSecond--;
+        if (bulletSpeedIndex <= 0)
+            bulletSpeedIndex = 0;
+        else
+        {
+            bulletSpeedIndex--;
+            bulletCostMagSecond--;
 
-        DecreaseCost(20);
+            DecreaseCost(20);
+        }
     }
 }

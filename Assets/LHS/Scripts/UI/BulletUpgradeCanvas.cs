@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -10,16 +9,29 @@ public class BulletUpgradeCanvas : MonoBehaviour
     [SerializeField] GameObject speedMeter;
     [SerializeField] Button okButton;
     [SerializeField] TMP_Text costText;
+    [SerializeField] TMP_Text speedPlusText;
+    [SerializeField] TMP_Text damagePlusText;
+
+    [SerializeField] Transform itemTransform;
 
     List<Image> damageImages;
     List<Image> speedImages;
+    GameObject bulletObject;
+
+    int speedPlus;
+    int damagePlus;
 
     private void Awake()
     {
         damageImages = new List<Image>();
         speedImages = new List<Image>();
 
+        speedPlus = 0;
+        damagePlus = 0;
+
         costText.text = "0";
+        speedPlusText.text = "0";
+        damagePlusText.text = "0";
 
         for (int i = 0; i < damageMeter.transform.childCount; i++)
         {
@@ -35,34 +47,32 @@ public class BulletUpgradeCanvas : MonoBehaviour
     private void OnEnable()
     {
         okButton.gameObject.SetActive(false);
+
+        bulletObject = GameManager.Resource.Instantiate<GameObject>("Prefabs/ItemBullet", itemTransform.position, Quaternion.Euler(-90, 0, 0), true);
     }
 
     private void IncreaseCost()
     {
-        DataManager.Upgrade.IncreaseCost(20);
-
         costText.text = DataManager.Upgrade.applyCost.ToString();
     }
 
     private void DecreaseCost()
     {
-        DataManager.Upgrade.DecreaseCost(20);
-
         costText.text = DataManager.Upgrade.applyCost.ToString();
     }
 
     public void DamageUp()
     {
-        if (!okButton.gameObject.activeSelf)
-            okButton.gameObject.SetActive(true);
-
-        if (DataManager.Upgrade.damageIndex >= damageImages.Count - 1)
-        {
-            DataManager.Upgrade.damageIndex = damageImages.Count - 1;
-            return;
-        }
-
         DataManager.Upgrade.DamageUp();
+
+        if (damagePlus >= 12)
+            damagePlus = 12;
+        else
+            damagePlus += 1;
+
+        damagePlusText.text = damagePlus.ToString();
+
+        okButton.gameObject.SetActive(DataManager.Upgrade.damageIndex > 0 ? true : false);
 
         damageImages[DataManager.Upgrade.damageIndex].color = Color.white;
 
@@ -71,35 +81,40 @@ public class BulletUpgradeCanvas : MonoBehaviour
 
     public void DamageDown()
     {
-        damageImages[DataManager.Upgrade.damageIndex + 1].color = Color.black;
+        damageImages[DataManager.Upgrade.damageIndex].color = Color.black;
+
+        DataManager.Upgrade.DamageDown();
+
+        if (damagePlus <= 0)
+            damagePlus = 0;
+        else
+            damagePlus -= 1;
+
+        damagePlusText.text = damagePlus.ToString();
 
         if (DataManager.Upgrade.damageIndex <= 0)
         {
             if (DataManager.Upgrade.bulletSpeedIndex <= 0)
                 okButton.gameObject.SetActive(false);
 
-            DataManager.Upgrade.damageIndex = 0;
-            damageImages[0].color = Color.black;
-            return;
+            damageImages[0].color = Color.white;
         }
-
-        DataManager.Upgrade.DamageDown();
 
         DecreaseCost();
     }
 
     public void SpeedUp()
     {
-        if (!okButton.gameObject.activeSelf)
-            okButton.gameObject.SetActive(true);
-
-        if (DataManager.Upgrade.bulletSpeedIndex >= speedImages.Count - 1)
-        {
-            DataManager.Upgrade.bulletSpeedIndex = speedImages.Count - 1;
-            return;
-        }
-
         DataManager.Upgrade.BulletSpeedUp();
+
+        if (speedPlus >= 90)
+            speedPlus = 90;
+        else
+            speedPlus += 10;
+
+        speedPlusText.text = speedPlus.ToString();
+
+        okButton.gameObject.SetActive(DataManager.Upgrade.bulletSpeedIndex > 0 ? true : false);
 
         speedImages[DataManager.Upgrade.bulletSpeedIndex].color = Color.white;
 
@@ -108,19 +123,24 @@ public class BulletUpgradeCanvas : MonoBehaviour
 
     public void SpeedDown()
     {
-        speedImages[DataManager.Upgrade.carSpeedIndex].color = Color.black;
+        speedImages[DataManager.Upgrade.bulletSpeedIndex].color = Color.black;
+
+        DataManager.Upgrade.BulletSpeedDown();
+
+        if (speedPlus <= 0)
+            speedPlus = 0;
+        else
+            speedPlus -= 10;
+
+        speedPlusText.text = speedPlus.ToString();
 
         if (DataManager.Upgrade.bulletSpeedIndex <= 0)
         {
             if (DataManager.Upgrade.damageIndex <= 0)
                 okButton.gameObject.SetActive(false);
 
-            DataManager.Upgrade.bulletSpeedIndex = 0;
-            speedImages[0].color = Color.black;
-            return;
+            speedImages[0].color = Color.white;
         }
-
-        DataManager.Upgrade.BulletSpeedDown();
 
         DecreaseCost();
     }
@@ -129,14 +149,20 @@ public class BulletUpgradeCanvas : MonoBehaviour
     {
         DataManager.Upgrade.applyCost = 0;
 
-        DataManager.Bullet.damage *= DataManager.Upgrade.bulletCostMagFirst;
-        DataManager.Bullet.bulletSpeed *= DataManager.Upgrade.bulletCostMagSecond;
-
-        GameManager.Data.RemoveCost(DataManager.Upgrade.applyCost);
+        GameManager.Data.Money -= DataManager.Upgrade.applyCost;
     }
 
     private void OnDisable()
     {
         okButton.gameObject.SetActive(false);
+
+        speedPlus = 0;
+        damagePlus = 0;
+
+        speedPlusText.text = "0";
+        damagePlusText.text = "0";
+
+        if (bulletObject != null)
+            GameManager.Resource.Destroy(bulletObject);
     }
 }

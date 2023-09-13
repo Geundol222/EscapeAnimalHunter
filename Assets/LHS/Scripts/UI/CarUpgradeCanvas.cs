@@ -11,16 +11,29 @@ public class CarUpgradeCanvas : MonoBehaviour
     [SerializeField] GameObject speedMeter;
     [SerializeField] Button okButton;
     [SerializeField] TMP_Text costText;
+    [SerializeField] TMP_Text speedPlusText;
+    [SerializeField] TMP_Text duraPlusText;
+
+    [SerializeField] Transform itemTransform;
 
     List<Image> durabilityImages;
     List<Image> speedImages;
+    GameObject carObject;
+
+    int speedPlus;
+    int duraPlus;
 
     private void Awake()
     {
         durabilityImages = new List<Image>();
         speedImages = new List<Image>();
 
+        speedPlus = 0;
+        duraPlus = 0;
+
         costText.text = "0";
+        speedPlusText.text = "0";
+        duraPlusText.text = "0";
 
         for (int i = 0; i < durabilityMeter.transform.childCount; i++)
         {
@@ -36,34 +49,32 @@ public class CarUpgradeCanvas : MonoBehaviour
     private void OnEnable()
     {
         okButton.gameObject.SetActive(false);
+
+        carObject = GameManager.Resource.Instantiate<GameObject>("Prefabs/ItemCar", itemTransform.position, Quaternion.Euler(0, -90, 0), true);
     }
 
     private void IncreaseCost()
     {
-        DataManager.Upgrade.IncreaseCost(20);
-
         costText.text = DataManager.Upgrade.applyCost.ToString();
     }
 
     private void DecreaseCost()
     {
-        DataManager.Upgrade.DecreaseCost(20);
-
         costText.text = DataManager.Upgrade.applyCost.ToString();
     }
 
     public void DurabilityUp()
     {
-        if (!okButton.gameObject.activeSelf)
-            okButton.gameObject.SetActive(true);
-
-        if (DataManager.Upgrade.durabilityIndex >= durabilityImages.Count - 1)
-        {
-            DataManager.Upgrade.durabilityIndex = durabilityImages.Count - 1;
-            return;
-        }
-
         DataManager.Upgrade.DurabilityUp();
+
+        if (duraPlus >= 90)
+            duraPlus = 90;
+        else
+            duraPlus += 10;
+
+        duraPlusText.text = duraPlus.ToString();
+
+        okButton.gameObject.SetActive(DataManager.Upgrade.durabilityIndex > 0 ? true : false);
 
         durabilityImages[DataManager.Upgrade.durabilityIndex].color = Color.white;
 
@@ -72,35 +83,40 @@ public class CarUpgradeCanvas : MonoBehaviour
 
     public void DurabilityDown()
     {
-        durabilityImages[DataManager.Upgrade.durabilityIndex].color = Color.black; 
+        durabilityImages[DataManager.Upgrade.durabilityIndex].color = Color.black;
+
+        DataManager.Upgrade.DurabilityDown();
+
+        if (duraPlus <= 0)
+            duraPlus = 0;
+        else
+            duraPlus -= 10;
+
+        duraPlusText.text = duraPlus.ToString();
 
         if (DataManager.Upgrade.durabilityIndex <= 0)
         {
             if (DataManager.Upgrade.carSpeedIndex <= 0)
                 okButton.gameObject.SetActive(false);
 
-            DataManager.Upgrade.durabilityIndex = 0;
-            durabilityImages[0].color = Color.black;
-            return;
+            durabilityImages[0].color = Color.white;
         }
 
-        DataManager.Upgrade.DurabilityDown();
-        
         DecreaseCost();
     }
 
     public void SpeedUp()
     {
-        if (!okButton.gameObject.activeSelf)
-            okButton.gameObject.SetActive(true);
-
-        if (DataManager.Upgrade.carSpeedIndex >= speedImages.Count - 1)
-        {
-            DataManager.Upgrade.carSpeedIndex = speedImages.Count - 1;
-            return;
-        }
-
         DataManager.Upgrade.CarSpeedUp();
+
+        if (speedPlus >= 45)
+            speedPlus = 45;
+        else
+            speedPlus += 5;
+
+        speedPlusText.text = speedPlus.ToString();
+
+        okButton.gameObject.SetActive(DataManager.Upgrade.carSpeedIndex > 0 ? true : false);
 
         speedImages[DataManager.Upgrade.carSpeedIndex].color = Color.white;
 
@@ -111,17 +127,22 @@ public class CarUpgradeCanvas : MonoBehaviour
     {
         speedImages[DataManager.Upgrade.carSpeedIndex].color = Color.black;
 
+        DataManager.Upgrade.CarSpeedDown();
+
+        if (speedPlus <= 0)
+            speedPlus = 0;
+        else
+            speedPlus -= 5;
+
+        speedPlusText.text = speedPlus.ToString();
+
         if (DataManager.Upgrade.carSpeedIndex <= 0)
         {
             if (DataManager.Upgrade.durabilityIndex <= 0)
                 okButton.gameObject.SetActive(false);
 
-            DataManager.Upgrade.carSpeedIndex = 0;
-            speedImages[0].color = Color.black;
-            return;
+            speedImages[0].color = Color.white;
         }
-
-        DataManager.Upgrade.CarSpeedDown();
 
         DecreaseCost();
     }
@@ -130,11 +151,20 @@ public class CarUpgradeCanvas : MonoBehaviour
     {
         DataManager.Upgrade.applyCost = 0;
 
-        GameManager.Data.RemoveCost(DataManager.Upgrade.applyCost);
+        GameManager.Data.Money -= DataManager.Upgrade.applyCost;
     }
 
     private void OnDisable()
     {
         okButton.gameObject.SetActive(false);
+
+        speedPlus = 0;
+        duraPlus = 0;
+
+        speedPlusText.text = "0";
+        duraPlusText.text = "0";
+
+        if (carObject != null)
+            GameManager.Resource.Destroy(carObject);
     }
 }

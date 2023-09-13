@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DataManager : MonoBehaviour
 {
@@ -25,16 +26,17 @@ public class DataManager : MonoBehaviour
         upgradeObj.transform.parent = transform;
         upgrade = upgradeObj.AddComponent<UpgradeManager>();
     }
+    
+    private int money = 0;
 
-    public int money = 0;
-
-    public void GetCost(int cost)
+    public int Money
     {
-        money += cost;
+        get { return money; }
+        set
+        {
+            OnCurrentMoneyChanged?.Invoke(value);
+            money = value;
+        }
     }
-
-    public void RemoveCost(int cost)
-    {
-        money -= cost;
-    }
+    public event UnityAction<int> OnCurrentMoneyChanged;
 }
