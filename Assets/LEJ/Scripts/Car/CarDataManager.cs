@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR.Content.Interaction;
 
 public class CarDataManager : MonoBehaviour
 {
     GameObject car;
-    float damageTime = 60f;
+    float damageTime = 3f;
     int damageAmount = 5;
     int maxUpgradableSpeed = 55;
 
@@ -23,6 +24,8 @@ public class CarDataManager : MonoBehaviour
 
     float time;
     GameObject gear;
+
+    public UnityAction OnDamaged;
 
     private void Awake()
     {
@@ -96,7 +99,8 @@ public class CarDataManager : MonoBehaviour
 
                 if (time > damageTime)
                 {
-                    SetHP(damageAmount);
+                    PlusHP(-damageAmount);
+                    OnDamaged?.Invoke();
                     time = 0;
                 }
             }
@@ -106,7 +110,8 @@ public class CarDataManager : MonoBehaviour
 
                 if (time > damageTime * 0.5)
                 {
-                    SetHP(damageAmount);
+                    PlusHP(-damageAmount);
+                    OnDamaged?.Invoke();
                     time = 0;
                 }
             }
@@ -125,6 +130,11 @@ public class CarDataManager : MonoBehaviour
             canRepair = false;
         else
             canRepair = true;
+    }
+
+    public void PlusHP(int value)
+    {
+        SetHP(car.GetComponent<CarDamager>().CurHp + value);
     }
 
     /// <summary>

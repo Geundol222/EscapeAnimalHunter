@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEditor.Animations;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,7 @@ public class UHDSeter : MonoBehaviour
     [SerializeField] Material emissionRed;
 
     int durabilityToTen;
+    float blinkTime;
 
     private void Awake()
     {
@@ -36,6 +38,25 @@ public class UHDSeter : MonoBehaviour
         car.GetComponent<CarDriver>().OnMaxSpeedChanged -= SetMaxSpeedText;
         car.GetComponent<CarDriver>().OnCurSpeedChanged -= SetSpeedText;
         car.GetComponent<CarDamager>().OnCurHpChanged -= SetDurabilityGauge;
+    }
+
+    Coroutine blinkRoutine;
+
+    private void Update()
+    {
+        if (DataManager.Car.carCurHP != 100 && DataManager.Car.carCurHP != 0)
+        {
+            if (DataManager.Car.carCurState == CarDataManager.GearState.Drive || DataManager.Car.carCurState == CarDataManager.GearState.Reverse)
+            {
+                blinkTime += Time.deltaTime;
+
+                if (blinkTime >= 1f)
+                {
+                    blinkRoutine = StartCoroutine(BlinkGaugeAtOnce(FindLastGauge()));
+                    blinkTime = 0f;
+                }
+            }
+        }
     }
 
     void SetSpeedText()
@@ -78,7 +99,32 @@ public class UHDSeter : MonoBehaviour
 
             if (car.GetComponent<CarDamager>().CurHp < durabilityToTen)
                 durabilityGauge.transform.GetChild(0).gameObject.GetComponent<Image>().material = emissionRed;
+
+            if (DataManager.Car.carCurHP == 0)
+                durabilityGauge.transform.GetChild(0).gameObject.SetActive(false);
         }
     }
 
+    public GameObject FindLastGauge()
+    {
+        int num = 0;
+
+        for (int i = 0; i < durabilityGauge.transform.childCount; i++)
+        {
+            if (durabilityGauge.transform.GetChild(i) != null)
+            {
+                if (durabilityGauge.transform.GetChild(i).transform.gameObject.activeInHierarchy)
+                    num = i;
+            }
+        }
+
+        return durabilityGauge.transform.GetChild(num).transform.gameObject;
+    }
+
+    IEnumerator BlinkGaugeAtOnce(GameObject obj)
+    {
+        obj.SetActive(false);
+        yield return new WaitForSeconds(0.3f);
+        obj.SetActive(true);
+    }
 }

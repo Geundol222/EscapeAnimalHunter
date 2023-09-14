@@ -34,11 +34,11 @@ public class CarDamager : MonoBehaviour, IHittable
     [SerializeField] int damageAmountWhenCarHitAnimal;
     [SerializeField] float canHitSpeed;
 
-    public UnityAction OnHitSomething;
-
     int carnivoreLayerMask;
     int harbivoreLayerMask;
     int groundLayerMask;
+
+    public UnityAction OnHitSomething;
 
     private void Awake()
     {
