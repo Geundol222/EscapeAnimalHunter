@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class CarRepairCanvas : MonoBehaviour
 {
+    [SerializeField] CarDamager car;
     [SerializeField] TMP_Text costText;
     [SerializeField] TMP_Text enableRepairText;
     [SerializeField] TMP_Text sliderText;
@@ -31,7 +32,7 @@ public class CarRepairCanvas : MonoBehaviour
     {
         okButton.gameObject.SetActive(false);
 
-        enableRepairValue = DataManager.Car.carMaxHP - DataManager.Car.carCurHP;
+        enableRepairValue = car.MaxHp - car.CurHp;
 
         enableRepairText.text = enableRepairValue.ToString();
 
@@ -45,7 +46,7 @@ public class CarRepairCanvas : MonoBehaviour
         while (true)
         {
             sliderValue = (int)repairSlider.value;
-            cost += (sliderValue * 5);
+            cost = (sliderValue * 5);
 
             sliderText.text = sliderValue.ToString();
             costText.text = cost.ToString();
@@ -58,14 +59,14 @@ public class CarRepairCanvas : MonoBehaviour
 
     public void PressOkButton()
     {
-        GameManager.Data.Money -= cost;
-        DataManager.Car.SetHP(sliderValue);
+        GameManager.Data.RemoveMoney(cost);
+        DataManager.Car.SetHP(car.CurHp + sliderValue);
 
         okButton.gameObject.SetActive(false);
 
         cost = 0;
         sliderValue = 0;
-        enableRepairValue = DataManager.Car.carMaxHP - DataManager.Car.carCurHP;
+        enableRepairValue = car.MaxHp - car.CurHp;
 
         costText.text = cost.ToString();
         sliderText.text = sliderValue.ToString();
@@ -73,6 +74,8 @@ public class CarRepairCanvas : MonoBehaviour
 
         repairSlider.value = 0;
         repairSlider.maxValue = enableRepairValue;
+
+        okButton.gameObject.SetActive(false);
     }
 
     private void OnDisable()
