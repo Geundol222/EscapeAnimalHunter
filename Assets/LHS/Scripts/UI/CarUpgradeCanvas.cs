@@ -149,17 +149,30 @@ public class CarUpgradeCanvas : MonoBehaviour
 
     public void PressOkButton()
     {
-        DataManager.Upgrade.applyCost = 0;
+        if (GameManager.Data.Money < DataManager.Upgrade.applyCost)
+            return;
+        else
+        {
+            GameManager.Data.RemoveMoney(DataManager.Upgrade.applyCost);
 
-        DataManager.Car.carMaxHP += duraPlus;
-        DataManager.Car.SetMaxSpeed(speedPlus);
+            DataManager.Upgrade.applyCost = 0;
+            costText.text = DataManager.Upgrade.applyCost.ToString();
 
-        GameManager.Data.Money -= DataManager.Upgrade.applyCost;
+            DataManager.Car.carMaxHP += duraPlus;
+            DataManager.Car.SetMaxSpeed(speedPlus);
+
+            DataManager.Upgrade.durabilityIndex = 0;
+            DataManager.Upgrade.carSpeedIndex = 0;
+
+            okButton.gameObject.SetActive(false);
+        }
     }
 
     private void OnDisable()
     {
         okButton.gameObject.SetActive(false);
+
+        DataManager.Upgrade.applyCost = 0;
 
         speedPlus = 0;
         duraPlus = 0;

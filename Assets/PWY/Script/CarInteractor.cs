@@ -29,9 +29,9 @@ public class CarInteractor : MonoBehaviour
             float operatorX = car_Enter_Point.transform.rotation.eulerAngles.x;
             float operatorZ = car_Enter_Point.transform.rotation.eulerAngles.z;
 
-            Vector3 newRotation = new Vector3(operatorX, Operator.transform.rotation.eulerAngles.y, operatorZ);
+            Quaternion carLookRotation = Quaternion.LookRotation(car_Enter_Point.transform.forward);
 
-            Operator.transform.rotation = Quaternion.Euler(newRotation);
+            Operator.transform.rotation = carLookRotation;
         }
     }
 
