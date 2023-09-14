@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class BulletManager : MonoBehaviour
 {
-    public int damage = 1;
-    public float bulletSpeed = 50;
+    public int damage = 3;
+    public float bulletSpeed = 100;
 
     public void AddDamage(int cost)
     {

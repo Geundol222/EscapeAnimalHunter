@@ -60,7 +60,7 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
 
     public enum PoseState
     {
-        Main, Sub, Multi
+        None, Socket, Main, Sub, Multi
     }
 
     [SerializeField] Transform gripTransform;
@@ -156,6 +156,8 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
             case PoseState.Multi:
                 UpdateTargetMulti(grabInteractable, ref targetPose);
                 break;
+            default:
+                break;
         }
     }
 
@@ -207,8 +209,17 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
 
     void UpdateTargetMulti(XRGrabInteractable grabInteractable, ref Pose targetPose)
     {
-        leftHand.SetActive(true);
-        rightHand.SetActive(true);
+        if (mainInteractor is XRSocketInteractor || subInteractor is XRSocketInteractor)
+        {
+            state = PoseState.Main;
+            return;
+        }
+
+        gunLeftHand.SetActive(true);
+        gunRightHand.SetActive(true);
+
+        controllerRightHand.SetActive(false);
+        controllerLeftHand.SetActive(false);
 
         grabInteractable.attachTransform = gripTransform;
 

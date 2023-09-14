@@ -89,7 +89,8 @@ public class Bullet : MonoBehaviour
             StopProjectile();
             transform.parent = collision.gameObject.transform;
 
-            StartCoroutine(DamageRoutine(collision));
+            IHittable hittable = collision.gameObject.GetComponent<IHittable>();
+            hittable?.TakeHit(damage);
         }
         else
         {
@@ -97,21 +98,6 @@ public class Bullet : MonoBehaviour
             StopProjectile();
             GameManager.Resource.Destroy(gameObject, 10f);
         }
-    }
-
-    IEnumerator DamageRoutine(Collision collision)
-    {
-        int tickCount = 0;
-
-        while (tickCount < 4)
-        {
-            IHittable hittable = collision.gameObject.GetComponent<IHittable>();
-            hittable?.TakeHit(damage);
-            tickCount++;
-            yield return new WaitForSeconds(1f);
-        }
-
-        yield break;
     }
 
     private void StopProjectile()

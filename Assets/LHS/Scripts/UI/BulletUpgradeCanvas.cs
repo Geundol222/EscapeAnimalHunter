@@ -147,14 +147,31 @@ public class BulletUpgradeCanvas : MonoBehaviour
 
     public void PressOkButton()
     {
-        DataManager.Upgrade.applyCost = 0;
+        if (GameManager.Data.Money < DataManager.Upgrade.applyCost)
+            return;
+        else
+        {
+            GameManager.Data.RemoveMoney(DataManager.Upgrade.applyCost);
 
-        GameManager.Data.Money -= DataManager.Upgrade.applyCost;
+            DataManager.Upgrade.applyCost = 0;
+            costText.text = DataManager.Upgrade.applyCost.ToString();
+
+            DataManager.Bullet.AddDamage(damagePlus);
+            DataManager.Bullet.AddSpeed(speedPlus);
+
+            DataManager.Upgrade.damageIndex = 0;
+            DataManager.Upgrade.bulletSpeedIndex = 0;
+
+            okButton.gameObject.SetActive(false);
+        }
     }
 
     private void OnDisable()
     {
         okButton.gameObject.SetActive(false);
+
+        DataManager.Upgrade.applyCost = 0;
+        costText.text = DataManager.Upgrade.applyCost.ToString();
 
         speedPlus = 0;
         damagePlus = 0;
