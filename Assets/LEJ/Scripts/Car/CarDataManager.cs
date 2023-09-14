@@ -6,9 +6,9 @@ using UnityEngine.XR.Content.Interaction;
 public class CarDataManager : MonoBehaviour
 {
     GameObject car;
-    [SerializeField] float damageTime;
-    [SerializeField] int damageAmount;
-    [SerializeField] int maxUpgradableSpeed = 55;
+    float damageTime = 60f;
+    int damageAmount = 5;
+    int maxUpgradableSpeed = 55;
 
     public int carCurHP;
     public int carMaxHP;
@@ -39,14 +39,14 @@ public class CarDataManager : MonoBehaviour
         yield break;
     }
 
-    /*
+    
     public void Update()
     {
         if (car != null)
             DamagedByTime();
 
     }
-    */
+    
 
     public void OnEnable()
     {
