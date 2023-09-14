@@ -218,6 +218,7 @@ namespace UnityEngine.XR.Content.Interaction
 
         void StartGrab(SelectEnterEventArgs args)
         {
+
             m_Interactor = args.interactorObject;
             m_PositionAngles.Reset();
             m_UpVectorAngles.Reset();
@@ -225,6 +226,9 @@ namespace UnityEngine.XR.Content.Interaction
 
             UpdateBaseKnobRotation();
             UpdateRotation(true);
+
+            Debug.Log($"is handle grabbing interactor null? = {m_Interactor == null}");
+
         }
 
         void EndGrab(SelectExitEventArgs args)
@@ -247,6 +251,7 @@ namespace UnityEngine.XR.Content.Interaction
 
         void UpdateRotation(bool freshCheck = false)
         {
+            
             // Are we in position offset or direction rotation mode?
             var interactorTransform = m_Interactor.GetAttachTransform(this);
 

@@ -16,6 +16,7 @@ public class CarDriver : MonoBehaviour
     SetGearState gearState;
     XRKnobLEJ handleKnob;
     DetectHandleGrab handleGrab;
+    CarDamager damager;
 
     public UnityAction OnMaxSpeedChanged;
 
@@ -59,6 +60,7 @@ public class CarDriver : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         carInteractor = player.GetComponent<PlayerCarInteractor>();      
         inputDetecter = player.GetComponent<PlayerInputDetecter>();
+        damager = GetComponent<CarDamager>();
 
         gearState = gearObj.GetComponent<SetGearState>();
         handleKnob = handleObj.GetComponent<XRKnobLEJ>();
@@ -93,6 +95,16 @@ public class CarDriver : MonoBehaviour
         if (!handleGrab.isRightGrip|| !handleGrab.isLeftGrip)
             handleKnob.value = Mathf.Lerp(handleKnob.value, 0.5f, backToZeroSpeed);
 
+    }
+
+    private void OnEnable()
+    {
+        damager.OnHitSomething += SetSpeedToZero;
+    }
+
+    private void OnDisable()
+    {
+        damager.OnHitSomething -= SetSpeedToZero;
     }
 
     /// <summary>
@@ -191,6 +203,20 @@ public class CarDriver : MonoBehaviour
 
         else
             setHandleValue = (handleKnob.value - 0.5f) * 2f; //0f ~ 1f
+    }
+
+    Coroutine waitOneSec;
+
+    private void SetSpeedToZero()
+    {
+        curSpeed = 0f;
+        rb.velocity = Vector3.zero;
+        waitOneSec = StartCoroutine(WaitForOneSecond());
+    }
+
+    IEnumerator WaitForOneSecond()
+    {
+        yield return 1f;
     }
 }
 

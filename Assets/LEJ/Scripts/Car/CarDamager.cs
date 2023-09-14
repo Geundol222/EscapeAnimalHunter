@@ -38,6 +38,8 @@ public class CarDamager : MonoBehaviour, IHittable
     int harbivoreLayerMask;
     int groundLayerMask;
 
+    public UnityAction OnHitSomething;
+
     private void Awake()
     {
         carnivoreLayerMask = 1 << LayerMask.NameToLayer("Carnivore");
@@ -70,6 +72,8 @@ public class CarDamager : MonoBehaviour, IHittable
             GiveDamage(obj);
 
         TakeHit(damageAmountWhenCarHitAnimal);
+
+        OnHitSomething?.Invoke();
     }
 
     /// <summary>

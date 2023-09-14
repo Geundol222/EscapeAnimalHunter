@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR.Content.Interaction;
 
 public class CarDataManager : MonoBehaviour
 {
     GameObject car;
-    [SerializeField] float damageTime;
-    [SerializeField] int damageAmount;
-    [SerializeField] int maxUpgradableSpeed = 55;
+    float damageTime = 3f;
+    int damageAmount = 5;
+    int maxUpgradableSpeed = 55;
 
-    public int carCurHP;
-    public int carMaxHP;
-    public float carCurMaxSpeed;
+    public int carCurHP = 100;
+    public int carMaxHP = 100;
+    public float carCurMaxSpeed = 15;
     public string carCurExterior;
     public enum GearState { Parking, Neutral, Drive, Reverse };
     public GearState carCurState;
@@ -24,8 +25,12 @@ public class CarDataManager : MonoBehaviour
     float time;
     GameObject gear;
 
+    public UnityAction OnDamaged;
+    public UnityAction OnGearStateIsChanged;
+
     private void Awake()
     {
+        carCurState = GearState.Parking;
         StartCoroutine(FindRoutine());
     }
 
@@ -36,6 +41,7 @@ public class CarDataManager : MonoBehaviour
         car = GameObject.Find("Car");
         gear = car.transform.Find("Gear").gameObject;
 
+        CarInit();
         yield break;
     }
 
@@ -43,7 +49,9 @@ public class CarDataManager : MonoBehaviour
     {
         if (car != null)
             DamagedByTime();
+
     }
+    
 
     public void OnEnable()
     {
@@ -57,6 +65,7 @@ public class CarDataManager : MonoBehaviour
         car.GetComponent<CarDriver>().OnMaxSpeedChanged += SetCurMaxSpeedInThisScript;
         car.GetComponent<CarDamager>().OnCurHpChanged += SetCurHPInThisScript;
         gear.GetComponent<SetGearState>().OnCurGearStateChanged += SetGearStateInThisScript;
+        car.GetComponent<CarParker>().OnParkedOrNot += SetIsParking;
 
         yield break;
     }
@@ -66,6 +75,7 @@ public class CarDataManager : MonoBehaviour
         car.GetComponent<CarDriver>().OnMaxSpeedChanged -= SetCurMaxSpeedInThisScript;
         car.GetComponent<CarDamager>().OnCurHpChanged -= SetCurHPInThisScript;
         gear.GetComponent<SetGearState>().OnCurGearStateChanged -= SetGearStateInThisScript;
+        car.GetComponent<CarParker>().OnParkedOrNot -= SetIsParking;
     }
 
     /// <summary>
@@ -92,7 +102,8 @@ public class CarDataManager : MonoBehaviour
 
                 if (time > damageTime)
                 {
-                    SetHP(damageAmount);
+                    PlusHP(-damageAmount);
+                    OnDamaged?.Invoke();
                     time = 0;
                 }
             }
@@ -102,7 +113,8 @@ public class CarDataManager : MonoBehaviour
 
                 if (time > damageTime * 0.5)
                 {
-                    SetHP(damageAmount);
+                    PlusHP(-damageAmount);
+                    OnDamaged?.Invoke();
                     time = 0;
                 }
             }
@@ -121,6 +133,11 @@ public class CarDataManager : MonoBehaviour
             canRepair = false;
         else
             canRepair = true;
+    }
+
+    public void PlusHP(int value)
+    {
+        SetHP(car.GetComponent<CarDamager>().CurHp + value);
     }
 
     /// <summary>
@@ -154,6 +171,11 @@ public class CarDataManager : MonoBehaviour
             canUpgrade = false;
         else
             canUpgrade = true;
+    }
+
+    public void SetIsParking()
+    {
+        isCarParkingInBaseCamp = car.GetComponent<CarParker>().isParking;
     }
 
     /// <summary>
@@ -197,18 +219,22 @@ public class CarDataManager : MonoBehaviour
         {
             case "Park":
                 carCurState = GearState.Parking;
+                OnGearStateIsChanged?.Invoke();
                 break;
 
             case "Neutral":
                 carCurState = GearState.Neutral;
+                OnGearStateIsChanged?.Invoke();
                 break;
 
             case "Reverse":
                 carCurState = GearState.Reverse;
+                OnGearStateIsChanged?.Invoke();
                 break;
 
             case "Drive":
                 carCurState = GearState.Drive;
+                OnGearStateIsChanged?.Invoke();
                 break;
         }
     }
