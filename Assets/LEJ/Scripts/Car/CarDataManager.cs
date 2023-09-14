@@ -39,11 +39,14 @@ public class CarDataManager : MonoBehaviour
         yield break;
     }
 
+    /*
     public void Update()
     {
         if (car != null)
             DamagedByTime();
+
     }
+    */
 
     public void OnEnable()
     {
