@@ -26,11 +26,12 @@ public class CarDataManager : MonoBehaviour
     GameObject gear;
 
     public UnityAction OnDamaged;
+    public UnityAction OnGearStateIsChanged;
 
     private void Awake()
     {
+        carCurState = GearState.Parking;
         StartCoroutine(FindRoutine());
-        
     }
 
     IEnumerator FindRoutine()
@@ -64,6 +65,7 @@ public class CarDataManager : MonoBehaviour
         car.GetComponent<CarDriver>().OnMaxSpeedChanged += SetCurMaxSpeedInThisScript;
         car.GetComponent<CarDamager>().OnCurHpChanged += SetCurHPInThisScript;
         gear.GetComponent<SetGearState>().OnCurGearStateChanged += SetGearStateInThisScript;
+        car.GetComponent<CarParker>().OnParkedOrNot += SetIsParking;
 
         yield break;
     }
@@ -73,6 +75,7 @@ public class CarDataManager : MonoBehaviour
         car.GetComponent<CarDriver>().OnMaxSpeedChanged -= SetCurMaxSpeedInThisScript;
         car.GetComponent<CarDamager>().OnCurHpChanged -= SetCurHPInThisScript;
         gear.GetComponent<SetGearState>().OnCurGearStateChanged -= SetGearStateInThisScript;
+        car.GetComponent<CarParker>().OnParkedOrNot -= SetIsParking;
     }
 
     /// <summary>
@@ -170,6 +173,11 @@ public class CarDataManager : MonoBehaviour
             canUpgrade = true;
     }
 
+    public void SetIsParking()
+    {
+        isCarParkingInBaseCamp = car.GetComponent<CarParker>().isParking;
+    }
+
     /// <summary>
     /// 차량의 현재 외관 상태를 패턴으로 설정(색을 바꾸는 것과 구분하기 위함)
     /// </summary>
@@ -211,18 +219,22 @@ public class CarDataManager : MonoBehaviour
         {
             case "Park":
                 carCurState = GearState.Parking;
+                OnGearStateIsChanged?.Invoke();
                 break;
 
             case "Neutral":
                 carCurState = GearState.Neutral;
+                OnGearStateIsChanged?.Invoke();
                 break;
 
             case "Reverse":
                 carCurState = GearState.Reverse;
+                OnGearStateIsChanged?.Invoke();
                 break;
 
             case "Drive":
                 carCurState = GearState.Drive;
+                OnGearStateIsChanged?.Invoke();
                 break;
         }
     }

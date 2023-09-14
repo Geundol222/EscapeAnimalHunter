@@ -11,7 +11,7 @@ public class SphereCasterNew : MonoBehaviour
     public UnityAction<Transform, bool> OnDetectHerbivore;
 
     float maxDistance = 0.1f;
-    float curRadius;
+    public float curRadius;
     int layerMaskForCarnivore;
     int layerMaskForHerbivore;
     private void Start()

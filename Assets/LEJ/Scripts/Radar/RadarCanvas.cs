@@ -9,7 +9,6 @@ public class RadarCanvas : MonoBehaviour
     [SerializeField] Transform car;
     [SerializeField] SphereCasterNew sphereCaster;
     [SerializeField] GameObject pointGreen;
-    [SerializeField] GameObject circlePrefab;
 
     [SerializeField] GameObject[] circles = new GameObject[10];
     int index;
@@ -31,7 +30,7 @@ public class RadarCanvas : MonoBehaviour
 
     private GameObject CreateNewCircle()
     {
-        GameObject circle = Instantiate(circlePrefab, Vector3.zero, transform.rotation, transform);
+        GameObject circle = Instantiate(pointGreen, Vector3.zero, transform.rotation, transform);
         circle.gameObject.transform.localPosition = Vector3.zero;
         circle.gameObject.SetActive(false);
         return circle;
