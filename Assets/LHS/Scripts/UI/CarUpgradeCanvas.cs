@@ -13,6 +13,7 @@ public class CarUpgradeCanvas : MonoBehaviour
     [SerializeField] TMP_Text costText;
     [SerializeField] TMP_Text speedPlusText;
     [SerializeField] TMP_Text duraPlusText;
+    [SerializeField] List<Material> carMat;
 
     [SerializeField] Transform itemTransform;
 
@@ -22,6 +23,10 @@ public class CarUpgradeCanvas : MonoBehaviour
 
     int speedPlus;
     int duraPlus;
+
+    int materialIndex;
+    int confirmDuraIndex;
+    int confirmSpeedIndex;
 
     private void Awake()
     {
@@ -83,6 +88,9 @@ public class CarUpgradeCanvas : MonoBehaviour
 
     public void DurabilityDown()
     {
+        if (DataManager.Upgrade.durabilityIndex == 0 && durabilityImages[confirmSpeedIndex].color == Color.white)
+            return;
+
         durabilityImages[DataManager.Upgrade.durabilityIndex].color = Color.black;
 
         DataManager.Upgrade.DurabilityDown();
@@ -125,6 +133,9 @@ public class CarUpgradeCanvas : MonoBehaviour
 
     public void SpeedDown()
     {
+        if (DataManager.Upgrade.carSpeedIndex == 0 && speedImages[confirmSpeedIndex].color == Color.white)
+            return;
+
         speedImages[DataManager.Upgrade.carSpeedIndex].color = Color.black;
 
         DataManager.Upgrade.CarSpeedDown();
@@ -159,12 +170,41 @@ public class CarUpgradeCanvas : MonoBehaviour
             costText.text = DataManager.Upgrade.applyCost.ToString();
 
             DataManager.Car.carMaxHP += duraPlus;
-            DataManager.Car.SetMaxSpeed(speedPlus);
+            DataManager.Car.SetMaxSpeed(DataManager.Car.carCurMaxSpeed + speedPlus);
+
+            confirmDuraIndex = DataManager.Upgrade.durabilityIndex;
+            confirmSpeedIndex = DataManager.Upgrade.carSpeedIndex;
 
             DataManager.Upgrade.durabilityIndex = 0;
             DataManager.Upgrade.carSpeedIndex = 0;
 
             okButton.gameObject.SetActive(false);
+        }
+    }
+
+    public void MatRight()
+    {
+        if (materialIndex >= carMat.Count - 1)
+        {
+            materialIndex = carMat.Count - 1;
+
+            if (materialIndex < 4)
+                DataManager.Car.ChangeExteriorToPattern(carMat[materialIndex].name);
+            else
+                DataManager.Car.ChangeExteriorColor(carMat[materialIndex].name);
+        }
+    }
+
+    public void MatLeft()
+    {
+        if (materialIndex <= 0)
+        {
+            materialIndex = 0;
+
+            if (materialIndex < 4)
+                DataManager.Car.ChangeExteriorToPattern(carMat[materialIndex].name);
+            else
+                DataManager.Car.ChangeExteriorColor(carMat[materialIndex].name);
         }
     }
 

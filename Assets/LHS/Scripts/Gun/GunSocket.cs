@@ -20,7 +20,10 @@ public class GunSocket : MonoBehaviour
     private void Update()
     {
         if (isAttachable)
+        {
             gun.gameObject.transform.position = gunAttachPoint.position;
+            gun.gameObject.transform.rotation = gunAttachPoint.rotation;
+        }
         else
             return;
     }
@@ -39,6 +42,23 @@ public class GunSocket : MonoBehaviour
                 isAttachable = true;
                 gunMat.SetActive(false);
             }                
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (gunMask.IsContain(other.gameObject.layer))
+        {
+            if (gun.isSelected)
+            {
+                isAttachable = false;
+                gunMat.SetActive(true);
+            }
+            else
+            {
+                isAttachable = true;
+                gunMat.SetActive(false);
+            }
         }
     }
 

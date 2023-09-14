@@ -82,6 +82,10 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
         gunRightHand.SetActive(false);
     }
 
+    /// <summary>
+    /// 맨 처음 Grab될 때, mainInteractor를 grabInteractable의 firstInteractorSelecting으로 지정
+    /// </summary>
+    /// <param name="grabInteractable"></param>
     public override void OnGrab(XRGrabInteractable grabInteractable)
     {
         base.OnGrab(grabInteractable);
@@ -91,6 +95,10 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
         grabInteractable.lastSelectExited.AddListener(OnDrop);
     }
 
+    /// <summary>
+    /// 총이 손에서 완전이 떨어질 때 grabInteractable의 attachTransform을 원래의 transform으로 교체
+    /// </summary>
+    /// <param name="args"></param>
     public void OnDrop(SelectExitEventArgs args)
     {
         XRGrabInteractable grabInteractable = GetComponent<XRGrabInteractable>();
@@ -105,6 +113,12 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
         args.interactableObject.lastSelectExited.RemoveListener(OnDrop);
     }
 
+    /// <summary>
+    /// grab하는 손이 추가 삭제 될 때 호출, 조건에 따라 PoseState의 state 변경
+    /// </summary>
+    /// <param name="grabInteractable"></param>
+    /// <param name="targetPose"></param>
+    /// <param name="localScale"></param>
     public override void OnGrabCountChanged(XRGrabInteractable grabInteractable, Pose targetPose, Vector3 localScale)
     {
         if (grabInteractable.interactorsSelecting.Count == 1)
@@ -148,6 +162,13 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
         }
     }
 
+    /// <summary>
+    /// Grab Processing (Update Routine)
+    /// </summary>
+    /// <param name="grabInteractable"></param>
+    /// <param name="updatePhase"></param>
+    /// <param name="targetPose"></param>
+    /// <param name="localScale"></param>
     public override void Process(XRGrabInteractable grabInteractable, XRInteractionUpdateOrder.UpdatePhase updatePhase, ref Pose targetPose, ref Vector3 localScale)
     {
         switch (updatePhase)
@@ -244,9 +265,6 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
         Transform secondaryAttachTransform = subInteractor.GetAttachTransform(grabInteractable);
         Pose secondaryAttachPose = new Pose(secondaryAttachTransform.position, secondaryAttachTransform.rotation);
 
-        // When multi-selecting, adjust the effective interactorAttachPose with our default 2-hand algorithm.
-        // Default to the primary interactor.\
-
         var avrAttachPositionOffset = transform.position - grabInteractable.attachTransform.position;
         var avrAttachRotationOffset = Quaternion.Inverse(Quaternion.Inverse(grabInteractable.secondaryAttachTransform.rotation) * grabInteractable.attachTransform.rotation);
         var interactorAttachPose = primaryAttachPose;
@@ -306,13 +324,6 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
 
         var crossRight = Vector3.Cross(up, forward);
         up = Vector3.Cross(forward, crossRight);
-
-        // We also keep track of whether the up vector was pointing up or down previously, to allow for objects to be flipped through a series of rotations
-        // Such as a 180 degree rotation on the y, followed by a 180 degree rotation on the x
-        if (Vector3.Dot(up, m_LastUp) <= 0f)
-        {
-            // up = -up;
-        }
 
         m_LastUp = up;
 
