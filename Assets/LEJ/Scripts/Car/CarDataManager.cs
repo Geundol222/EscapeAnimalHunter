@@ -10,9 +10,9 @@ public class CarDataManager : MonoBehaviour
     int damageAmount = 5;
     int maxUpgradableSpeed = 55;
 
-    public int carCurHP;
-    public int carMaxHP;
-    public float carCurMaxSpeed;
+    public int carCurHP = 100;
+    public int carMaxHP = 100;
+    public float carCurMaxSpeed = 15;
     public string carCurExterior;
     public enum GearState { Parking, Neutral, Drive, Reverse };
     public GearState carCurState;
@@ -27,6 +27,7 @@ public class CarDataManager : MonoBehaviour
     private void Awake()
     {
         StartCoroutine(FindRoutine());
+        
     }
 
     IEnumerator FindRoutine()
@@ -36,10 +37,10 @@ public class CarDataManager : MonoBehaviour
         car = GameObject.Find("Car");
         gear = car.transform.Find("Gear").gameObject;
 
+        CarInit();
         yield break;
     }
 
-    
     public void Update()
     {
         if (car != null)

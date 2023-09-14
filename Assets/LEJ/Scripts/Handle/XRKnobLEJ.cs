@@ -225,6 +225,7 @@ namespace UnityEngine.XR.Content.Interaction
 
             UpdateBaseKnobRotation();
             UpdateRotation(true);
+
         }
 
         void EndGrab(SelectExitEventArgs args)
