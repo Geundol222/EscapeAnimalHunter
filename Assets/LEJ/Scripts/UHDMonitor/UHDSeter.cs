@@ -99,6 +99,8 @@ public class UHDSeter : MonoBehaviour
 
             if (car.GetComponent<CarDamager>().CurHp < durabilityToTen)
                 durabilityGauge.transform.GetChild(0).gameObject.GetComponent<Image>().material = emissionRed;
+            else
+                durabilityGauge.transform.GetChild(0).gameObject.GetComponent<Image>().material = durabilityGauge.transform.GetChild(1).gameObject.GetComponent<Image>().material;
 
             if (DataManager.Car.carCurHP == 0)
                 durabilityGauge.transform.GetChild(0).gameObject.SetActive(false);
