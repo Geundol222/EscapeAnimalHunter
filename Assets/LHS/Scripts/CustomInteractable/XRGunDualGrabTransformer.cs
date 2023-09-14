@@ -172,6 +172,8 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
             case PoseState.Multi:
                 UpdateTargetMulti(grabInteractable, ref targetPose);
                 break;
+            default:
+                break;
         }
     }
 
