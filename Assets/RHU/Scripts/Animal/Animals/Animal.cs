@@ -12,13 +12,14 @@ public abstract class Animal : MonoBehaviour, IHittable
     [SerializeField] public FieldOfView fieldOfView;
     [NonSerialized] public Animator animator;
     [NonSerialized] public Collider[] colliders;
+    [NonSerialized] public Collider hitCollider;
     [NonSerialized] public int curHp;
-    [NonSerialized] public float waryTime = 0;
-    [NonSerialized] public bool isHit = false;
-    [NonSerialized] public bool isDie = false;
-    [NonSerialized] public bool isWary = false;
-    [NonSerialized] public bool isTracking = false;
-    [NonSerialized] public float bulletDirection = 0;
+    [NonSerialized] public float waryTime;
+    [NonSerialized] public bool isHit;
+    [NonSerialized] public bool isDie;
+    [NonSerialized] public bool isWary;
+    [NonSerialized] public bool isTracking;
+    [NonSerialized] public float bulletDirection;
     [SerializeField] LayerMask GroundLayer;
     public BTBase bTBase;
     public SelectorNode hitNode = new SelectorNode();
@@ -30,12 +31,26 @@ public abstract class Animal : MonoBehaviour, IHittable
     {
         animator = GetComponent<Animator>();
         colliders = GetComponentsInChildren<Collider>();
-        curHp = data.Animals[(int)animalName].maxHp;
         SetUpBT();
         StartCoroutine(StepOnGrounRoutine());
+        //foreach(Collider col in colliders)
+        //{
+        //    Debug.Log(col.name);
+        //}
     }
 
     public abstract void SetUpBT();
+
+    private void OnEnable()     // ReSpawn 시 초기화를 위해 OnEnable에서 초기화
+    {
+        curHp = data.Animals[(int)animalName].maxHp;
+        waryTime = 0;
+        isHit = false;
+        isDie = false;
+        isWary = false;
+        isTracking = false;
+        bulletDirection = 0;
+    }
 
     private void Update()
     {
@@ -48,11 +63,11 @@ public abstract class Animal : MonoBehaviour, IHittable
         {
             if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
             {
-                Debug.Log("총알 충돌");
-
-                Debug.Log($"i.Point : {i.point}");
-                Debug.Log($"i.Point : {i.normal}");
-                Debug.Log($"i.Point : {i.otherCollider.gameObject.transform.position}");
+                //Debug.Log("총알 충돌");
+                //Debug.Log($"i.Point : {i.point}");
+                //Debug.Log($"i.Point : {i.normal}");
+                //Debug.Log($"i.Point : {i.otherCollider.gameObject.transform.position}");
+                
             }
         }
 

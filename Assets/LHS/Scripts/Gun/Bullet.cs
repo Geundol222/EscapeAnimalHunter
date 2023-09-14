@@ -48,6 +48,10 @@ public class Bullet : MonoBehaviour
         StartCoroutine(BulletFlyRoutine());
     }
 
+    /// <summary>
+    /// 총알 사격 함수, 총알이 발사되면 포물선을 따라 진행한다.
+    /// </summary>
+    /// <returns> 총알이 멈출때까지 프레임 단위로 계산 </returns>
     IEnumerator BulletFlyRoutine()
     {
         float elapsedTime = 0f;
@@ -87,10 +91,15 @@ public class Bullet : MonoBehaviour
         {
             StopCoroutine(BulletFlyRoutine());
             StopProjectile();
-            transform.parent = collision.gameObject.transform;
 
             IHittable hittable = collision.gameObject.GetComponent<IHittable>();
             hittable?.TakeHit(damage);
+
+            ContactPoint contactPoint = collision.contacts[0];
+            Vector3 StuckBulletVector = contactPoint.point;
+            GameManager.Resource.Instantiate<GameObject>
+                ("Prefabs/StuckBullet", StuckBulletVector, transform.rotation, collision.collider.transform, true);
+            GameManager.Resource.Destroy(gameObject);
         }
         else
         {

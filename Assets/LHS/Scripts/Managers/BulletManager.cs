@@ -10,11 +10,6 @@ public class BulletManager : MonoBehaviour
         damage += cost;
     }
 
-    public void Reduce(int cost)
-    {
-        damage -= cost;
-    }
-
     public void AddSpeed(int cost)
     {
         damage += cost;

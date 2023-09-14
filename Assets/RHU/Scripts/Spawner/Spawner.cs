@@ -2,20 +2,24 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using Random = UnityEngine.Random;
 
 public class Spawner : MonoBehaviour
 {
     [Header("SpawnData")]
+    [SerializeField] Transform spawnPoint;
     [SerializeField] Transform focusPoint;                      // 플레이어의 시작 위치
     [SerializeField] AnimalSpawnArray[] animalSpawnArray;
 
     [Header("SpawnRange")]
-    [SerializeField][Range(0, 1000)] int maxRange;           // 플레이어를 기준으로 도넛 모양의 범위에 생성하기위해 maxRange에서 minRange를 제외한 위치에 생성
+    [SerializeField][Range(0, 1000)] int maxRange;              // 플레이어를 기준으로 도넛 모양의 범위에 생성하기위해 maxRange에서 minRange를 제외한 위치에 생성
     [SerializeField][Range(0, 1000)] int minRange;
     [SerializeField] LayerMask groundLayer;
 
+    private RaycastHit hitInfo;
     private List<GameObject> curExistAnimals = new List<GameObject>();
 
     [Serializable]
@@ -25,101 +29,140 @@ public class Spawner : MonoBehaviour
         public int spawnCount;                                  // 생성할 개수
     }
 
+    /// <summary>
+    /// 기타 다른 설정들 모두 완료되면 생성, Awake에 넣어도 상관있는지는 아직 모름
+    /// </summary>
     private void Start()
     {
-        StartSpawn();
+        StartCoroutine(StartSpawnRoutine());
     }
 
-    private void Update()
-    {
-        //RePosition();
-    }
-
-    private void StartSpawn()
+    /// <summary>
+    /// 시작 시 animalSpawnArray에서 직접 설정한 만큼 동물 생성
+    /// </summary>
+    IEnumerator StartSpawnRoutine()
     {
         foreach (AnimalSpawnArray spawnList in animalSpawnArray)                  // 생성
         {
             for (int i = 0; i < spawnList.spawnCount; i++)
             {
-                RandomSpawnPoint();
-                RaycastHit hitInfo = GroundCheck();
-                GameObject animal = GameManager.Resource.Instantiate<GameObject>($"Prefabs/Animals/{spawnList.animalName}",
-                    hitInfo.point, Quaternion.Euler(0, Random.Range(-180, 180), 0), true);
-                curExistAnimals.Add(animal);
+                yield return StartCoroutine(GroundCheckRoutine());
+
+                InstantiateAnimal(spawnList.animalName.ToString());
+
+                yield return null;
             }
         }
+
+        StartCoroutine(ReSpawnRoutine());
+
+        yield break;
     }
 
-    private void RandomSpawnPoint()                                             // 스폰될 위치를 지정된 범위 내에서 랜덤하게 뽑아줌
+    /// <summary>
+    /// 지정한 동물이름 기준으로 생성
+    /// </summary>
+    /// <param name="animalName">생성할 동물 이름</param>
+    private void InstantiateAnimal(string animalName)
     {
-        transform.position = focusPoint.position;                              // 기본 위치로 초기화
-        int randomX = Random.Range(minRange, maxRange);
-        int randomZ = Random.Range(minRange, maxRange);
-        int randomOperator = Random.Range(0, 2);                                // +, - 를 랜덤하게 출력
-
-        switch (randomOperator)
-        {
-            case 0:
-                randomX = -randomX;
-                break;
-
-            default:
-                break;
-        }
-
-        randomOperator = Random.Range(0, 2);
-
-        switch (randomOperator)
-        {
-            case 0:
-                randomZ = -randomZ;
-                break;
-
-            default:
-                break;
-        }
-        //Vector3 a = Random.Range(minRange, maxRange) * Random.insideUnitSphere;
-        //Vector3 b = Random.insideUnitSphere;
-        //Debug.Log($"RandomVector3 a : {a}");
-        //Debug.Log($"RandomVector3 b : {b}");
-        //transform.Translate(a);
-        //transform.position = new Vector3(transform.position.x, 50, transform.position.z);
-        transform.Translate(randomX, 500, randomZ);
+        GameObject animal = GameManager.Resource.Instantiate<GameObject>($"Prefabs/Animals/{animalName}",
+            hitInfo.point, Quaternion.Euler(0, Random.Range(-180, 180), 0), true);
+        curExistAnimals.Add(animal);
     }
 
-    private void RePosition()
+    /// <summary>
+    /// 스폰될 위치를 지정된 범위 내에서 랜덤하게 뽑아줌
+    /// </summary>
+    private void RandomSpawnPoint()
     {
-        foreach (GameObject animal in curExistAnimals)
+        spawnPoint.position = focusPoint.position;
+        float angle = Random.Range(0.0f, 360.0f) * Mathf.Deg2Rad;
+        float radius = Random.Range(minRange, maxRange);
+        float x = radius * Mathf.Cos(angle);
+        float z = radius * Mathf.Sin(angle);
+        spawnPoint.Translate(x, 20, z);
+        //Debug.Log($"angle : {angle}");
+        //Debug.Log($"radius : {radius}");
+        //Debug.Log($"x : {x}");
+        //Debug.Log($"cos : {Mathf.Cos(angle)}");
+        //Debug.Log($"z : {z}");
+        //Debug.Log($"sin : {Mathf.Sin(angle)}");
+        //Debug.Log($"Position {spawnPoint.position}");
+        //Debug.Log($"Distance : {Vector3.Distance(focusPoint.position, spawnPoint.position)}");
+    }
+
+    /// <summary>
+    /// spawnPoint의 위치를 GroundLayer가 될 때까지 랜덤 위치로 이동
+    /// </summary>
+    IEnumerator GroundCheckRoutine()
+    {
+        RaycastHit _hitInfo;
+        Physics.Raycast(transform.position, Vector3.down, out _hitInfo, 10);
+        hitInfo = _hitInfo;
+
+        while (hitInfo.transform.gameObject.layer != groundLayer)
         {
-            if (DistanceCheck(animal))
+            RandomSpawnPoint();
+
+            if (Physics.Raycast(spawnPoint.position, Vector3.down, out _hitInfo, 1000, groundLayer))
             {
-                Debug.Log($"RePosition to {animal.name}");
-                Debug.Log(Vector3.Distance(animal.transform.position, focusPoint.position));
-                RandomSpawnPoint();
-                RaycastHit hitInfo = GroundCheck();
-                animal.transform.Translate(hitInfo.point);
+                hitInfo = _hitInfo;
+                Debug.Log($"GroundCheck hitInfo : {hitInfo.point}, {hitInfo.transform.position}");
+
+                break;
             }
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        yield break;
+    }
+
+    /// <summary>
+    /// 각 동물이 maxRange 벗어나면 재생성, 체력 및 상태 초기화
+    /// </summary>
+    IEnumerator ReSpawnRoutine()
+    {
+        while (true)
+        {
+            for (int i = 0; i < curExistAnimals.Count; i++)         // foreach쓰면 InvalidOperationException 발생
+            {
+                if (DistanceCheck(curExistAnimals[i]))
+                {
+                    yield return StartCoroutine(GroundCheckRoutine());
+
+                    RenewalCurAnimal(curExistAnimals[i]);
+                }
+
+                yield return new WaitForSeconds(0.2f);
+            }
+
+            yield return new WaitForSeconds(1f);
         }
     }
 
+    /// <summary>
+    /// ReSpawn에서 사용하는 함수
+    /// </summary>
+    /// <param name="animal">재생성할 동물</param>
+    private void RenewalCurAnimal(GameObject animal)
+    {
+        curExistAnimals.Remove(animal);
+        GameManager.Resource.Destroy(animal);
+        InstantiateAnimal(animal.name);
+    }
+
+    /// <summary>
+    /// 플레이어 기준으로 얼마나 멀어졌는지 체크
+    /// </summary>
+    /// <param name="animal"> 체크할 동물 </param>
+    /// <returns> 멀면 true 아니면 false </returns>
     private bool DistanceCheck(GameObject animal)
     {
         if (Vector3.Distance(animal.transform.position, focusPoint.position) > maxRange)
             return true;
 
         return false;
-    }
-
-    private RaycastHit GroundCheck()                                        // Ray에 부딛힌 땅의 위치를 반환
-    {
-        RaycastHit hitInfo;
-
-        if (Physics.Raycast(transform.position, Vector3.down, out hitInfo, 1000, groundLayer))
-            return hitInfo;
-
-        hitInfo = new RaycastHit();
-
-        return hitInfo;
     }
 
     private void OnDrawGizmosSelected()

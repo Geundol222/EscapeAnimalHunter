@@ -11,18 +11,12 @@ public class PlayerMoney : MonoBehaviour
         money = GameManager.Data.Money;
     }
 
-    private void OnEnable()
+    /// <summary>
+    /// Player의 Money에 변동이 있을 때, DataManager에서 해당 함수 호출, Player의 Money가 변동됨
+    /// </summary>
+    /// <param name="money"></param>
+    public void InitMoney(int money)
     {
-        GameManager.Data.OnCurrentMoneyChanged += ChangedMoney;
-    }
-
-    public void ChangedMoney(int cost)
-    {
-        money = cost;
-    }
-
-    private void OnDisable()
-    {
-        GameManager.Data.OnCurrentMoneyChanged -= ChangedMoney;
+        this.money = money;
     }
 }

@@ -16,6 +16,11 @@ public class DataManager : MonoBehaviour
     public static UpgradeManager Upgrade { get {  return upgrade; } }
     public static CarDataManager Car { get { return car; } }
 
+    private void Awake()
+    {
+        InitData();
+    }
+
     private void Start()
     {
         StartCoroutine(FindPlayerRoutine());
@@ -25,11 +30,8 @@ public class DataManager : MonoBehaviour
     {
         yield return new WaitUntil(() => { return GameObject.FindGameObjectWithTag("Player"); });
 
-        Debug.Log("Find Player Complete");
-
         player = GameObject.FindGameObjectWithTag("Player");
 
-        InitData();
         playerMoney = player.GetComponent<PlayerMoney>();
 
         yield break;

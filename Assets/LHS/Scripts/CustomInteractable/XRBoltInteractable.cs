@@ -20,6 +20,10 @@ public class XRBoltInteractable : XRBaseInteractable
 
     Vector3 originPosition;
 
+    /// <summary>
+    /// OnSelectEntered, Init Valiable
+    /// </summary>
+    /// <param name="args"></param>
     protected override void OnSelectEntered(SelectEnterEventArgs args)
     {
         base.OnSelectEntered(args);
@@ -33,6 +37,10 @@ public class XRBoltInteractable : XRBaseInteractable
         selectInteractor = null;
     }
 
+    /// <summary>
+    /// Bolt Rotating Process (Update Routine)
+    /// </summary>
+    /// <param name="updatePhase"></param>
     public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
     {
         base.ProcessInteractable(updatePhase);
@@ -59,6 +67,9 @@ public class XRBoltInteractable : XRBaseInteractable
         }
     }
 
+    /// <summary>
+    /// Rotating Bolt to currentAngle
+    /// </summary>
     private void RotateBolt()
     {
         attachPoint.position = selectInteractor.transform.position;
@@ -69,6 +80,10 @@ public class XRBoltInteractable : XRBaseInteractable
         boltTransform.localEulerAngles = new Vector3(0, 0, currentAngle);
     }
 
+    /// <summary>
+    /// Finding Bolt Angles
+    /// </summary>
+    /// <returns> the float result between Bolt and Interactor </returns>
     private float FindBoltAngle()
     {
         float totalAngle = 0f;
@@ -82,6 +97,11 @@ public class XRBoltInteractable : XRBaseInteractable
         return totalAngle;
     }
 
+    /// <summary>
+    /// Convert Vector3 to Vector2 with position's localPosition
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns> the Vector2, Vector3 localPosition converted to </returns>
     private Vector2 FindLocalPoint(Vector3 position)
     {
         Vector3 localPos3D = transform.InverseTransformPoint(position);
@@ -89,6 +109,11 @@ public class XRBoltInteractable : XRBaseInteractable
         return localPos2D.normalized;
     }
 
+    /// <summary>
+    /// Compare the angle converted to Vector2 with the x-axis of Transform using SignedAngle
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <returns> the float Converted angle to Vector2 direction </returns>
     private float ConvertToAngle(Vector2 direction)
     {
         float angle = Vector2.SignedAngle(transform.InverseTransformDirection(transform.right), direction) > 0 ? Vector2.SignedAngle(transform.InverseTransformDirection(transform.right), direction) : 0;

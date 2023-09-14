@@ -21,6 +21,9 @@ public class BulletUpgradeCanvas : MonoBehaviour
     int speedPlus;
     int damagePlus;
 
+    int confirmDamageIndex;
+    int confirmSpeedIndex;
+
     private void Awake()
     {
         damageImages = new List<Image>();
@@ -81,6 +84,9 @@ public class BulletUpgradeCanvas : MonoBehaviour
 
     public void DamageDown()
     {
+        if (DataManager.Upgrade.damageIndex == 0 && damageImages[confirmDamageIndex].color == Color.white)
+            return;
+
         damageImages[DataManager.Upgrade.damageIndex].color = Color.black;
 
         DataManager.Upgrade.DamageDown();
@@ -123,6 +129,9 @@ public class BulletUpgradeCanvas : MonoBehaviour
 
     public void SpeedDown()
     {
+        if (DataManager.Upgrade.bulletSpeedIndex == 0 && speedImages[confirmSpeedIndex].color == Color.white)
+            return;
+
         speedImages[DataManager.Upgrade.bulletSpeedIndex].color = Color.black;
 
         DataManager.Upgrade.BulletSpeedDown();
@@ -158,6 +167,9 @@ public class BulletUpgradeCanvas : MonoBehaviour
 
             DataManager.Bullet.AddDamage(damagePlus);
             DataManager.Bullet.AddSpeed(speedPlus);
+
+            confirmDamageIndex = DataManager.Upgrade.damageIndex;
+            confirmSpeedIndex = DataManager.Upgrade.bulletSpeedIndex;
 
             DataManager.Upgrade.damageIndex = 0;
             DataManager.Upgrade.bulletSpeedIndex = 0;

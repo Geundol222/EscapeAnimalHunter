@@ -52,8 +52,11 @@ MonoBehaviour:
     spawnCount: 5
   - animalName: 1
     spawnCount: 3
-  maxRange: 100
-  minRange: 50
+  maxRange: 200
+  minRange: 100
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &1965082147909871401
 GameObject:
   m_ObjectHideFlags: 0
