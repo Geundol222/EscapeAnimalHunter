@@ -10,8 +10,10 @@ public abstract class Animal : MonoBehaviour, IHittable
     [SerializeField] public AnimalName animalName;
     [SerializeField] private Transform footCenter;
     [SerializeField] public FieldOfView fieldOfView;
+    [SerializeField] LayerMask GroundLayer;
+
+    // 각 노드에서 사용할 변수들
     [NonSerialized] public Animator animator;
-    [NonSerialized] public Collider[] colliders;
     [NonSerialized] public Collider hitCollider;
     [NonSerialized] public int curHp;
     [NonSerialized] public float waryTime;
@@ -19,25 +21,17 @@ public abstract class Animal : MonoBehaviour, IHittable
     [NonSerialized] public bool isDie;
     [NonSerialized] public bool isWary;
     [NonSerialized] public bool isTracking;
+    [NonSerialized] public bool isSit;
     [NonSerialized] public float bulletDirection;
-    [SerializeField] LayerMask GroundLayer;
-    protected SelectorNode rootNode = new SelectorNode();
+
     protected BTBase bTBase;
-    //public SelectorNode hitNode = new SelectorNode();
-    //public SequenceNode getAwayNode = new SequenceNode();
-    //public SequenceNode hostileNode = new SequenceNode();
-    //public IdleAction idleNode;
+    protected SelectorNode rootNode = new SelectorNode();
 
     protected void Awake()
     {
         animator = GetComponent<Animator>();
-        colliders = GetComponentsInChildren<Collider>();
         SetUpBT();
         StartCoroutine(StepOnGrounRoutine());
-        //foreach(Collider col in colliders)
-        //{
-        //    Debug.Log(col.name);
-        //}
     }
 
     public abstract void SetUpBT();
@@ -50,6 +44,7 @@ public abstract class Animal : MonoBehaviour, IHittable
         isDie = false;
         isWary = false;
         isTracking = false;
+        isSit = false;
         bulletDirection = 0;
     }
 
@@ -114,7 +109,7 @@ public abstract class Animal : MonoBehaviour, IHittable
         curHp -= damage;
         isHit = true;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.2f);
 
         isHit = false;
 

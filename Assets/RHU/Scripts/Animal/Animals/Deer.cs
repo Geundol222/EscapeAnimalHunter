@@ -5,13 +5,13 @@ using UnityEngine;
 public class Deer : Animal
 {
     private SelectorNode hitNode = new SelectorNode();
-    private SelectorNode getAwayNode = new SelectorNode();
+    private SequenceNode getAwayNode = new SequenceNode();
     private SelectorNode idleNode = new SelectorNode();
-
+    
     public override void SetUpBT()
     {
         bTBase = new BTBase(rootNode);
-
+        
         rootNode.childrenNode = new List<Node>()
         {
             hitNode,
@@ -21,6 +21,7 @@ public class Deer : Animal
 
         hitNode.childrenNode = new List<Node>()
         {                                           // 사용하는 Owner의 변수
+            new HitWhileSitAction(this),            // CurHp, IsHit, IsWary, IsSit
             new HitAction(this),                    // CurHp, IsHit, IsWary
             new DieAction(this)                     // IsHit, IsDie
         };
@@ -28,12 +29,13 @@ public class Deer : Animal
         getAwayNode.childrenNode = new List<Node>
         {
             new GetAwayCondition(this),             // IsWary
-            new GetAwayRunAction(this)              // WaryTime, IsWary
+            new RunAction(this),                    // WaryTime, IsTracking, IsWary
         };
 
         idleNode.childrenNode = new List<Node>
         {
-            new IdleAction(this)                    // IsWary
+            new IdleAction(this),                   // IsWary
+            new SitAction(this)                     // IsSit
         };
     }
 }

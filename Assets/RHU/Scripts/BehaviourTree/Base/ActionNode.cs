@@ -18,4 +18,12 @@ public abstract class ActionNode : Node
     {
         return random = Random.Range(0, max);
     }
+
+    public bool curAnimationCheck(string animationName)
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName(animationName))
+            return true;
+        else
+            return false;
+    }
 }

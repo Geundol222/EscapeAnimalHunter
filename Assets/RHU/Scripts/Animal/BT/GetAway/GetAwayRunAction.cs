@@ -15,9 +15,7 @@ public class GetAwayRunAction : ActionNode
 
     public override NodeState Evaluate()
     {
-        animator.SetInteger("RandomRun", 0);
-
-        if (WaryTime <= 20)
+        if (WaryTime <= 20f)
             WaryTime += Time.deltaTime;
         else
         {
@@ -26,11 +24,14 @@ public class GetAwayRunAction : ActionNode
 
             return NodeState.Failure;
         }
+        Debug.Log("Test1");
 
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Run") &&
-            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+        if (curAnimationCheck("Run") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f)
+        {
             animator.SetInteger("RandomRun", RandomAction(6));
+            Debug.Log("Test2");
+        }
+        Debug.Log("Test3");
 
         return NodeState.Success;
     }

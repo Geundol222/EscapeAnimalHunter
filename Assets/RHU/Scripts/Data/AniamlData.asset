@@ -38,6 +38,6 @@ MonoBehaviour:
     description: 
     prefab: {fileID: 5360700942124476747, guid: badddf64ecc10844faa88b68126a5435,
       type: 3}
-    maxHp: 5
+    maxHp: 20
     damage: 0
     cost: 50

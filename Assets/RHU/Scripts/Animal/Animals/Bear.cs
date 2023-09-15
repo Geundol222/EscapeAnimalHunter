@@ -28,7 +28,7 @@ public class Bear : Animal
         hostileNode.childrenNode = new List<Node>
         {
             new HostileCondition(this),             // IsWary
-            new HostileRunAction(this),             // WaryTime, IsTracking, IsWary
+            new RunAction(this),                    // WaryTime, IsTracking, IsWary
             new CheckFieldOfViewCondition(this),    // FieldOfView, IsTracking
             new TrackingAction(this),               // FieldOfView, WaryTime, IsTracking
             new AttackAction(this)                  // FieldOfView

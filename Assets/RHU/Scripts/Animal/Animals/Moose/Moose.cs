@@ -28,7 +28,7 @@ public class Moose : Animal
         getAwayNode.childrenNode = new List<Node>
         {
             new GetAwayCondition(this),             // IsWary
-            new GetAwayRunAction(this)              // WaryTime, IsWary
+            new RunAction(this),                    // WaryTime, IsTracking, IsWary
         };
 
         idleNode.childrenNode = new List<Node>
