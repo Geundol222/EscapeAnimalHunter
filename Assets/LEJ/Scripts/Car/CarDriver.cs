@@ -11,7 +11,7 @@ public class CarDriver : MonoBehaviour
     
     [SerializeField] GameObject player;
     Rigidbody rb;
-    PlayerCarInteractor carInteractor;
+    [SerializeField] CarInteractor carInteractor;
     PlayerInputDetecter inputDetecter;
     SetGearState gearState;
     XRKnobLEJ handleKnob;
@@ -58,7 +58,6 @@ public class CarDriver : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         player = GameObject.FindWithTag("Player");
-        carInteractor = player.GetComponent<PlayerCarInteractor>();      
         inputDetecter = player.GetComponent<PlayerInputDetecter>();
         damager = GetComponent<CarDamager>();
 
@@ -92,9 +91,12 @@ public class CarDriver : MonoBehaviour
                 Handling();
             }
         }
+        
+        /*
         if (!handleGrab.isRightGrip|| !handleGrab.isLeftGrip)
             handleKnob.value = Mathf.Lerp(handleKnob.value, 0.5f, backToZeroSpeed);
-
+        */
+        
     }
 
     private void OnEnable()
@@ -113,7 +115,7 @@ public class CarDriver : MonoBehaviour
 
     private void WhichPedalIsUsing()
     {
-        if (carInteractor.isPlayerTakingCar)
+        if (carInteractor.car)
         {
             if (inputDetecter.rightJoyStickYValue > 0 || inputDetecter.leftJoyStickYValue > 0)
             {
@@ -165,9 +167,7 @@ public class CarDriver : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     private void UseBreakPedal()
     {
         if (inputDetecter.leftJoyStickYValue != 0)
@@ -183,13 +183,17 @@ public class CarDriver : MonoBehaviour
         }
     }
 
+    
     private void Handling()
     {
         SetHandleValue();
 
-        if (curSpeed > 0)
+        
+        if (rb.velocity.magnitude > 1f)
             transform.RotateAround(transform.position, new Vector3(0f, 1f, 0f), -handleRotateSpeed * setHandleValue);
+        
     }
+
 
     private void SetHandleValue()
     {
@@ -204,19 +208,20 @@ public class CarDriver : MonoBehaviour
         else
             setHandleValue = (handleKnob.value - 0.5f) * 2f; //0f ~ 1f
     }
+   
 
-    Coroutine waitOneSec;
+    Coroutine waitThreeSec;
 
     private void SetSpeedToZero()
     {
         curSpeed = 0f;
         rb.velocity = Vector3.zero;
-        waitOneSec = StartCoroutine(WaitForOneSecond());
+        waitThreeSec = StartCoroutine(WaitForThreeSec());
     }
 
-    IEnumerator WaitForOneSecond()
+    IEnumerator WaitForThreeSec()
     {
-        yield return 1f;
+        yield return new WaitForSeconds(3f);
     }
 }
 

@@ -11,6 +11,7 @@ public class BulletUpgradeCanvas : MonoBehaviour
     [SerializeField] TMP_Text costText;
     [SerializeField] TMP_Text speedPlusText;
     [SerializeField] TMP_Text damagePlusText;
+    [SerializeField] TMP_Text playerMoneyText;
 
     [SerializeField] Transform itemTransform;
 
@@ -50,7 +51,7 @@ public class BulletUpgradeCanvas : MonoBehaviour
     private void OnEnable()
     {
         okButton.gameObject.SetActive(false);
-
+        playerMoneyText.text = GameManager.Data.Money.ToString();
         bulletObject = GameManager.Resource.Instantiate<GameObject>("Prefabs/ItemBullet", itemTransform.position, Quaternion.Euler(-90, 0, 0), true);
     }
 
@@ -84,7 +85,7 @@ public class BulletUpgradeCanvas : MonoBehaviour
 
     public void DamageDown()
     {
-        if (DataManager.Upgrade.damageIndex == 0 && damageImages[confirmDamageIndex].color == Color.white)
+        if (DataManager.Upgrade.damageIndex == confirmDamageIndex && damageImages[confirmDamageIndex].color == Color.white)
             return;
 
         damageImages[DataManager.Upgrade.damageIndex].color = Color.black;
@@ -129,7 +130,7 @@ public class BulletUpgradeCanvas : MonoBehaviour
 
     public void SpeedDown()
     {
-        if (DataManager.Upgrade.bulletSpeedIndex == 0 && speedImages[confirmSpeedIndex].color == Color.white)
+        if (DataManager.Upgrade.bulletSpeedIndex == confirmSpeedIndex && speedImages[confirmSpeedIndex].color == Color.white)
             return;
 
         speedImages[DataManager.Upgrade.bulletSpeedIndex].color = Color.black;
@@ -171,8 +172,7 @@ public class BulletUpgradeCanvas : MonoBehaviour
             confirmDamageIndex = DataManager.Upgrade.damageIndex;
             confirmSpeedIndex = DataManager.Upgrade.bulletSpeedIndex;
 
-            DataManager.Upgrade.damageIndex = 0;
-            DataManager.Upgrade.bulletSpeedIndex = 0;
+            playerMoneyText.text = GameManager.Data.Money.ToString();
 
             okButton.gameObject.SetActive(false);
         }
@@ -190,6 +190,36 @@ public class BulletUpgradeCanvas : MonoBehaviour
 
         speedPlusText.text = "0";
         damagePlusText.text = "0";
+
+        if (confirmDamageIndex != 0)
+        {
+            for (int i = 0; i < confirmDamageIndex; i++)
+            {
+                damageImages[i].color = Color.white;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < confirmDamageIndex; i++)
+            {
+                damageImages[i].color = Color.black;
+            }
+        }
+
+        if (confirmSpeedIndex != 0)
+        {
+            for (int i = 0; i < confirmSpeedIndex; i++)
+            {
+                speedImages[i].color = Color.white;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < confirmSpeedIndex; i++)
+            {
+                speedImages[i].color = Color.black;
+            }
+        }
 
         if (bulletObject != null)
             GameManager.Resource.Destroy(bulletObject);

@@ -15,7 +15,7 @@ public class TestMoney : MonoBehaviour
     {
         if (a <= 0 )
         {
-            //GameManager.Data.Money =  GameManager.Data.Money + 100;
+            GameManager.Data.Money =  GameManager.Data.Money + 100;
             Destroy( gameObject );
         }
     }

@@ -10,6 +10,7 @@ public class CarRepairCanvas : MonoBehaviour
     [SerializeField] TMP_Text costText;
     [SerializeField] TMP_Text enableRepairText;
     [SerializeField] TMP_Text sliderText;
+    [SerializeField] TMP_Text playerMoneyText;
     [SerializeField] Slider repairSlider;
     [SerializeField] Button okButton;
 
@@ -37,6 +38,8 @@ public class CarRepairCanvas : MonoBehaviour
         enableRepairText.text = enableRepairValue.ToString();
 
         repairSlider.maxValue = enableRepairValue;
+
+        playerMoneyText.text = GameManager.Data.Money.ToString();
 
         StartCoroutine(SliderValueChangeRoutine());
     }
@@ -74,6 +77,8 @@ public class CarRepairCanvas : MonoBehaviour
 
         repairSlider.value = 0;
         repairSlider.maxValue = enableRepairValue;
+
+        playerMoneyText.text = GameManager.Data.Money.ToString();
 
         okButton.gameObject.SetActive(false);
     }

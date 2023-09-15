@@ -16,6 +16,8 @@ public class UHDSeter : MonoBehaviour
 
     [SerializeField] Material emissionRed;
 
+    GameObject curLastGauge;
+
     int durabilityToTen;
     float blinkTime;
 
@@ -52,7 +54,8 @@ public class UHDSeter : MonoBehaviour
 
                 if (blinkTime >= 1f)
                 {
-                    blinkRoutine = StartCoroutine(BlinkGaugeAtOnce(FindLastGauge()));
+                    if (FindLastGauge() == curLastGauge)
+                        blinkRoutine = StartCoroutine(BlinkGaugeAtOnce(curLastGauge));
                     blinkTime = 0f;
                 }
             }
@@ -120,6 +123,7 @@ public class UHDSeter : MonoBehaviour
             }
         }
 
+        curLastGauge = durabilityGauge.transform.GetChild(num).transform.gameObject;
         return durabilityGauge.transform.GetChild(num).transform.gameObject;
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +14,7 @@ public class CarUpgradeCanvas : MonoBehaviour
     [SerializeField] TMP_Text costText;
     [SerializeField] TMP_Text speedPlusText;
     [SerializeField] TMP_Text duraPlusText;
+    [SerializeField] TMP_Text playerMoneyText;
     [SerializeField] List<Material> carMat;
 
     [SerializeField] Transform itemTransform;
@@ -24,7 +26,6 @@ public class CarUpgradeCanvas : MonoBehaviour
     int speedPlus;
     int duraPlus;
 
-    int materialIndex;
     int confirmDuraIndex;
     int confirmSpeedIndex;
 
@@ -33,6 +34,8 @@ public class CarUpgradeCanvas : MonoBehaviour
         durabilityImages = new List<Image>();
         speedImages = new List<Image>();
 
+        confirmDuraIndex = 0;
+        confirmSpeedIndex = 0;
         speedPlus = 0;
         duraPlus = 0;
 
@@ -54,7 +57,7 @@ public class CarUpgradeCanvas : MonoBehaviour
     private void OnEnable()
     {
         okButton.gameObject.SetActive(false);
-
+        playerMoneyText.text = GameManager.Data.Money.ToString();
         carObject = GameManager.Resource.Instantiate<GameObject>("Prefabs/ItemCar", itemTransform.position, Quaternion.Euler(0, -90, 0), true);
     }
 
@@ -88,7 +91,7 @@ public class CarUpgradeCanvas : MonoBehaviour
 
     public void DurabilityDown()
     {
-        if (DataManager.Upgrade.durabilityIndex == 0 && durabilityImages[confirmSpeedIndex].color == Color.white)
+        if (DataManager.Upgrade.durabilityIndex == confirmDuraIndex && durabilityImages[confirmSpeedIndex].color == Color.white)
             return;
 
         durabilityImages[DataManager.Upgrade.durabilityIndex].color = Color.black;
@@ -115,6 +118,9 @@ public class CarUpgradeCanvas : MonoBehaviour
 
     public void SpeedUp()
     {
+        if (DataManager.Upgrade.carSpeedIndex >= confirmSpeedIndex)
+            return;
+
         DataManager.Upgrade.CarSpeedUp();
 
         if (speedPlus >= 45)
@@ -133,7 +139,7 @@ public class CarUpgradeCanvas : MonoBehaviour
 
     public void SpeedDown()
     {
-        if (DataManager.Upgrade.carSpeedIndex == 0 && speedImages[confirmSpeedIndex].color == Color.white)
+        if (DataManager.Upgrade.carSpeedIndex == confirmSpeedIndex && speedImages[confirmSpeedIndex].color == Color.white)
             return;
 
         speedImages[DataManager.Upgrade.carSpeedIndex].color = Color.black;
@@ -175,38 +181,37 @@ public class CarUpgradeCanvas : MonoBehaviour
             confirmDuraIndex = DataManager.Upgrade.durabilityIndex;
             confirmSpeedIndex = DataManager.Upgrade.carSpeedIndex;
 
-            DataManager.Upgrade.durabilityIndex = 0;
-            DataManager.Upgrade.carSpeedIndex = 0;
+            playerMoneyText.text = GameManager.Data.Money.ToString();
 
             okButton.gameObject.SetActive(false);
         }
     }
 
-    public void MatRight()
-    {
-        if (materialIndex >= carMat.Count - 1)
-        {
-            materialIndex = carMat.Count - 1;
+    //public void MatRight()
+    //{
+    //    if (materialIndex >= carMat.Count - 1)
+    //    {
+    //        materialIndex = carMat.Count - 1;
 
-            if (materialIndex < 4)
-                DataManager.Car.ChangeExteriorToPattern(carMat[materialIndex].name);
-            else
-                DataManager.Car.ChangeExteriorColor(carMat[materialIndex].name);
-        }
-    }
+    //        if (materialIndex < 4)
+    //            DataManager.Car.ChangeExteriorToPattern(carMat[materialIndex].name);
+    //        else
+    //            DataManager.Car.ChangeExteriorColor(carMat[materialIndex].name);
+    //    }
+    //}
 
-    public void MatLeft()
-    {
-        if (materialIndex <= 0)
-        {
-            materialIndex = 0;
+    //public void MatLeft()
+    //{
+    //    if (materialIndex <= 0)
+    //    {
+    //        materialIndex = 0;
 
-            if (materialIndex < 4)
-                DataManager.Car.ChangeExteriorToPattern(carMat[materialIndex].name);
-            else
-                DataManager.Car.ChangeExteriorColor(carMat[materialIndex].name);
-        }
-    }
+    //        if (materialIndex < 4)
+    //            DataManager.Car.ChangeExteriorToPattern(carMat[materialIndex].name);
+    //        else
+    //            DataManager.Car.ChangeExteriorColor(carMat[materialIndex].name);
+    //    }
+    //}
 
     private void OnDisable()
     {
@@ -219,6 +224,36 @@ public class CarUpgradeCanvas : MonoBehaviour
 
         speedPlusText.text = "0";
         duraPlusText.text = "0";
+
+        if (confirmDuraIndex != 0)
+        {
+            for (int i = 0; i < confirmDuraIndex; i++)
+            {
+                durabilityImages[i].color = Color.white;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < confirmDuraIndex; i++)
+            {
+                durabilityImages[i].color = Color.black;
+            }
+        }
+
+        if (confirmSpeedIndex != 0)
+        {
+            for (int i = 0; i < confirmSpeedIndex; i++)
+            {
+                speedImages[i].color = Color.white;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < confirmSpeedIndex; i++)
+            {
+                speedImages[i].color = Color.black;
+            }
+        }
 
         if (carObject != null)
             GameManager.Resource.Destroy(carObject);
