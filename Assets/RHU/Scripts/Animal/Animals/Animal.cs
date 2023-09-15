@@ -55,18 +55,17 @@ public abstract class Animal : MonoBehaviour, IHittable
     }
     private void OnCollisionEnter(Collision collision)
     {
-        foreach (ContactPoint i in collision.contacts)
-        {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
-            {
-                //Debug.Log("ÃÑ¾Ë Ãæµ¹");
-                //Debug.Log($"i.Point : {i.point}");
-                //Debug.Log($"i.Point : {i.normal}");
-                //Debug.Log($"i.Point : {i.otherCollider.gameObject.transform.position}");
-                
-            }
-        }
+        ContactPoint contactPoint = collision.contacts[0];
 
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
+        {
+            Debug.Log("ÃÑ¾Ë Ãæµ¹");
+            Debug.Log($"i.Point : {contactPoint.point}");
+            Debug.Log($"foot - i.Point : {footCenter.position - contactPoint.point}");
+
+            //Debug.Log($"i.Point : {contactPoint.normal}");
+            //Debug.Log($"i.Point : {contactPoint.otherCollider.gameObject.transform.position}");
+        }
     }
 
 

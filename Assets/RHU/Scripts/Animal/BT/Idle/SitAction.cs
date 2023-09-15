@@ -22,6 +22,8 @@ public class SitAction : ActionNode
 
             if (random == 0)
                 animator.SetBool("IsSit", IsSit = false);
+            else if (random == 1)
+                animator.SetInteger("RandomIdle", random);
         }
 
         return NodeState.Success;
