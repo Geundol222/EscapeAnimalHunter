@@ -18,7 +18,7 @@ public class IdleAction: ActionNode
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
                 animator.SetInteger("RandomWalk", RandomAction(5));
             else
-                animator.SetInteger("RandomIdle", RandomAction(10));
+                animator.SetInteger("RandomIdle", RandomAction(11));
         }
 
         return NodeState.Success;

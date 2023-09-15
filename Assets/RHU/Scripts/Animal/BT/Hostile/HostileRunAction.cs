@@ -37,11 +37,11 @@ public class HostileRunAction : ActionNode
 
     private int RandomRun()
     {
-        RandomAction(8);
+        RandomAction(6);
 
         if (random <= 1)
             return 1;
-        else if (2 <= random && random <= 3)
+        else if (2 == random || random == 3)
             return 2;
 
         return 0;                               // Animator에서 1 == Left Run, 2 == Right Run, 나머지는 run 계속 재생

@@ -21,11 +21,12 @@ public abstract class Animal : MonoBehaviour, IHittable
     [NonSerialized] public bool isTracking;
     [NonSerialized] public float bulletDirection;
     [SerializeField] LayerMask GroundLayer;
-    public BTBase bTBase;
-    public SelectorNode hitNode = new SelectorNode();
-    public SequenceNode getAwayNode = new SequenceNode();
-    public SequenceNode hostileNode = new SequenceNode();
-    public IdleAction idleNode;
+    protected SelectorNode rootNode = new SelectorNode();
+    protected BTBase bTBase;
+    //public SelectorNode hitNode = new SelectorNode();
+    //public SequenceNode getAwayNode = new SequenceNode();
+    //public SequenceNode hostileNode = new SequenceNode();
+    //public IdleAction idleNode;
 
     protected void Awake()
     {

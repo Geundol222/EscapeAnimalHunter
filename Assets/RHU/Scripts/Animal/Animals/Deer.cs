@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Moose : Animal
+public class Deer : Animal
 {
     private SelectorNode hitNode = new SelectorNode();
-    private SequenceNode getAwayNode = new SequenceNode();
+    private SelectorNode getAwayNode = new SelectorNode();
     private SelectorNode idleNode = new SelectorNode();
 
     public override void SetUpBT()

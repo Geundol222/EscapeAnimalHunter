@@ -22,7 +22,7 @@ public class GetAwayRunAction : ActionNode
         else
         {
             WaryTime = 0;
-            IsWary = false;
+            animator.SetBool("IsWary", IsWary = false);
 
             return NodeState.Failure;
         }
