@@ -21,7 +21,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 2eab53c61da93414d820e5e2397d4335, type: 2}
+  m_Motion: {fileID: 7400000, guid: 598dbf0e68c508e45a04508e9fa14af9, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -34,7 +34,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Paw Left_Bear
+  m_Name: Bite Right_Tiger
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -48,7 +48,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: c36555bd077fdf1469b8c24ae78bc67e, type: 2}
+  m_Motion: {fileID: 7400000, guid: 06f6ed065965c8c4ba796a6f0c4d3af3, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -61,7 +61,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Paw Right_Bear
+  m_Name: Jump Attack_Tiger
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -75,7 +75,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: e795a0c9fca93e04b9c62d59d2498325, type: 2}
+  m_Motion: {fileID: 7400000, guid: 9543e8be4a3220449ba79346d483ac62, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -143,7 +143,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Hit Left_Bear
+  m_Name: Hit Left_Tiger
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -156,7 +156,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: a9e04f02e97e96d4f8031f25cad64e68, type: 2}
+  m_Motion: {fileID: 7400000, guid: 2f55804d39f4bce4b920fb0ade40984c, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -189,7 +189,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: e649bb9f22382884f8ebdcdecbda3d06, type: 2}
+  m_Motion: {fileID: 7400000, guid: f1452d6580bb0a44dac11c308b115a06, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -246,7 +246,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Dig_Bear
+  m_Name: Howlling_Tiger
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -260,7 +260,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 6aad3fa786dd1ad4494b3a42d0ba86aa, type: 2}
+  m_Motion: {fileID: 7400000, guid: b9d1a6818bbdda6449ff855d680d4e93, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -290,7 +290,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 37e6e4d507aef224cb7126dab54ea5cc, type: 2}
+  m_Motion: {fileID: 7400000, guid: 3d2841bedfb068243b31ee84dea94acd, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -442,7 +442,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: d61978ff8085aa54bbeb2504c9961391, type: 2}
+  m_Motion: {fileID: 7400000, guid: a5a1e115608e26b44a31f0ad1de9e0be, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -455,7 +455,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Hit Right_Bear
+  m_Name: Hit Right_Tiger
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -468,7 +468,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 2e5825d5fd3b74e439ac367ed15442fc, type: 2}
+  m_Motion: {fileID: 7400000, guid: c847e3b86e7e27144a35f56080e063af, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -528,7 +528,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Death1_Bear
+  m_Name: Death1_Tiger
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -541,7 +541,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 50982ba18a6ee2246a19d19afb3f27f2, type: 2}
+  m_Motion: {fileID: 7400000, guid: 51077efbef462b34d8893a2f4b93aa07, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -604,7 +604,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Bite Left_Bear
+  m_Name: Bite Left_Tiger
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -618,7 +618,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: e8e5b97799a458d4c8e61be9877af9bb, type: 2}
+  m_Motion: {fileID: 7400000, guid: 34178433f572ec14e86c1b7f57a1db97, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -652,7 +652,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Bear Animator
+  m_Name: Tiger Animator
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: IsHit
@@ -743,7 +743,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: c0609ddf07d821a41ac03725c61c21e7, type: 2}
+  m_Motion: {fileID: 7400000, guid: e2cd7d0d29dc59848a306d90feaee687, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -756,7 +756,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Bite Right_Bear
+  m_Name: Claws_Tiger
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -770,7 +770,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 0ad8fec52d6e6f643a9135fa0a2e5ed1, type: 2}
+  m_Motion: {fileID: 7400000, guid: dd9feea575ba738449b262132a9334e8, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -797,7 +797,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: c610bd04542a242438721f9e137f6a71, type: 2}
+  m_Motion: {fileID: 7400000, guid: 0609c8c08585d2141836340f85be8988, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -951,7 +951,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Hit Back_Bear Left
+  m_Name: Hit Back_Tiger
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -964,7 +964,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: c8dd230959d997640bc4d15e958ab3ec, type: 2}
+  m_Motion: {fileID: 7400000, guid: 5907965ab3d281f4b8eb86a7870886b3, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -999,7 +999,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Look_Bear
+  m_Name: Look_Tiger
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -1013,7 +1013,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: f4c765528ea9fae47a9142b4d6e9c348, type: 2}
+  m_Motion: {fileID: 7400000, guid: e21e347ea4837e94c884f13f368d3dae, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -1111,7 +1111,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 143ed16a6189c774eb6a7e301ad385d7, type: 2}
+  m_Motion: {fileID: 7400000, guid: df4b7a0752bdd9c48ada8a9bdc542a69, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -1237,7 +1237,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Hit Front_Bear
+  m_Name: Hit Front_Tiger
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -1251,7 +1251,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 8cbdd1d85ab8f4343a0dbadf6158a1cc, type: 2}
+  m_Motion: {fileID: 7400000, guid: 1a3e38a681efdc04693fde31290135cb, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -1264,7 +1264,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Death2_Bear
+  m_Name: Death2_Tiger
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -1277,7 +1277,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 85bae5b06262d4143aaabb4f17014031, type: 2}
+  m_Motion: {fileID: 7400000, guid: 16b37a35c9e03984794f0ec6f9e03c3d, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

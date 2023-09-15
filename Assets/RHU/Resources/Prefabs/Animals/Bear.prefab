@@ -1171,7 +1171,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6971072296763249053}
   m_Layer: 10
-  m_Name: FootCenter
+  m_Name: Foot Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

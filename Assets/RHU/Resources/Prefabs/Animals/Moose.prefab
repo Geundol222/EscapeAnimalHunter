@@ -830,7 +830,7 @@ GameObject:
   - component: {fileID: -8247502386642265878}
   m_Layer: 11
   m_Name: Moose
-  m_TagString: Untagged
+  m_TagString: Animal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -903,7 +903,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 435d3c564271fe34a820f0c86f306423, type: 2}
-  animalName: 1
+  animalName: 2
   footCenter: {fileID: 2050099851584991942}
   fieldOfView: {fileID: 202505615596210071}
   GroundLayer:
@@ -1927,7 +1927,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2050099851584991942}
   m_Layer: 11
-  m_Name: FootCenter
+  m_Name: Foot Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

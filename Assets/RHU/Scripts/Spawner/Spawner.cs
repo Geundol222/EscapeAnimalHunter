@@ -107,7 +107,6 @@ public class Spawner : MonoBehaviour
             if (Physics.Raycast(spawnPoint.position, Vector3.down, out _hitInfo, 1000, groundLayer))
             {
                 hitInfo = _hitInfo;
-                Debug.Log($"GroundCheck hitInfo : {hitInfo.point}, {hitInfo.transform.position}");
 
                 break;
             }
