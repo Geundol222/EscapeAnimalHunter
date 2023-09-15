@@ -22,7 +22,7 @@ public abstract class Animal : MonoBehaviour, IHittable
     [NonSerialized] public bool isWary;
     [NonSerialized] public bool isTracking;
     [NonSerialized] public bool isSit;
-    [NonSerialized] public float bulletDirection;
+    [NonSerialized] public Vector2 bulletDirection;
 
     protected BTBase bTBase;
     protected SelectorNode rootNode = new SelectorNode();
@@ -45,7 +45,7 @@ public abstract class Animal : MonoBehaviour, IHittable
         isWary = false;
         isTracking = false;
         isSit = false;
-        bulletDirection = 0;
+        bulletDirection = new Vector2();
     }
 
     private void Update()
@@ -62,7 +62,8 @@ public abstract class Animal : MonoBehaviour, IHittable
             Debug.Log("총알 충돌");
             Debug.Log($"i.Point : {contactPoint.point}");
             Debug.Log($"foot - i.Point : {footCenter.position - contactPoint.point}");
-
+            Debug.Log($"foot - i.Point . normalized: {(footCenter.position - contactPoint.point).normalized}");
+            Debug.Log($"계산끝 {footCenter.InverseTransformDirection(footCenter.position - contactPoint.point).normalized}");
             //Debug.Log($"i.Point : {contactPoint.normal}");
             //Debug.Log($"i.Point : {contactPoint.otherCollider.gameObject.transform.position}");
         }
