@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
+using UnityEngine.SocialPlatforms;
 using static AnimalData;
 
 public abstract class Animal : MonoBehaviour, IHittable
@@ -23,6 +25,7 @@ public abstract class Animal : MonoBehaviour, IHittable
     [NonSerialized] public bool isTracking;
     [NonSerialized] public bool isSit;
     [NonSerialized] public Vector2 bulletDirection;
+    [SerializeField] LayerMask playerLayer;
 
     protected BTBase bTBase;
     protected SelectorNode rootNode = new SelectorNode();
@@ -33,7 +36,7 @@ public abstract class Animal : MonoBehaviour, IHittable
         SetUpBT();
         StartCoroutine(StepOnGrounRoutine());
     }
-
+    
     public abstract void SetUpBT();
 
     private void OnEnable()     // ReSpawn 시 초기화를 위해 OnEnable에서 초기화
@@ -64,27 +67,9 @@ public abstract class Animal : MonoBehaviour, IHittable
             Debug.Log($"foot - i.Point : {footCenter.position - contactPoint.point}");
             Debug.Log($"foot - i.Point . normalized: {(footCenter.position - contactPoint.point).normalized}");
             Debug.Log($"계산끝 {footCenter.InverseTransformDirection(footCenter.position - contactPoint.point).normalized}");
-            //Debug.Log($"i.Point : {contactPoint.normal}");
-            //Debug.Log($"i.Point : {contactPoint.otherCollider.gameObject.transform.position}");
+            //if (animator.GetFloat("HitX") > 0)
         }
     }
-
-
-    //private void StepOnGround()
-    //{
-    //    RaycastHit hitInfo;
-
-    //    if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 20, /*1 << groundLayer*/GroundLayer))
-    //    {
-    //        Debug.Log($"normal : {hitInfo.normal}");
-    //        Debug.DrawRay(footCenter.position, Vector3.down * 20, Color.red);
-    //        Debug.DrawRay(hitInfo.point, hitInfo.normal * 20, Color.blue);
-
-    //        Debug.Log($"Dot : {Vector3.Dot(footCenter.position, hitInfo.normal)}");
-
-    //        transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
-    //    }
-    //}
 
     IEnumerator StepOnGrounRoutine()
     {
