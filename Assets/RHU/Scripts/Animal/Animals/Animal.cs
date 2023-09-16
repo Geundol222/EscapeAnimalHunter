@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static AnimalData;
 
-public abstract class Animal : MonoBehaviour, IHittable
+public abstract class Animal : MonoBehaviour, IHittable, ICrusher
 {
     [SerializeField] public AnimalData data;
     [SerializeField] public AnimalName animalName;
@@ -119,5 +119,22 @@ public abstract class Animal : MonoBehaviour, IHittable
 
         yield break;
     }
+
+    Coroutine crushRoutine;
+
+    public void Crusher(float mass, float speed, Vector3 targetsForward)
+    {
+        Debug.Log("Crushed by car");
+        crushRoutine = StartCoroutine(CrushTime(mass, speed, targetsForward));
+    }
+
+    IEnumerator CrushTime(float mass, float speed, Vector3 targetsForward)
+    {
+        animator.applyRootMotion = false;
+        transform.GetComponent<Rigidbody>().AddForce(new Vector3(0f, 0f, targetsForward.z * speed * 5f), ForceMode.Impulse);
+        yield return new WaitForSeconds(1f);
+        animator.applyRootMotion = true;
+    }
+
 
 }

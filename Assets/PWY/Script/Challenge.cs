@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,133 +9,84 @@ using UnityEngine.UI;
 
 public class Challenge : MonoBehaviour
 {
-    public TMP_Text[] challengeName;
+    public TMP_Text[] challengeName;         // 포획할 동물 이름 핸드폰에 나타내기
 
-    public GameObject[] challenge_Uncheck_Image;
-    public GameObject[] challenge_Check_Image;
-
-    public GameObject[] colling_Enble;
-    public GameObject[] colling_Dissble;
-
-    public GameObject graveyard;
-
-    public bool Bear_Challenge_Attainment;
-    public bool moos_Challenge_Attainment;
-
-    public bool name_Challenge_Attainment;
-    public bool Name_Challenge_Attainment;
-
-    private void Update()
-    {
-       // Did(die);
-    }
+    public Image[] challenge_Dissble_Image;   // 업적이 하나도 안돼있을때 !모양
+    public Image[] challenge_Progress_Image;  // 업적 진행도
+    public Image[] challenge_Enble_Image;     // 업적을 다 완료했을 때 V 모양
 
     private void Start()
     {
-        
         StartSetText();
-    }
-
-    private void Colling_Enable_Disable()
-    {
-        
-        colling_Enble[0].SetActive(true);
-
-        colling_Dissble[0].SetActive(false);
-        colling_Dissble[1].SetActive(false);
-        colling_Dissble[2].SetActive(false);
-        colling_Dissble[3].SetActive(false);
-        colling_Dissble[4].SetActive(false);
-        colling_Dissble[5].SetActive(false);
-        colling_Dissble[6].SetActive(false);
-        colling_Dissble[7].SetActive(false);
-        colling_Dissble[8].SetActive(false);
-        colling_Dissble[9].SetActive(false);
     }
 
     public void StartSetText()
     {
+
+        challengeName[0].text = "<size=80%>Bear</size>";    // 곰
+        challengeName[1].text = "<size=80%>Moos</size>";    // 무스
         
-        challengeName[0].text = "<size=80%>Deer Capture</size>";
-        challengeName[1].text = "<size=80%>Bear</size>";
-        challengeName[2].text = "<size=80%>Moos</size>";
-        //challengeName[3].text = "<size=80%>Deer Capture</size>";
-        challenge_Uncheck_Image[0].SetActive(true);
-        challenge_Uncheck_Image[1].SetActive(true);
-        challenge_Uncheck_Image[2].SetActive(true);
-        //challenge_Uncheck_Image[3].SetActive(true);
+        // 시작
+        challenge_Dissble_Image[0].enabled = true;
+        challenge_Dissble_Image[1].enabled = true;
+        // 진행도
+        challenge_Progress_Image[0].enabled = true;
+        challenge_Progress_Image[1].enabled = true;
+        // 완료
+        challenge_Enble_Image[0].enabled = false;
+        challenge_Enble_Image[1].enabled = false;
+
     }
 
-    public void Bear_Challenge()
+    public void Bear_Challenge(ChallengeManager challengeManager)
     {
-        if(Bear_Challenge_Attainment)
+        if (challengeManager.bearCount == challengeManager.bear_Challenge_Exit)
+        {
+
+            challenge_Progress_Image[0].enabled = true;
+            challenge_Progress_Image[0].fillAmount += 0.175f;
+        }
+        else if (challengeManager.bear_Challenge_Exit <= 11)
         {
             challengeName[0].text = "<size=80%><color=red><s>Bear Capture</color></s></size>";
-            challenge_Uncheck_Image[0].SetActive(false);
-            challenge_Check_Image[0].SetActive(true);
-
-            Colling_Enable_Disable();
-
-
+            challenge_Progress_Image[0].fillAmount = 1f;
+            challenge_Dissble_Image[0].enabled = false;
+            challenge_Enble_Image[0].enabled = true;
+            return;
         }
-
-        else
-        {
-            return;    
-        }
-
     }
 
-    public void Moos_Challenge() 
+    public void Moos_Challenge(ChallengeManager challengeManager) 
     {
-        if(moos_Challenge_Attainment)
+        if (challengeManager.bearCount == challengeManager.bear_Challenge_Exit)
+        {
+            challenge_Progress_Image[1].enabled = true;
+            challenge_Progress_Image[1].fillAmount += 0.175f;
+        }
+        else if (challengeManager.moose_Challenge_Exit <= 11)
         {
             challengeName[1].text = "<size=80%><color=red><s>Moos Capture</color></s></size>";
-            challenge_Uncheck_Image[1].SetActive(false);
-            challenge_Check_Image[1].SetActive(true);
-
-            Colling_Enable_Disable();
-        }
-
-        else 
-        { 
-            return; 
+            challenge_Progress_Image[1].fillAmount = 1f;
+            challenge_Dissble_Image[1].enabled = false;
+            challenge_Enble_Image[1].enabled = true;
+            return;
         }
     }
 
-    #region // 아직 추가 안됨
-    /*public void Name_Challenge() 
-    {
-        if (name_Challenge_Attainment)
-        {
-            challengeName[2].text = "<size=80%><color=red><s>Moos</color></s></size>";
-            challenge_Uncheck_Image[2].SetActive(false);
-            challenge_Check_Image[2].SetActive(true);
-        }
-
-        else
-        {
-            return;
-        }
-    }*/
-
-    /*public void Name_Challenge4() 
-    {
-        if(Name_Challenge_Attainment)
-        {
-            challengeName[2].text = "<size=80%><color=red><s>Moos</color></s></size>";
-            challenge_Uncheck_Image[3].SetActive(false);
-            challenge_Check_Image[3].SetActive(true);
-        }
-
-        else
-        {
-            return;
-        }
-    }*/
-
-    // 업적에 따라 인테리어 소품이 늘어남
-    // ex.)사슴잡으면 침대와 테이블이 생김
-    // Start is called before the first frame update
-    #endregion
+    //private void Colling_Enable_Disable()
+    //{
+    //    
+    //    colling_Enble[0].SetActive(true);
+    //
+    //    colling_Dissble[0].SetActive(false);
+    //    colling_Dissble[1].SetActive(false);
+    //    colling_Dissble[2].SetActive(false);
+    //    colling_Dissble[3].SetActive(false);
+    //    colling_Dissble[4].SetActive(false);
+    //    colling_Dissble[5].SetActive(false);
+    //    colling_Dissble[6].SetActive(false);
+    //    colling_Dissble[7].SetActive(false);
+    //    colling_Dissble[8].SetActive(false);
+    //    colling_Dissble[9].SetActive(false);
+    //}
 }

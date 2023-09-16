@@ -5,13 +5,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Content.Interaction;
+using static UnityEngine.Rendering.DebugUI;
 
 public class CarDriver : MonoBehaviour
 {
     
-    [SerializeField] GameObject player;
+    GameObject player;
     Rigidbody rb;
-    [SerializeField] CarInteractor carInteractor;
+    PlayerCarInteractor carInteractor;
     PlayerInputDetecter inputDetecter;
     SetGearState gearState;
     XRKnobLEJ handleKnob;
@@ -58,6 +59,7 @@ public class CarDriver : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         player = GameObject.FindWithTag("Player");
+        carInteractor = player.GetComponent<PlayerCarInteractor>();
         inputDetecter = player.GetComponent<PlayerInputDetecter>();
         damager = GetComponent<CarDamager>();
 
@@ -92,10 +94,10 @@ public class CarDriver : MonoBehaviour
             }
         }
         
-        /*
+        
         if (!handleGrab.isRightGrip|| !handleGrab.isLeftGrip)
             handleKnob.value = Mathf.Lerp(handleKnob.value, 0.5f, backToZeroSpeed);
-        */
+        
         
     }
 
@@ -115,7 +117,7 @@ public class CarDriver : MonoBehaviour
 
     private void WhichPedalIsUsing()
     {
-        if (carInteractor.car)
+        if (carInteractor.isPlayerTakingCar)
         {
             if (inputDetecter.rightJoyStickYValue > 0 || inputDetecter.leftJoyStickYValue > 0)
             {
@@ -183,20 +185,23 @@ public class CarDriver : MonoBehaviour
         }
     }
 
+    float prevValue;
+    float curValue;
     
     private void Handling()
     {
         SetHandleValue();
 
-        
         if (rb.velocity.magnitude > 1f)
             transform.RotateAround(transform.position, new Vector3(0f, 1f, 0f), -handleRotateSpeed * setHandleValue);
         
     }
 
+    float prevHandleRot;
 
     private void SetHandleValue()
     {
+        
         //To make handleValue.value 0f ~ 1f to -1f ~ 1f
 
         if (handleKnob.value == 0.5f)
@@ -207,21 +212,25 @@ public class CarDriver : MonoBehaviour
 
         else
             setHandleValue = (handleKnob.value - 0.5f) * 2f; //0f ~ 1f
+
+        prevHandleRot = setHandleValue;
+
+
     }
-   
 
-    Coroutine waitThreeSec;
 
-    private void SetSpeedToZero()
+    Coroutine waitOneSec;
+
+    public void SetSpeedToZero()
     {
         curSpeed = 0f;
         rb.velocity = Vector3.zero;
-        waitThreeSec = StartCoroutine(WaitForThreeSec());
+        waitOneSec = StartCoroutine(WaitForOneSec());
     }
 
-    IEnumerator WaitForThreeSec()
+    IEnumerator WaitForOneSec()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
     }
 }
 

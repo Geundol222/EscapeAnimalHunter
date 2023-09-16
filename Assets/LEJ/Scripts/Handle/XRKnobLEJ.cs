@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 using UnityEngine.XR.Interaction.Toolkit;
 
 namespace UnityEngine.XR.Content.Interaction
@@ -16,6 +17,7 @@ namespace UnityEngine.XR.Content.Interaction
         IXRSelectInteractor authorInteractor;
 
         float curValue;
+        float prevValue;
         float knobRotation;
 
         [SerializeField] PlayerControllerMoveDetecter moveDetecter;
@@ -374,6 +376,7 @@ namespace UnityEngine.XR.Content.Interaction
 
         public void SetValueWhenOnEvent(bool isRight)
         {
+
             if (isRight && authorInteractor.transform.tag == "RightController" || !isRight && authorInteractor.transform.tag == "LeftController")
             {
                 SetKnobRotation(knobRotation);
@@ -401,21 +404,23 @@ namespace UnityEngine.XR.Content.Interaction
 
         void SetValue(float value)
         {
+            
+
             if (m_ClampedMotion)
                 value = Mathf.Clamp(value, -1f, 1f);
+
 
             if (m_AngleIncrement > 0)
             {
                 var angleRange = m_MaxAngle - m_MinAngle;
-                var angle = Mathf.Lerp(0.0f, angleRange, value);
+                var angle = Mathf.Lerp(0.0f, angleRange, value * 0.5f);
                 angle = Mathf.Round(angle / m_AngleIncrement) * m_AngleIncrement;
                 value = Mathf.InverseLerp(0.0f, angleRange, angle);
             }
 
+
             m_Value = value;
             m_OnValueChange.Invoke(m_Value);
-
-            curValue = m_Value;
         }
 
         float ValueToRotation()

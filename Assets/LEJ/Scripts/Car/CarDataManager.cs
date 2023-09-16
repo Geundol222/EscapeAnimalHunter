@@ -208,6 +208,11 @@ public class CarDataManager : MonoBehaviour
         carCurHP = car.GetComponent<CarDamager>().CurHp;
     }
 
+    public void SetMaxHPInThisScript()
+    {
+        carMaxHP = car.GetComponent<CarDamager>().MaxHp;
+    }
+
     public void SetCurMaxSpeedInThisScript()
     {
         carCurMaxSpeed = car.GetComponent<CarDriver>().MaxSpeed;

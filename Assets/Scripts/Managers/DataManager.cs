@@ -11,10 +11,12 @@ public class DataManager : MonoBehaviour
     private static BulletManager bullet;
     private static UpgradeManager upgrade;
     private static CarDataManager car;
+    private static ChallengeManager challenge;
 
     public static BulletManager Bullet { get { return bullet; } }
     public static UpgradeManager Upgrade { get {  return upgrade; } }
     public static CarDataManager Car { get { return car; } }
+    public static ChallengeManager Challenge { get { return challenge; } }
 
     private void Awake()
     {
@@ -53,9 +55,14 @@ public class DataManager : MonoBehaviour
         carObj.name = "CarDataManager";
         carObj.transform.parent = transform;
         car = carObj.AddComponent<CarDataManager>();
+
+        GameObject challengeObj = new GameObject();
+        challengeObj.name = "ChallengeManager";
+        challengeObj.transform.parent = transform;
+        challenge = challengeObj.AddComponent<ChallengeManager>();
     }
     
-    private int money = 9999;
+    private int money = 0;
 
     public int Money { get { return money; } }
 

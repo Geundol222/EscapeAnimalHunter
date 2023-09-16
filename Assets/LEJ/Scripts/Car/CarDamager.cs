@@ -56,6 +56,7 @@ public class CarDamager : MonoBehaviour, IHittable
     public void OnDisable()
     {
         OnCurHpChanged -= CheckCurDamage;
+        carBodyCol.GetComponent<CarBodyCollider>().OnHit -= HitSomething;
     }
 
     /// <summary>
@@ -63,13 +64,17 @@ public class CarDamager : MonoBehaviour, IHittable
     /// </summary>
     /// <param name="i">박은 오브젝트의 레이어 인덱스</param>
     /// <param name="obj">박은 오브젝트의 gameObject</param>
-    public void HitSomething(int i, GameObject obj)
+    public void HitSomething(GameObject obj, Vector3 direction)
     {
-        if (GetComponent<Rigidbody>().velocity.magnitude < canHitSpeed)
+        /*
+        if (Math.Abs(GetComponent<Rigidbody>().velocity.magnitude) < canHitSpeed)
             return;
+        */
 
-        if (i == carnivoreLayerMask || i == harbivoreLayerMask)
-            GiveDamage(obj);
+        Debug.Log("Hit Something");
+
+        if (obj.layer == 10 || obj.layer == 11)
+            GiveDamage(obj, direction);
 
         TakeHit(damageAmountWhenCarHitAnimal);
 
@@ -80,12 +85,16 @@ public class CarDamager : MonoBehaviour, IHittable
     /// 차가 오브젝트를 박았을 때 그 오브젝트에 ICrusher가 있으면 발동함
     /// </summary>
     /// <param name="gameObject"></param>
-    public void GiveDamage(GameObject gameObject)
+    public void GiveDamage(GameObject gameObject, Vector3 direction)
     {
+        Debug.Log($"{gameObject.name} GiveDamage()");
+
         if (gameObject.GetComponent<ICrusher>() != null)
         {
-            gameObject.GetComponent<ICrusher>().Crusher(GetComponent<Rigidbody>().mass, GetComponent<CarDriver>().CurSpeed, transform.forward);
+            gameObject.GetComponent<ICrusher>().Crusher(GetComponent<Rigidbody>().mass, GetComponent<CarDriver>().CurSpeed, direction);
         }
+
+        GetComponent<CarDriver>().SetSpeedToZero();
     }
 
     /// <summary>
@@ -97,8 +106,6 @@ public class CarDamager : MonoBehaviour, IHittable
     public void TakeHit(int damage)
     {
         curHp -= damage;
-
-        throw new System.NotImplementedException();
     }
 
     /// <summary>

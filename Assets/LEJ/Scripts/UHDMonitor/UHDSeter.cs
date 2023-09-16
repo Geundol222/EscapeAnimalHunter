@@ -64,12 +64,14 @@ public class UHDSeter : MonoBehaviour
 
     void SetSpeedText()
     {
-        speedText.SetText(car.GetComponent<CarDriver>().CurSpeed.ToString());
+        int curSpeed = (int)car.GetComponent<CarDriver>().CurSpeed;
+        speedText.SetText(curSpeed.ToString());
     }
 
     void SetMaxSpeedText()
     {
-        maxSpeedText.SetText(car.GetComponent<CarDriver>().MaxSpeed.ToString());
+        int maxSpeed = (int)car.GetComponent<CarDriver>().MaxSpeed;
+        maxSpeedText.SetText(maxSpeed.ToString());
     }
 
     void SetDurabilityGauge()
