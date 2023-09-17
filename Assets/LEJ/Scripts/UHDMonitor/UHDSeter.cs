@@ -16,6 +16,8 @@ public class UHDSeter : MonoBehaviour
 
     [SerializeField] Material emissionRed;
 
+    GameObject curLastGauge;
+
     int durabilityToTen;
     float blinkTime;
 
@@ -52,7 +54,8 @@ public class UHDSeter : MonoBehaviour
 
                 if (blinkTime >= 1f)
                 {
-                    blinkRoutine = StartCoroutine(BlinkGaugeAtOnce(FindLastGauge()));
+                    if (FindLastGauge() == curLastGauge)
+                        blinkRoutine = StartCoroutine(BlinkGaugeAtOnce(curLastGauge));
                     blinkTime = 0f;
                 }
             }
@@ -61,12 +64,14 @@ public class UHDSeter : MonoBehaviour
 
     void SetSpeedText()
     {
-        speedText.SetText(car.GetComponent<CarDriver>().CurSpeed.ToString());
+        int curSpeed = (int)car.GetComponent<CarDriver>().CurSpeed;
+        speedText.SetText(curSpeed.ToString());
     }
 
     void SetMaxSpeedText()
     {
-        maxSpeedText.SetText(car.GetComponent<CarDriver>().MaxSpeed.ToString());
+        int maxSpeed = (int)car.GetComponent<CarDriver>().MaxSpeed;
+        maxSpeedText.SetText(maxSpeed.ToString());
     }
 
     void SetDurabilityGauge()
@@ -120,6 +125,7 @@ public class UHDSeter : MonoBehaviour
             }
         }
 
+        curLastGauge = durabilityGauge.transform.GetChild(num).transform.gameObject;
         return durabilityGauge.transform.GetChild(num).transform.gameObject;
     }
 

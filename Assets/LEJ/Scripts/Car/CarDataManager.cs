@@ -13,7 +13,7 @@ public class CarDataManager : MonoBehaviour
 
     public int carCurHP = 100;
     public int carMaxHP = 100;
-    public float carCurMaxSpeed = 15;
+    public float carCurMaxSpeed = 20;
     public string carCurExterior;
     public enum GearState { Parking, Neutral, Drive, Reverse };
     public GearState carCurState;
@@ -203,17 +203,22 @@ public class CarDataManager : MonoBehaviour
 
     //안 봐도 됩니다--------------------------------------------------------
 
-    void SetCurHPInThisScript()
+    public void SetCurHPInThisScript()
     {
         carCurHP = car.GetComponent<CarDamager>().CurHp;
     }
 
-    void SetCurMaxSpeedInThisScript()
+    public void SetMaxHPInThisScript()
+    {
+        carMaxHP = car.GetComponent<CarDamager>().MaxHp;
+    }
+
+    public void SetCurMaxSpeedInThisScript()
     {
         carCurMaxSpeed = car.GetComponent<CarDriver>().MaxSpeed;
     }
 
-    void SetGearStateInThisScript(string state)
+    public void SetGearStateInThisScript(string state)
     {
         switch (state)
         {

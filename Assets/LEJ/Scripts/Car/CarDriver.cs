@@ -5,11 +5,12 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Content.Interaction;
+using static UnityEngine.Rendering.DebugUI;
 
 public class CarDriver : MonoBehaviour
 {
     
-    [SerializeField] GameObject player;
+    GameObject player;
     Rigidbody rb;
     PlayerCarInteractor carInteractor;
     PlayerInputDetecter inputDetecter;
@@ -58,7 +59,7 @@ public class CarDriver : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         player = GameObject.FindWithTag("Player");
-        carInteractor = player.GetComponent<PlayerCarInteractor>();      
+        carInteractor = player.GetComponent<PlayerCarInteractor>();
         inputDetecter = player.GetComponent<PlayerInputDetecter>();
         damager = GetComponent<CarDamager>();
 
@@ -92,9 +93,12 @@ public class CarDriver : MonoBehaviour
                 Handling();
             }
         }
+        
+        
         if (!handleGrab.isRightGrip|| !handleGrab.isLeftGrip)
             handleKnob.value = Mathf.Lerp(handleKnob.value, 0.5f, backToZeroSpeed);
-
+        
+        
     }
 
     private void OnEnable()
@@ -165,9 +169,7 @@ public class CarDriver : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     private void UseBreakPedal()
     {
         if (inputDetecter.leftJoyStickYValue != 0)
@@ -183,16 +185,23 @@ public class CarDriver : MonoBehaviour
         }
     }
 
+    float prevValue;
+    float curValue;
+    
     private void Handling()
     {
         SetHandleValue();
 
-        if (curSpeed > 0)
+        if (rb.velocity.magnitude > 1f)
             transform.RotateAround(transform.position, new Vector3(0f, 1f, 0f), -handleRotateSpeed * setHandleValue);
+        
     }
+
+    float prevHandleRot;
 
     private void SetHandleValue()
     {
+        
         //To make handleValue.value 0f ~ 1f to -1f ~ 1f
 
         if (handleKnob.value == 0.5f)
@@ -203,20 +212,25 @@ public class CarDriver : MonoBehaviour
 
         else
             setHandleValue = (handleKnob.value - 0.5f) * 2f; //0f ~ 1f
+
+        prevHandleRot = setHandleValue;
+
+
     }
+
 
     Coroutine waitOneSec;
 
-    private void SetSpeedToZero()
+    public void SetSpeedToZero()
     {
         curSpeed = 0f;
         rb.velocity = Vector3.zero;
-        waitOneSec = StartCoroutine(WaitForOneSecond());
+        waitOneSec = StartCoroutine(WaitForOneSec());
     }
 
-    IEnumerator WaitForOneSecond()
+    IEnumerator WaitForOneSec()
     {
-        yield return 1f;
+        yield return new WaitForSeconds(1f);
     }
 }
 

@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class CarBodyCollider : MonoBehaviour
 {
-    public UnityAction<int, GameObject> OnHit;
+    [SerializeField] bool isForward;
+    public UnityAction<GameObject, Vector3> OnHit;
     int carnivoreLayerMask;
     int harbivoreLayerMask;
     int groundLayerMask;
@@ -20,7 +22,19 @@ public class CarBodyCollider : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.gameObject.layer == groundLayerMask || collision.transform.gameObject.layer == carnivoreLayerMask || collision.transform.gameObject.layer == harbivoreLayerMask)
-            OnHit?.Invoke(collision.transform.gameObject.layer, collision.gameObject);
+        if (collision.gameObject.layer != 10 && collision.gameObject.layer != 11)
+            return;
+
+        if (isForward)
+        {
+            Debug.Log("Forward");
+            OnHit?.Invoke(collision.transform.gameObject, transform.forward);
+        }
+        else
+        {
+            Debug.Log("Back");
+            OnHit?.Invoke(collision.transform.gameObject, -transform.forward);
+        }
+
     }
 }

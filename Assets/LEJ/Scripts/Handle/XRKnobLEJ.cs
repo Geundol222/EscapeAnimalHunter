@@ -1,5 +1,9 @@
 using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine.Animations.Rigging;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 using UnityEngine.XR.Interaction.Toolkit;
 
 namespace UnityEngine.XR.Content.Interaction
@@ -9,7 +13,18 @@ namespace UnityEngine.XR.Content.Interaction
     /// </summary>
     public class XRKnobLEJ : XRBaseInteractable
     {
+        public List<IXRSelectInteractor> enteredInteractors = new List<IXRSelectInteractor>();
+        IXRSelectInteractor authorInteractor;
+
+        float curValue;
+        float prevValue;
+        float knobRotation;
+
+        [SerializeField] PlayerControllerMoveDetecter moveDetecter;
+
         
+        //=====================================================================
+
 
         const float k_ModeSwitchDeadZone = 0.1f; // Prevents rapid switching between the different rotation tracking modes
 
@@ -207,6 +222,8 @@ namespace UnityEngine.XR.Content.Interaction
             base.OnEnable();
             selectEntered.AddListener(StartGrab);
             selectExited.AddListener(EndGrab);
+
+            moveDetecter.OnRotationChanged += SetValueWhenOnEvent;
         }
 
         protected override void OnDisable()
@@ -214,12 +231,17 @@ namespace UnityEngine.XR.Content.Interaction
             selectEntered.RemoveListener(StartGrab);
             selectExited.RemoveListener(EndGrab);
             base.OnDisable();
+
+            moveDetecter.OnRotationChanged += SetValueWhenOnEvent;
         }
 
         void StartGrab(SelectEnterEventArgs args)
         {
+            enteredInteractors.Add(args.interactorObject);
+            authorInteractor = enteredInteractors[enteredInteractors.Count - 1];
 
-            m_Interactor = args.interactorObject;
+            AuthorIsChanged();
+
             m_PositionAngles.Reset();
             m_UpVectorAngles.Reset();
             m_ForwardVectorAngles.Reset();
@@ -227,13 +249,25 @@ namespace UnityEngine.XR.Content.Interaction
             UpdateBaseKnobRotation();
             UpdateRotation(true);
 
-            Debug.Log($"is handle grabbing interactor null? = {m_Interactor == null}");
 
         }
 
         void EndGrab(SelectExitEventArgs args)
         {
-            m_Interactor = null;
+            enteredInteractors.Remove(args.interactorObject);
+            if (enteredInteractors.Count != 0)
+            {
+                if (authorInteractor != enteredInteractors[enteredInteractors.Count - 1])
+                {
+                    authorInteractor = enteredInteractors[enteredInteractors.Count - 1];
+                    AuthorIsChanged();
+                }
+            }
+        }
+
+        void AuthorIsChanged()
+        {
+
         }
 
         public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
@@ -251,9 +285,12 @@ namespace UnityEngine.XR.Content.Interaction
 
         void UpdateRotation(bool freshCheck = false)
         {
+            if (enteredInteractors.Count <= 0)
+                return;
+
             
             // Are we in position offset or direction rotation mode?
-            var interactorTransform = m_Interactor.GetAttachTransform(this);
+            var interactorTransform = authorInteractor.GetAttachTransform(this);
 
             // We cache the three potential sources of rotation - the position offset, the forward vector of the controller, and up vector of the controller
             // We store any data used for determining which rotation to use, then flatten the vectors to the local xz plane
@@ -289,6 +326,9 @@ namespace UnityEngine.XR.Content.Interaction
                 m_PositionDriven = false;
 
             // If it's not a fresh check, then we weight the local Y up or down to keep it from flickering back and forth at boundaries
+            
+            
+            
             if (!freshCheck)
             {
                 if (!m_UpVectorDriven)
@@ -313,6 +353,8 @@ namespace UnityEngine.XR.Content.Interaction
                     m_UpVectorDriven = false;
                 }
             }
+            
+
 
             // Get angle from position
             if (m_PositionDriven)
@@ -324,17 +366,28 @@ namespace UnityEngine.XR.Content.Interaction
                 m_ForwardVectorAngles.SetTargetFromVector(localForward);
 
             // Apply offset to base knob rotation to get new knob rotation
-            var knobRotation = m_BaseKnobRotation - ((m_UpVectorAngles.totalOffset + m_ForwardVectorAngles.totalOffset) * m_TwistSensitivity) - m_PositionAngles.totalOffset;
+            knobRotation = m_BaseKnobRotation - ((m_UpVectorAngles.totalOffset + m_ForwardVectorAngles.totalOffset) * m_TwistSensitivity) - m_PositionAngles.totalOffset;
 
             // Clamp to range
             if (m_ClampedMotion)
                 knobRotation = Mathf.Clamp(knobRotation, m_MinAngle, m_MaxAngle);
 
-            SetKnobRotation(knobRotation);
+        }
 
-            // Reverse to get value
-            var knobValue = (knobRotation - m_MinAngle) / (m_MaxAngle - m_MinAngle);
-            SetValue(knobValue);
+        public void SetValueWhenOnEvent(bool isRight)
+        {
+
+            if (isRight && authorInteractor.transform.tag == "RightController" || !isRight && authorInteractor.transform.tag == "LeftController")
+            {
+                SetKnobRotation(knobRotation);
+
+                // Reverse to get value
+                var knobValue = (knobRotation - m_MinAngle) / (m_MaxAngle - m_MinAngle);
+                SetValue(knobValue);
+            }
+            else
+                return;
+            
         }
 
         void SetKnobRotation(float angle)
@@ -351,16 +404,20 @@ namespace UnityEngine.XR.Content.Interaction
 
         void SetValue(float value)
         {
+            
+
             if (m_ClampedMotion)
                 value = Mathf.Clamp(value, -1f, 1f);
+
 
             if (m_AngleIncrement > 0)
             {
                 var angleRange = m_MaxAngle - m_MinAngle;
-                var angle = Mathf.Lerp(0.0f, angleRange, value);
+                var angle = Mathf.Lerp(0.0f, angleRange, value * 0.5f);
                 angle = Mathf.Round(angle / m_AngleIncrement) * m_AngleIncrement;
                 value = Mathf.InverseLerp(0.0f, angleRange, angle);
             }
+
 
             m_Value = value;
             m_OnValueChange.Invoke(m_Value);

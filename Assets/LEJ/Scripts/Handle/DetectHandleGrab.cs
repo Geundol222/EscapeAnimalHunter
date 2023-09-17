@@ -12,13 +12,18 @@ public class DetectHandleGrab : MonoBehaviour
     [SerializeField] private GameObject rightHandleHand;
     [SerializeField] private GameObject leftHandleHand;
 
+    [SerializeField] GameObject handleModelObj;
+
     private bool isRightAttach;
     private bool isLeftAttach;
 
     public bool isRightGrip;
     public bool isLeftGrip;
 
+
     private PlayerInputDetecter playerInput;
+
+
 
     private void Awake()
     {
@@ -44,12 +49,15 @@ public class DetectHandleGrab : MonoBehaviour
         {
             rightControllerModel.SetActive(false);
             rightHandleHand.SetActive(true);
+
         }
 
         if (!isRightGrip)
         {
             rightControllerModel.SetActive(true);
             rightHandleHand.SetActive(false);
+
+
         }
 
         if (isLeftGrip)
@@ -59,11 +67,14 @@ public class DetectHandleGrab : MonoBehaviour
         }
         if (!isLeftGrip)
         {
+
             leftControllerModel.SetActive(true);
             leftHandleHand.SetActive(false);
         }
         
     }
+
+   
 
     private void OnTriggerEnter(Collider other)
     {

@@ -1,6 +1,7 @@
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Rendering;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Transformers;
@@ -69,8 +70,10 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
     [SerializeField] GameObject controllerLeftHand;
     [SerializeField] GameObject controllerRightHand;
 
-    [SerializeField] GameObject gunLeftHand;
-    [SerializeField] GameObject gunRightHand;
+    [SerializeField] GameObject mainGunRightHand;
+    [SerializeField] GameObject subGunLeftHand;
+    [SerializeField] GameObject mainGunLeftHand;
+    [SerializeField] GameObject subGunRightHand;
 
     private PoseState state;
     private IXRInteractor mainInteractor;
@@ -78,8 +81,10 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
 
     private void Awake()
     {
-        gunLeftHand.SetActive(false);
-        gunRightHand.SetActive(false);
+        mainGunRightHand.SetActive(false);
+        mainGunLeftHand.SetActive(false);
+        subGunRightHand.SetActive(false);
+        subGunLeftHand.SetActive(false);
     }
 
     /// <summary>
@@ -103,11 +108,13 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
     {
         XRGrabInteractable grabInteractable = GetComponent<XRGrabInteractable>();
 
-        gunLeftHand.SetActive(false);
-        gunRightHand.SetActive(false);
+        mainGunLeftHand.SetActive(false);
+        subGunRightHand.SetActive(false);
+        mainGunRightHand.SetActive(false);
+        subGunLeftHand.SetActive(false);
 
-        controllerLeftHand.SetActive(true);
         controllerRightHand.SetActive(true);
+        controllerLeftHand.SetActive(true);
 
         grabInteractable.attachTransform = gripTransform;
         args.interactableObject.lastSelectExited.RemoveListener(OnDrop);
@@ -200,11 +207,22 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
 
     private void UpdateTargetMain(XRGrabInteractable grabInteractable, ref Pose targetPose)
     {
-        gunLeftHand.SetActive(false);
-        gunRightHand.SetActive(true);
+        if (mainInteractor.transform.gameObject.name == "Left Direct Interactor")
+        {
+            mainGunLeftHand.SetActive(true);
+            subGunRightHand.SetActive(false);
 
-        controllerLeftHand.SetActive(true);
-        controllerRightHand.SetActive(false);
+            controllerLeftHand.SetActive(false);
+            controllerRightHand.SetActive(true);
+        }
+        else
+        {
+            mainGunRightHand.SetActive(true);
+            subGunLeftHand.SetActive(false);
+
+            controllerLeftHand.SetActive(true);
+            controllerRightHand.SetActive(false);
+        }
 
         Transform interactorAttachTransform = mainInteractor.GetAttachTransform(grabInteractable);
         Pose interactorAttachPose = new Pose(interactorAttachTransform.position, interactorAttachTransform.rotation);
@@ -225,16 +243,27 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
 
     private void UpdateTargetSub(XRGrabInteractable grabInteractable, ref Pose targetPose)
     {
-        gunLeftHand.SetActive(true);
-        gunRightHand.SetActive(false);
+        if (subInteractor.transform.gameObject.name == "Right Direct Interactorr")
+        {
+            mainGunLeftHand.SetActive(false);
+            subGunRightHand.SetActive(true);
 
-        controllerRightHand.SetActive(true);
-        controllerLeftHand.SetActive(false);
+            controllerLeftHand.SetActive(true);
+            controllerRightHand.SetActive(false);
+        }
+        else
+        {
+            mainGunRightHand.SetActive(false);
+            subGunLeftHand.SetActive(true);
+
+            controllerLeftHand.SetActive(false);
+            controllerRightHand.SetActive(true);
+        }
 
         grabInteractable.attachTransform = subInteractor.transform;
 
         Transform interactorAttachTransform = grabInteractable.attachTransform;
-        Pose interactorAttachPose = new Pose(interactorAttachTransform.position, transform.rotation);
+        Pose interactorAttachPose = new Pose(interactorAttachTransform.position, grabInteractable.attachTransform.rotation);
         Pose thisTransformPose = new Pose(transform.position, transform.rotation);
 
         // Calculate offset of the grab interactable's position relative to its attach transform
@@ -252,11 +281,19 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
 
     void UpdateTargetMulti(XRGrabInteractable grabInteractable, ref Pose targetPose)
     {
-        gunLeftHand.SetActive(true);
-        gunRightHand.SetActive(true);
+        if (mainInteractor.transform.gameObject.name == "Left Direct Interactor")
+        {
+            mainGunLeftHand.SetActive(true);
+            subGunRightHand.SetActive(true);
+        }
+        else
+        {
+            mainGunRightHand.SetActive(true);
+            subGunLeftHand.SetActive(true);
+        }
 
-        controllerRightHand.SetActive(false);
         controllerLeftHand.SetActive(false);
+        controllerRightHand.SetActive(false);
 
         grabInteractable.attachTransform = gripTransform;
 

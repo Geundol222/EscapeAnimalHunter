@@ -5,7 +5,7 @@ using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public class SceneManager : MonoBehaviour
 {
-    //private LoadingUI loadingUI;
+    private LoadingUI loadingUI;
     private int nextIndex = 0;
 
     private BaseScene curScene;
@@ -22,9 +22,9 @@ public class SceneManager : MonoBehaviour
 
     private void Awake()
     {
-        //LoadingUI ui = Resources.Load<LoadingUI>("UI/LoadingSceneUI");
-        //loadingUI = Instantiate(ui);
-        //loadingUI.transform.SetParent(transform, false);
+        LoadingUI ui = GameManager.Resource.Load<LoadingUI>("UI/LoadingSceneUI");
+        loadingUI = Instantiate(ui);
+        loadingUI.transform.SetParent(transform, false);
     }
 
     public void NextScene()
@@ -45,7 +45,7 @@ public class SceneManager : MonoBehaviour
 
     IEnumerator LoadingRoutine(int index)
     {
-        //loadingUI.FadeOut();
+        loadingUI.FadeOut();
         yield return new WaitForSeconds(1f);
         GameManager.Sound.Clear();
         yield return new WaitUntil(() => { return GameManager.Sound.IsMuted(); });
@@ -55,24 +55,23 @@ public class SceneManager : MonoBehaviour
 
         while (!oper.isDone)
         {
-            //loadingUI.SetProgress(Mathf.Lerp(0f, 0.5f, oper.progress));
+            loadingUI.SetProgress(Mathf.Lerp(0f, 0.5f, oper.progress));
             yield return null;
         }
 
         GameManager.Pool.InitPool();
-        GameManager.UI.InitUI();
         GameManager.Sound.InitSound();
         GameManager.Sound.FadeInAudio();
 
         CurScene.LoadAsync();
         while (CurScene.progress < 1f)
         {
-            //loadingUI.SetProgress(Mathf.Lerp(0.5f, 1.0f, CurScene.progress));
+            loadingUI.SetProgress(Mathf.Lerp(0.5f, 1.0f, CurScene.progress));
             yield return null;
         }
 
         Time.timeScale = 1f;
-        //loadingUI.FadeIn();
+        loadingUI.FadeIn();
         yield return new WaitWhile(() => { return GameManager.Sound.IsMuted(); });
     }
 }

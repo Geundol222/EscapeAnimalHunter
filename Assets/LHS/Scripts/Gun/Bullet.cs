@@ -18,7 +18,6 @@ public class Bullet : MonoBehaviour
     private float fireAngle;
     private float tipAngle;
     private float maxHeight = 0f;
-    private float duration = 0f;
 
     private float grav;
 

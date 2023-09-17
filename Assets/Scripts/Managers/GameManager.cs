@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
     private static DataManager data;
     private static PoolManager pool;
     private static ResourceManager resource;
-    private static UIManager ui;
     private static SceneManager scene;
     private static SoundManager sound;
 
@@ -14,7 +13,6 @@ public class GameManager : MonoBehaviour
     public static DataManager Data { get { return data; } }
     public static PoolManager Pool { get { return pool; } }
     public static ResourceManager Resource { get { return resource; } }
-    public static UIManager UI { get { return ui; } }
     public static SceneManager Scene { get { return scene; } }
     public static SoundManager Sound { get { return sound; } }
 
@@ -53,11 +51,6 @@ public class GameManager : MonoBehaviour
         poolObj.name = "PoolManager";
         poolObj.transform.parent = transform;
         pool = poolObj.AddComponent<PoolManager>();
-
-        GameObject uiObj = new GameObject();
-        uiObj.name = "UIManager";
-        uiObj.transform.parent = transform;
-        ui = uiObj.AddComponent<UIManager>();
 
         GameObject sceneObj = new GameObject();
         sceneObj.name = "SceneManager";

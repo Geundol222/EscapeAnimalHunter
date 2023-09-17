@@ -6,7 +6,7 @@ using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class ChallengeManager : MonoBehaviour
+public class ChallengeManagertest : MonoBehaviour
 {
     [SerializeField] GameObject Graveyard;
 

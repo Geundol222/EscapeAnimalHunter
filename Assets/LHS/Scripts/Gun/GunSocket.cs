@@ -28,23 +28,6 @@ public class GunSocket : MonoBehaviour
             return;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (gunMask.IsContain(other.gameObject.layer))
-        {
-            if (gun.isSelected)
-            {
-                isAttachable = false;
-                gunMat.SetActive(true);
-            }
-            else
-            {
-                isAttachable = true;
-                gunMat.SetActive(false);
-            }                
-        }
-    }
-
     private void OnTriggerStay(Collider other)
     {
         if (gunMask.IsContain(other.gameObject.layer))
