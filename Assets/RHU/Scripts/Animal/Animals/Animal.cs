@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
+using UnityEngine.SocialPlatforms;
 using static AnimalData;
 
 public abstract class Animal : MonoBehaviour, IHittable
@@ -10,8 +12,10 @@ public abstract class Animal : MonoBehaviour, IHittable
     [SerializeField] public AnimalName animalName;
     [SerializeField] private Transform footCenter;
     [SerializeField] public FieldOfView fieldOfView;
+    [SerializeField] LayerMask GroundLayer;
+
+    // 각 노드에서 사용할 변수들
     [NonSerialized] public Animator animator;
-    [NonSerialized] public Collider[] colliders;
     [NonSerialized] public Collider hitCollider;
     [NonSerialized] public int curHp;
     [NonSerialized] public float waryTime;
@@ -19,26 +23,20 @@ public abstract class Animal : MonoBehaviour, IHittable
     [NonSerialized] public bool isDie;
     [NonSerialized] public bool isWary;
     [NonSerialized] public bool isTracking;
-    [NonSerialized] public float bulletDirection;
-    [SerializeField] LayerMask GroundLayer;
-    public BTBase bTBase;
-    public SelectorNode hitNode = new SelectorNode();
-    public SequenceNode getAwayNode = new SequenceNode();
-    public SequenceNode hostileNode = new SequenceNode();
-    public IdleAction idleNode;
+    [NonSerialized] public bool isSit;
+    [NonSerialized] public Vector2 bulletDirection;
+    [SerializeField] LayerMask playerLayer;
+
+    protected BTBase bTBase;
+    protected SelectorNode rootNode = new SelectorNode();
 
     protected void Awake()
     {
         animator = GetComponent<Animator>();
-        colliders = GetComponentsInChildren<Collider>();
         SetUpBT();
         StartCoroutine(StepOnGrounRoutine());
-        //foreach(Collider col in colliders)
-        //{
-        //    Debug.Log(col.name);
-        //}
     }
-
+    
     public abstract void SetUpBT();
 
     private void OnEnable()     // ReSpawn 시 초기화를 위해 OnEnable에서 초기화
@@ -49,7 +47,8 @@ public abstract class Animal : MonoBehaviour, IHittable
         isDie = false;
         isWary = false;
         isTracking = false;
-        bulletDirection = 0;
+        isSit = false;
+        bulletDirection = new Vector2();
     }
 
     private void Update()
@@ -59,36 +58,29 @@ public abstract class Animal : MonoBehaviour, IHittable
     }
     private void OnCollisionEnter(Collision collision)
     {
-        foreach (ContactPoint i in collision.contacts)
+        if (gameObject.layer != LayerMask.NameToLayer("Carnivore"))
+            return;
+
+        ContactPoint contactPoint = collision.contacts[0];
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
         {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
-            {
-                //Debug.Log("총알 충돌");
-                //Debug.Log($"i.Point : {i.point}");
-                //Debug.Log($"i.Point : {i.normal}");
-                //Debug.Log($"i.Point : {i.otherCollider.gameObject.transform.position}");
-                
-            }
+            Vector3 hitDir = footCenter.InverseTransformDirection(footCenter.position - contactPoint.point).normalized;
+
+            if (hitDir.x > 0)
+                hitDir.x = 1;
+            else
+                hitDir.x = -1;
+
+            if (hitDir.z > 0)
+                hitDir.z = 1;
+            else
+                hitDir.z = -1;
+
+            animator.SetFloat("HitX", hitDir.x);
+            animator.SetFloat("HitZ", hitDir.z);
         }
-
     }
-
-
-    //private void StepOnGround()
-    //{
-    //    RaycastHit hitInfo;
-
-    //    if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 20, /*1 << groundLayer*/GroundLayer))
-    //    {
-    //        Debug.Log($"normal : {hitInfo.normal}");
-    //        Debug.DrawRay(footCenter.position, Vector3.down * 20, Color.red);
-    //        Debug.DrawRay(hitInfo.point, hitInfo.normal * 20, Color.blue);
-
-    //        Debug.Log($"Dot : {Vector3.Dot(footCenter.position, hitInfo.normal)}");
-
-    //        transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
-    //    }
-    //}
 
     IEnumerator StepOnGrounRoutine()
     {
@@ -113,7 +105,7 @@ public abstract class Animal : MonoBehaviour, IHittable
         curHp -= damage;
         isHit = true;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.2f);
 
         isHit = false;
 

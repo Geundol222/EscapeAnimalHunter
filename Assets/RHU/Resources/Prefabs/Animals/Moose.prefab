@@ -830,7 +830,7 @@ GameObject:
   - component: {fileID: -8247502386642265878}
   m_Layer: 11
   m_Name: Moose
-  m_TagString: Untagged
+  m_TagString: Animal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -903,12 +903,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 435d3c564271fe34a820f0c86f306423, type: 2}
-  animalName: 1
+  animalName: 2
   footCenter: {fileID: 2050099851584991942}
   fieldOfView: {fileID: 202505615596210071}
   GroundLayer:
     serializedVersion: 2
     m_Bits: 256
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &2471215384402868534
 GameObject:
   m_ObjectHideFlags: 0
@@ -1592,7 +1595,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e0ae740f3a57e1044bb5b1c4c5ffa385, type: 2}
+  - {fileID: 2100000, guid: cd88146edaef7534ea29041129faaf77, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1675,7 +1678,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e0ae740f3a57e1044bb5b1c4c5ffa385, type: 2}
+  - {fileID: 2100000, guid: cd88146edaef7534ea29041129faaf77, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1758,7 +1761,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e0ae740f3a57e1044bb5b1c4c5ffa385, type: 2}
+  - {fileID: 2100000, guid: cd88146edaef7534ea29041129faaf77, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1841,7 +1844,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e0ae740f3a57e1044bb5b1c4c5ffa385, type: 2}
+  - {fileID: 2100000, guid: cd88146edaef7534ea29041129faaf77, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1927,7 +1930,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2050099851584991942}
   m_Layer: 11
-  m_Name: FootCenter
+  m_Name: Foot Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

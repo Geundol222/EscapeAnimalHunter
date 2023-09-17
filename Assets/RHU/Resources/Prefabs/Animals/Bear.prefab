@@ -833,6 +833,9 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 256
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &1674021466903017570
 GameObject:
   m_ObjectHideFlags: 0
@@ -1171,7 +1174,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6971072296763249053}
   m_Layer: 10
-  m_Name: FootCenter
+  m_Name: Foot Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

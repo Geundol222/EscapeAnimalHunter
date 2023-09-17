@@ -4,8 +4,21 @@ using UnityEngine;
 
 public class Moose : Animal
 {
+    private SelectorNode hitNode = new SelectorNode();
+    private SequenceNode getAwayNode = new SequenceNode();
+    private SelectorNode idleNode = new SelectorNode();
+
     public override void SetUpBT()
-    {   
+    {
+        bTBase = new BTBase(rootNode);
+
+        rootNode.childrenNode = new List<Node>()
+        {
+            hitNode,
+            getAwayNode,
+            idleNode
+        };
+
         hitNode.childrenNode = new List<Node>()
         {                                           // 사용하는 Owner의 변수
             new HitAction(this),                    // CurHp, IsHit, IsWary
@@ -15,11 +28,12 @@ public class Moose : Animal
         getAwayNode.childrenNode = new List<Node>
         {
             new GetAwayCondition(this),             // IsWary
-            new GetAwayRunAction(this)              // WaryTime, IsWary
+            new RunAction(this),                    // WaryTime, IsTracking, IsWary
         };
 
-        idleNode = new IdleAction(this);            // IsWary
-
-        bTBase = new BTBase(hitNode, getAwayNode, idleNode);
+        idleNode.childrenNode = new List<Node>
+        {
+            new IdleAction(this)                    // IsWary
+        };
     }
 }

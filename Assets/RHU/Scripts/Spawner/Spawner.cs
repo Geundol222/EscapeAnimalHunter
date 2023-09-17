@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.SocialPlatforms;
 using Random = UnityEngine.Random;
 
@@ -97,7 +98,7 @@ public class Spawner : MonoBehaviour
     IEnumerator GroundCheckRoutine()
     {
         RaycastHit _hitInfo;
-        Physics.Raycast(transform.position, Vector3.down, out _hitInfo, 10);
+        Physics.Raycast(transform.position, Vector3.down, out _hitInfo, 50);
         hitInfo = _hitInfo;
 
         while (hitInfo.transform.gameObject.layer != groundLayer)
@@ -107,12 +108,11 @@ public class Spawner : MonoBehaviour
             if (Physics.Raycast(spawnPoint.position, Vector3.down, out _hitInfo, 1000, groundLayer))
             {
                 hitInfo = _hitInfo;
-                Debug.Log($"GroundCheck hitInfo : {hitInfo.point}, {hitInfo.transform.position}");
 
                 break;
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(1f);
         }
 
         yield break;
@@ -123,6 +123,7 @@ public class Spawner : MonoBehaviour
     /// </summary>
     IEnumerator ReSpawnRoutine()
     {
+
         while (true)
         {
             for (int i = 0; i < curExistAnimals.Count; i++)         // foreach쓰면 InvalidOperationException 발생
@@ -130,14 +131,14 @@ public class Spawner : MonoBehaviour
                 if (DistanceCheck(curExistAnimals[i]))
                 {
                     yield return StartCoroutine(GroundCheckRoutine());
-
+                    Debug.Log("동물이 범위 벗어남");
                     RenewalCurAnimal(curExistAnimals[i]);
                 }
 
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(1f);
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(10f);
         }
     }
 

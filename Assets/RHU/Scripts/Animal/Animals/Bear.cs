@@ -4,8 +4,21 @@ using UnityEngine;
 
 public class Bear : Animal
 {
+    private SelectorNode hitNode = new SelectorNode();
+    private SequenceNode hostileNode = new SequenceNode();
+    private SelectorNode idleNode = new SelectorNode();
+
     public override void SetUpBT()
     {
+        bTBase = new BTBase(rootNode);
+
+        rootNode.childrenNode = new List<Node>()
+        {
+            hitNode,
+            hostileNode,
+            idleNode
+        };
+
         hitNode.childrenNode = new List<Node>()
         {                                           // 사용하는 Owner의 변수
             new HitAction(this),                    // CurHp, IsHit, IsWary
@@ -15,14 +28,15 @@ public class Bear : Animal
         hostileNode.childrenNode = new List<Node>
         {
             new HostileCondition(this),             // IsWary
-            new HostileRunAction(this),             // WaryTime, IsTracking, IsWary
+            new RunAction(this),                    // WaryTime, IsTracking, IsWary
             new CheckFieldOfViewCondition(this),    // FieldOfView, IsTracking
             new TrackingAction(this),               // FieldOfView, WaryTime, IsTracking
             new AttackAction(this)                  // FieldOfView
         };
 
-        idleNode = new IdleAction(this);            // IsWary
-
-        bTBase = new BTBase(hitNode, hostileNode, idleNode);
+        idleNode.childrenNode = new List<Node>
+        {
+            new IdleAction(this)                    // IsWary
+        };
     }
 }
