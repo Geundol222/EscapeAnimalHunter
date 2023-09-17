@@ -56,6 +56,7 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
         if (!isDie)
             bTBase.Update();
     }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (gameObject.layer != LayerMask.NameToLayer("Carnivore"))

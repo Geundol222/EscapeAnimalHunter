@@ -25,6 +25,8 @@ public class BulletUpgradeCanvas : MonoBehaviour
     int confirmDamageIndex;
     int confirmSpeedIndex;
 
+    bool completeUpgrade;
+
     private void Awake()
     {
         damageImages = new List<Image>();
@@ -50,6 +52,7 @@ public class BulletUpgradeCanvas : MonoBehaviour
 
     private void OnEnable()
     {
+        completeUpgrade = false;
         okButton.gameObject.SetActive(false);
         playerMoneyText.text = GameManager.Data.Money.ToString();
         bulletObject = GameManager.Resource.Instantiate<GameObject>("Prefabs/ItemBullet", itemTransform.position, Quaternion.Euler(-90, 0, 0), true);
@@ -158,9 +161,13 @@ public class BulletUpgradeCanvas : MonoBehaviour
     public void PressOkButton()
     {
         if (GameManager.Data.Money < DataManager.Upgrade.applyCost)
+        {
+            GameManager.Sound.PlaySound("NegativeBeep");
             return;
+        }
         else
         {
+            GameManager.Sound.PlaySound("ConfirmSound");
             GameManager.Data.RemoveMoney(DataManager.Upgrade.applyCost);
 
             DataManager.Upgrade.applyCost = 0;
@@ -174,6 +181,7 @@ public class BulletUpgradeCanvas : MonoBehaviour
 
             playerMoneyText.text = GameManager.Data.Money.ToString();
 
+            completeUpgrade = true;
             okButton.gameObject.SetActive(false);
         }
     }
@@ -191,31 +199,46 @@ public class BulletUpgradeCanvas : MonoBehaviour
         speedPlusText.text = "0";
         damagePlusText.text = "0";
 
-        if (confirmDamageIndex != 0)
+        if (completeUpgrade)
         {
-            for (int i = 0; i < confirmDamageIndex; i++)
+            if (confirmDamageIndex != 0)
             {
-                damageImages[i].color = Color.white;
+                for (int i = 0; i < confirmDamageIndex; i++)
+                {
+                    damageImages[i].color = Color.white;
+                }
+            }
+            else
+            {
+                for (int i = 1; i < confirmDamageIndex; i++)
+                {
+                    damageImages[i].color = Color.black;
+                }
+            }
+
+            if (confirmSpeedIndex != 0)
+            {
+                for (int i = 0; i < confirmSpeedIndex; i++)
+                {
+                    speedImages[i].color = Color.white;
+                }
+            }
+            else
+            {
+                for (int i = 1; i < confirmSpeedIndex; i++)
+                {
+                    speedImages[i].color = Color.black;
+                }
             }
         }
         else
         {
-            for (int i = 0; i < confirmDamageIndex; i++)
+            for (int i = 1; i < DataManager.Upgrade.durabilityIndex; i++)
             {
                 damageImages[i].color = Color.black;
             }
-        }
 
-        if (confirmSpeedIndex != 0)
-        {
-            for (int i = 0; i < confirmSpeedIndex; i++)
-            {
-                speedImages[i].color = Color.white;
-            }
-        }
-        else
-        {
-            for (int i = 0; i < confirmSpeedIndex; i++)
+            for (int i = 0; i < DataManager.Upgrade.bulletSpeedIndex; i++)
             {
                 speedImages[i].color = Color.black;
             }

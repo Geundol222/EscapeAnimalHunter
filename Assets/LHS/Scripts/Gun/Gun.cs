@@ -13,6 +13,7 @@ public class Gun : MonoBehaviour
     {
         if (!IsShoot)
         {
+            GameManager.Sound.PlaySound("DartGun");
             GameManager.Resource.Instantiate<GameObject>("Prefabs/Bullet", scopeCamera.transform.position, scopeCamera.transform.rotation, true);
             IsShoot = true;
         }

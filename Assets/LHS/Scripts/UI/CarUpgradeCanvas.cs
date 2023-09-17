@@ -29,6 +29,8 @@ public class CarUpgradeCanvas : MonoBehaviour
     int confirmDuraIndex;
     int confirmSpeedIndex;
 
+    bool completeUpgrade;
+
     private void Awake()
     {
         durabilityImages = new List<Image>();
@@ -56,6 +58,8 @@ public class CarUpgradeCanvas : MonoBehaviour
 
     private void OnEnable()
     {
+        completeUpgrade = false;
+
         okButton.gameObject.SetActive(false);
         playerMoneyText.text = GameManager.Data.Money.ToString();
         carObject = GameManager.Resource.Instantiate<GameObject>("Prefabs/ItemCar", itemTransform.position, Quaternion.Euler(0, -90, 0), true);
@@ -167,9 +171,13 @@ public class CarUpgradeCanvas : MonoBehaviour
     public void PressOkButton()
     {
         if (GameManager.Data.Money < DataManager.Upgrade.applyCost)
+        {
+            GameManager.Sound.PlaySound("NegativeBeep");
             return;
+        }
         else
         {
+            GameManager.Sound.PlaySound("ConfirmSound");
             GameManager.Data.RemoveMoney(DataManager.Upgrade.applyCost);
 
             DataManager.Upgrade.applyCost = 0;
@@ -182,6 +190,8 @@ public class CarUpgradeCanvas : MonoBehaviour
             confirmSpeedIndex = DataManager.Upgrade.carSpeedIndex;
 
             playerMoneyText.text = GameManager.Data.Money.ToString();
+
+            completeUpgrade = true;
 
             okButton.gameObject.SetActive(false);
         }
@@ -218,6 +228,7 @@ public class CarUpgradeCanvas : MonoBehaviour
         okButton.gameObject.SetActive(false);
 
         DataManager.Upgrade.applyCost = 0;
+        costText.text = DataManager.Upgrade.applyCost.ToString();
 
         speedPlus = 0;
         duraPlus = 0;
@@ -225,35 +236,51 @@ public class CarUpgradeCanvas : MonoBehaviour
         speedPlusText.text = "0";
         duraPlusText.text = "0";
 
-        if (confirmDuraIndex != 0)
+        if (completeUpgrade)
         {
-            for (int i = 0; i < confirmDuraIndex; i++)
+            if (confirmDuraIndex != 0)
             {
-                durabilityImages[i].color = Color.white;
+                for (int i = 0; i < confirmDuraIndex; i++)
+                {
+                    durabilityImages[i].color = Color.white;
+                }
+            }
+            else
+            {
+                for (int i = 1; i < confirmDuraIndex; i++)
+                {
+                    durabilityImages[i].color = Color.black;
+                }
+            }
+
+            if (confirmSpeedIndex != 0)
+            {
+                for (int i = 0; i < confirmSpeedIndex; i++)
+                {
+                    speedImages[i].color = Color.white;
+                }
+            }
+            else
+            {
+                for (int i = 1; i < confirmSpeedIndex; i++)
+                {
+                    speedImages[i].color = Color.black;
+                }
             }
         }
         else
         {
-            for (int i = 0; i < confirmDuraIndex; i++)
+            for (int i = 1; i < DataManager.Upgrade.durabilityIndex; i++)
             {
                 durabilityImages[i].color = Color.black;
             }
-        }
 
-        if (confirmSpeedIndex != 0)
-        {
-            for (int i = 0; i < confirmSpeedIndex; i++)
-            {
-                speedImages[i].color = Color.white;
-            }
-        }
-        else
-        {
-            for (int i = 0; i < confirmSpeedIndex; i++)
+            for (int i = 0; i < DataManager.Upgrade.carSpeedIndex; i++)
             {
                 speedImages[i].color = Color.black;
             }
         }
+        
 
         if (carObject != null)
             GameManager.Resource.Destroy(carObject);
