@@ -8,9 +8,10 @@ public class PlayerControllerMoveDetecter : MonoBehaviour
 {
     [SerializeField] GameObject rightController;
     [SerializeField] GameObject leftController;
+    [SerializeField] GameObject handle;
 
-    [SerializeField] XRKnobLEJ handleKnob;
-    [SerializeField] DetectHandleGrab handleGrab;
+    XRKnobLEJ handleKnob;
+    DetectHandleGrab handleGrab;
     
     public UnityAction<bool> OnRotationChanged; //true : rightController, false : leftController
 
@@ -20,7 +21,13 @@ public class PlayerControllerMoveDetecter : MonoBehaviour
     Vector3 l_prevRot;
     Vector3 l_curRot;
 
-    
+    private void Awake()
+    {
+        handleKnob = handle.GetComponent<XRKnobLEJ>();
+        handleGrab = handle.GetComponent<DetectHandleGrab>();
+    }
+
+
     private void Update()
     {
         if (handleGrab.isRightGrip)

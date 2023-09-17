@@ -7,13 +7,13 @@ using UnityEngine.XR.Content.Interaction;
 public class CarDataManager : MonoBehaviour
 {
     GameObject car;
-    float damageTime = 3f;
+    float damageTime = 60f;
     int damageAmount = 5;
     int maxUpgradableSpeed = 55;
 
     public int carCurHP = 100;
     public int carMaxHP = 100;
-    public float carCurMaxSpeed = 20;
+    public float carCurMaxSpeed = 30;
     public string carCurExterior;
     public enum GearState { Parking, Neutral, Drive, Reverse };
     public GearState carCurState;
