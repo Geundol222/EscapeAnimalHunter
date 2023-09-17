@@ -58,16 +58,27 @@ public abstract class Animal : MonoBehaviour, IHittable
     }
     private void OnCollisionEnter(Collision collision)
     {
+        if (gameObject.layer != LayerMask.NameToLayer("Carnivore"))
+            return;
+
         ContactPoint contactPoint = collision.contacts[0];
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
         {
-            Debug.Log("총알 충돌");
-            Debug.Log($"i.Point : {contactPoint.point}");
-            Debug.Log($"foot - i.Point : {footCenter.position - contactPoint.point}");
-            Debug.Log($"foot - i.Point . normalized: {(footCenter.position - contactPoint.point).normalized}");
-            Debug.Log($"계산끝 {footCenter.InverseTransformDirection(footCenter.position - contactPoint.point).normalized}");
-            //if (animator.GetFloat("HitX") > 0)
+            Vector3 hitDir = footCenter.InverseTransformDirection(footCenter.position - contactPoint.point).normalized;
+
+            if (hitDir.x > 0)
+                hitDir.x = 1;
+            else
+                hitDir.x = -1;
+
+            if (hitDir.z > 0)
+                hitDir.z = 1;
+            else
+                hitDir.z = -1;
+
+            animator.SetFloat("HitX", hitDir.x);
+            animator.SetFloat("HitZ", hitDir.z);
         }
     }
 

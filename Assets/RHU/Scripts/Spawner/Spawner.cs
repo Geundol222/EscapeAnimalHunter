@@ -36,7 +36,6 @@ public class Spawner : MonoBehaviour
     private void Start()
     {
         StartCoroutine(StartSpawnRoutine());
-        //StartCoroutine(AnimalSpawnRoutine());
     }
 
     /// <summary>
@@ -44,8 +43,6 @@ public class Spawner : MonoBehaviour
     /// </summary>
     IEnumerator StartSpawnRoutine()
     {
-        Profiler.BeginSample("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
         foreach (AnimalSpawnArray spawnList in animalSpawnArray)                  // 생성
         {
             for (int i = 0; i < spawnList.spawnCount; i++)
@@ -54,13 +51,11 @@ public class Spawner : MonoBehaviour
 
                 InstantiateAnimal(spawnList.animalName.ToString());
 
-                //yield return StartCoroutine(AnimalSpawnRoutine(spawnList.animalName.ToString()));
-
                 yield return null;
             }
         }
-        Profiler.EndSample();
-        //StartCoroutine(ReSpawnRoutine());
+
+        StartCoroutine(ReSpawnRoutine());
 
         yield break;
     }
@@ -117,7 +112,7 @@ public class Spawner : MonoBehaviour
                 break;
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(1f);
         }
 
         yield break;
@@ -131,21 +126,19 @@ public class Spawner : MonoBehaviour
 
         while (true)
         {
-            //Profiler.BeginSample("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             for (int i = 0; i < curExistAnimals.Count; i++)         // foreach쓰면 InvalidOperationException 발생
             {
                 if (DistanceCheck(curExistAnimals[i]))
                 {
                     yield return StartCoroutine(GroundCheckRoutine());
                     Debug.Log("동물이 범위 벗어남");
-                    //RenewalCurAnimal(curExistAnimals[i]);
+                    RenewalCurAnimal(curExistAnimals[i]);
                 }
 
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(1f);
             }
 
-            yield return new WaitForSeconds(1f);
-            //Profiler.EndSample();
+            yield return new WaitForSeconds(10f);
         }
     }
 
@@ -173,37 +166,6 @@ public class Spawner : MonoBehaviour
         return false;
     }
 
-    IEnumerator AnimalSpawnRoutine(string animalName)
-    {
-        while (true)
-        {
-            int randomValue = Random.Range(0, 360);
-
-            Quaternion randomRotation = Quaternion.Euler(spawnPoint.rotation.x, spawnPoint.rotation.y + randomValue, spawnPoint.rotation.z);
-            spawnPoint.rotation = randomRotation;
-
-            spawnPoint.position = spawnPoint.forward * Random.Range(minRange, maxRange) + new Vector3(focusPoint.position.x, 40, focusPoint.position.z);
-
-            RaycastHit hit;
-
-            if (Physics.Raycast(spawnPoint.position, Vector3.down, out hit, 50))
-            {
-                if (groundLayer.IsContain(hit.collider.gameObject.layer))
-                {
-                    GameManager.Resource.Instantiate<GameObject>($"Prefabs/Animals/{animalName}", hit.point, Quaternion.Euler(hit.normal));
-
-                    yield break;
-                }
-                else
-                {
-                    Debug.Log("NoSpawnAnimal Not Found Ground");
-                    continue;
-                }
-            }
-
-            yield return new WaitForSeconds(1f);
-        }
-    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
