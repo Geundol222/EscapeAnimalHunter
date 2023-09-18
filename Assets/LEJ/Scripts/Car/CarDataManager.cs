@@ -32,6 +32,9 @@ public class CarDataManager : MonoBehaviour
     {
         carCurState = GearState.Parking;
         StartCoroutine(FindRoutine());
+
+        ChangeExteriorColor("green");
+        ChangeExterialMetalic(true);
     }
 
     IEnumerator FindRoutine()
@@ -183,7 +186,7 @@ public class CarDataManager : MonoBehaviour
     /// </summary>
     /// <param name="patternName">메터리얼 이름</param>
 
-    public void ChangeExteriorToPattern(string patternName)
+    public void ChangeExteriorPattern(string patternName)
     {
         car.GetComponent<CarDecorator>().ChangeMaterial(patternName);
     }
