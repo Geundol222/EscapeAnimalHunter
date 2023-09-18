@@ -7,6 +7,7 @@ using UnityEngine.XR.Content.Interaction;
 public class CarDataManager : MonoBehaviour
 {
     GameObject car;
+    GameObject upgradeCar;
     float damageTime = 60f;
     int damageAmount = 5;
     int maxUpgradableSpeed = 55;
@@ -73,10 +74,18 @@ public class CarDataManager : MonoBehaviour
 
     public void OnDisable()
     {
+        if (car == null)
+            return;
+
         car.GetComponent<CarDriver>().OnMaxSpeedChanged -= SetCurMaxSpeedInThisScript;
         car.GetComponent<CarDamager>().OnCurHpChanged -= SetCurHPInThisScript;
         gear.GetComponent<SetGearState>().OnCurGearStateChanged -= SetGearStateInThisScript;
         car.GetComponent<CarParker>().OnParkedOrNot -= SetIsParking;
+    }
+
+    public void GetUpgradeCar(GameObject car)
+    {
+        upgradeCar = car;
     }
 
     /// <summary>
@@ -190,6 +199,8 @@ public class CarDataManager : MonoBehaviour
     public void ChangeExteriorPattern(string patternName)
     {
         car.GetComponent<CarDecorator>().ChangeMaterial(patternName);
+        if (upgradeCar != null)
+            upgradeCar.GetComponent<CarDecorator>().ChangeMaterial(patternName);
     }
 
     /// <summary>
@@ -199,6 +210,8 @@ public class CarDataManager : MonoBehaviour
     public void ChangeExteriorColor(string colorName)
     {
         car.GetComponent<CarDecorator>().ChangeColor(colorName);
+        if (upgradeCar != null)
+            upgradeCar.GetComponent<CarDecorator>().ChangeColor(colorName);
     }
 
     /// <summary>
@@ -208,6 +221,8 @@ public class CarDataManager : MonoBehaviour
     public void ChangeExterialMetalic(bool isMetalic)
     {
         car.GetComponent<CarDecorator>().ChangeMetalic(isMetalic);
+        if (upgradeCar != null)
+            upgradeCar.GetComponent<CarDecorator>().ChangeMetalic(isMetalic);
     }
 
 

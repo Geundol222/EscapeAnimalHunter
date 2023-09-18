@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Animal
+  - LeftController
+  - RightController
+  - ScopeCamera
   layers:
   - Default
   - TransparentFX
@@ -21,7 +24,7 @@ TagManager:
   - Bullet
   - Car
   - Parking
-  - 
+  - Phone
   - 
   - 
   - 
