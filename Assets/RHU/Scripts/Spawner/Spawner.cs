@@ -28,7 +28,7 @@ public class Spawner : MonoBehaviour
     }
 
     /// <summary>
-    /// 기타 다른 설정들 모두 완료되면 생성, Awake에 넣어도 상관있는지는 아직 모름
+    /// 기타 다른 설정들 모두 완료되면 생성
     /// </summary>
     private void Start()
     {
@@ -102,7 +102,7 @@ public class Spawner : MonoBehaviour
         {
             RandomSpawnPoint();
 
-            if (Physics.Raycast(spawnPoint.position, Vector3.down, out _hitInfo, 1000, groundLayer))
+            if (Physics.Raycast(spawnPoint.position, Vector3.down, out _hitInfo, 100, groundLayer))
             {
                 hitInfo = _hitInfo;
 

@@ -17,8 +17,11 @@ public class HitAction : ActionNode
     {
         if (IsHit && CurHp >= 1)
         {
-            animator.SetTrigger("IsHit");
-            animator.SetBool("IsWary", IsWary = true);
+            if (!curAnimationCheck("Hit Tree") || !curAnimationCheck("Run"))
+            {
+                animator.SetTrigger("IsHit");
+                animator.SetBool("IsWary", IsWary = true);
+            }
 
             return NodeState.Success;
         }

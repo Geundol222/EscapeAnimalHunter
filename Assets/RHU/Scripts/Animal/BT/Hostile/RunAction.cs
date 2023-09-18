@@ -15,6 +15,9 @@ public class RunAction : ActionNode
 
     public override NodeState Evaluate()
     {
+        if (curAnimationCheck("Hit Tree") || curAnimationCheck("Run"))
+            animator.ResetTrigger("IsHit");
+
         if (WaryTime <= 20f)
         {
             if (curAnimationCheck("Run") &&

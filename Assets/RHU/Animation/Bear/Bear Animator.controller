@@ -251,10 +251,10 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
+  - {fileID: 4381974636153408024}
   - {fileID: 6615926151795285949}
   - {fileID: -2488701762317451252}
   - {fileID: 6653923328773268052}
-  - {fileID: 4381974636153408024}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -1046,7 +1046,7 @@ AnimatorStateTransition:
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
+  m_CanTransitionToSelf: 0
 --- !u!1102 &4982432649343911797
 AnimatorState:
   serializedVersion: 6
