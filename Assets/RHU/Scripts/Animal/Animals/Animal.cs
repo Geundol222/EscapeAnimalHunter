@@ -34,7 +34,7 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
     {
         animator = GetComponent<Animator>();
         SetUpBT();
-        StartCoroutine(StepOnGrounRoutine());
+        //StartCoroutine(StepOnGrounRoutine());
     }
     
     public abstract void SetUpBT();
@@ -89,8 +89,14 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
 
         while (true)
         {
-            if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 1, GroundLayer))                
+            if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 1, GroundLayer))
+            {
+                Debug.Log(transform.rotation);
+
                 transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+                Debug.Log(hitInfo.normal);
+                Debug.Log(transform.rotation);
+            }
 
             yield return new WaitForEndOfFrame();
         }
@@ -106,7 +112,7 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
         curHp -= damage;
         isHit = true;
 
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(0.05f);
 
         isHit = false;
 
