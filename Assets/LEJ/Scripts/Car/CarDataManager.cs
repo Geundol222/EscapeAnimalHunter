@@ -73,6 +73,9 @@ public class CarDataManager : MonoBehaviour
 
     public void OnDisable()
     {
+        if (car == null)
+            return;
+
         car.GetComponent<CarDriver>().OnMaxSpeedChanged -= SetCurMaxSpeedInThisScript;
         car.GetComponent<CarDamager>().OnCurHpChanged -= SetCurHPInThisScript;
         gear.GetComponent<SetGearState>().OnCurGearStateChanged -= SetGearStateInThisScript;

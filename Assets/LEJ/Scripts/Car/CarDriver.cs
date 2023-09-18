@@ -10,7 +10,7 @@ using static UnityEngine.Rendering.DebugUI;
 public class CarDriver : MonoBehaviour
 {
     
-    [SerializeField] CarInteractor carInteractor;
+    [SerializeField] PlayerCarInteractor playerCarInteractor;
     GameObject player;
     Rigidbody rb;
     PlayerInputDetecter inputDetecter;
@@ -48,6 +48,7 @@ public class CarDriver : MonoBehaviour
         }
     }
 
+    public UnityAction OnNotStepOn;
     bool isAcceling;
     bool isBreaking;
     float setHandleValue;
@@ -86,11 +87,13 @@ public class CarDriver : MonoBehaviour
                 Handling();
             }
 
-            if (isBreaking)
+            else if (isBreaking)
             {
                 UseBreakPedal();
                 Handling();
             }
+
+            
         }
         
         
@@ -116,7 +119,7 @@ public class CarDriver : MonoBehaviour
 
     private void WhichPedalIsUsing()
     {
-        if (carInteractor.car)
+        if (playerCarInteractor.isPlayerTakingCar)
         {
             if (inputDetecter.rightJoyStickYValue > 0 || inputDetecter.leftJoyStickYValue > 0)
             {
@@ -128,7 +131,22 @@ public class CarDriver : MonoBehaviour
                 isAcceling = false;
                 isBreaking = true;
             }
+            else if (inputDetecter.rightJoyStickYValue == 0 || inputDetecter.leftJoyStickYValue == 0)
+            {
+                NotUsingPedal();
+            }
             
+        }
+    }
+
+    private void NotUsingPedal()
+    {
+        if (rb.velocity.magnitude < 0.001f)
+            return;
+        else
+        {
+            Debug.Log("speed is almost zero");
+            CurSpeed = rb.velocity.magnitude;
         }
     }
 

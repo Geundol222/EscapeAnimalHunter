@@ -16,7 +16,6 @@ namespace UnityEngine.XR.Content.Interaction
             get { return isGrabbing; }
             set { 
                 isGrabbing = value;
-                OnStartGrab?.Invoke();
             }
         } 
         public UnityAction OnStopGrabbing;
@@ -87,6 +86,7 @@ namespace UnityEngine.XR.Content.Interaction
 
         void StartGrab(SelectEnterEventArgs args)
         {
+            OnStartGrab?.Invoke();
             IsGrabbing = true;
 
             m_Interactor = args.interactorObject;
