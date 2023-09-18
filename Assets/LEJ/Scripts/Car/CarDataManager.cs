@@ -33,8 +33,6 @@ public class CarDataManager : MonoBehaviour
         carCurState = GearState.Parking;
         StartCoroutine(FindRoutine());
 
-        ChangeExteriorColor("green");
-        ChangeExterialMetalic(true);
     }
 
     IEnumerator FindRoutine()
@@ -90,6 +88,9 @@ public class CarDataManager : MonoBehaviour
         car.GetComponent<CarDriver>().MaxSpeed = carCurMaxSpeed;
         car.GetComponent<CarReturner>().ReturnToBaseCamp();
         gear.GetComponent<XRSliderLEJ>().value = 0;
+        ChangeExteriorColor("green");
+        ChangeExterialMetalic(true);
+
     }
 
     /// <summary>

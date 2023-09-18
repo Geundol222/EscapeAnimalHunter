@@ -37,7 +37,7 @@ public class CarDamager : MonoBehaviour, IHittable
     [SerializeField] float canHitSpeed;
 
 
-
+    public UnityAction OnDie;
     public UnityAction OnHitSomething;
 
     private void Awake()
@@ -110,6 +110,7 @@ public class CarDamager : MonoBehaviour, IHittable
         if (curHp <= 0)
         {
             returner.ReturnToBaseCamp();
+            OnDie?.Invoke();
         }
     }
 }
