@@ -14,7 +14,6 @@ namespace UnityEngine.XR.Content.Interaction
     public class XRKnobLEJ : XRBaseInteractable
     {
         public List<IXRSelectInteractor> enteredInteractors = new List<IXRSelectInteractor>();
-        IXRSelectInteractor authorInteractor;
 
         float curValue;
         float prevValue;
@@ -138,7 +137,7 @@ namespace UnityEngine.XR.Content.Interaction
         [Tooltip("Events to trigger when the knob is rotated")]
         ValueChangeEvent m_OnValueChange = new ValueChangeEvent();
 
-        IXRSelectInteractor m_Interactor;
+        public IXRSelectInteractor m_Interactor;
 
         bool m_PositionDriven = false;
         bool m_UpVectorDriven = false;
@@ -241,7 +240,7 @@ namespace UnityEngine.XR.Content.Interaction
         void StartGrab(SelectEnterEventArgs args)
         {
             enteredInteractors.Add(args.interactorObject);
-            authorInteractor = enteredInteractors[enteredInteractors.Count - 1];
+            m_Interactor = enteredInteractors[enteredInteractors.Count - 1];
 
             m_PositionAngles.Reset();
             m_UpVectorAngles.Reset();
@@ -258,9 +257,9 @@ namespace UnityEngine.XR.Content.Interaction
             enteredInteractors.Remove(args.interactorObject);
             if (enteredInteractors.Count != 0)
             {
-                if (authorInteractor != enteredInteractors[enteredInteractors.Count - 1])
+                if (m_Interactor != enteredInteractors[enteredInteractors.Count - 1])
                 {
-                    authorInteractor = enteredInteractors[enteredInteractors.Count - 1];
+                    m_Interactor = enteredInteractors[enteredInteractors.Count - 1];
                 }
             }
         }
@@ -287,7 +286,7 @@ namespace UnityEngine.XR.Content.Interaction
 
             
             // Are we in position offset or direction rotation mode?
-            var interactorTransform = authorInteractor.GetAttachTransform(this);
+            var interactorTransform = m_Interactor.GetAttachTransform(this);
 
             // We cache the three potential sources of rotation - the position offset, the forward vector of the controller, and up vector of the controller
             // We store any data used for determining which rotation to use, then flatten the vectors to the local xz plane
@@ -374,18 +373,22 @@ namespace UnityEngine.XR.Content.Interaction
             if (m_ClampedMotion)
                 knobRotation = Mathf.Clamp(knobRotation, m_MinAngle, m_MaxAngle);
 
+
         }
 
 
         public void SetValueWhenOnEvent(bool isRight)
         {
-            if (isRight && authorInteractor.transform.tag == "RightController" || !isRight && authorInteractor.transform.tag == "LeftController")
+            if (m_Interactor == null)
+                return;
+
+            if (isRight && m_Interactor.transform.tag == "RightController" || !isRight && m_Interactor.transform.tag == "LeftController")
             {
                 SetKnobRotation(knobRotation);
 
                 // Reverse to get value
                 var knobValue = (knobRotation - m_MinAngle) / (m_MaxAngle - m_MinAngle);
-                SetValue(knobValue);
+                //SetValue(knobValue);
             }
             else
                 return;
