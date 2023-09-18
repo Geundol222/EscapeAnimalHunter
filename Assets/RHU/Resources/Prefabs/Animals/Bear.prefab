@@ -750,8 +750,9 @@ GameObject:
   - component: {fileID: 1466800644951711528}
   - component: {fileID: 1515103717997011744}
   - component: {fileID: 1465729228637230289}
-  - component: {fileID: 998179349996960013}
   - component: {fileID: 6104679215184371315}
+  - component: {fileID: 998179349996960013}
+  - component: {fileID: 2723960383713962703}
   m_Layer: 10
   m_Name: Bear
   m_TagString: Animal
@@ -815,28 +816,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &998179349996960013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1465729228637230290}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40586df89e47e0a4d97ad1db1dda5be7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 435d3c564271fe34a820f0c86f306423, type: 2}
-  animalName: 0
-  footCenter: {fileID: 6971072296763249053}
-  fieldOfView: {fileID: 9166582474577770158}
-  GroundLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!82 &6104679215184371315
 AudioSource:
   m_ObjectHideFlags: 0
@@ -933,6 +912,54 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &998179349996960013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465729228637230290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40586df89e47e0a4d97ad1db1dda5be7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 435d3c564271fe34a820f0c86f306423, type: 2}
+  animalName: 0
+  fieldOfView: {fileID: 9166582474577770158}
+  footCenter: {fileID: 6971072296763249053}
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  onDieAnimal:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1965082147055096804, guid: 968e13a80d980c0459a5888516e03222,
+          type: 3}
+        m_TargetAssemblyTypeName: Spawner, Assembly-CSharp
+        m_MethodName: OnDiedAnimal
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1465729228637230290}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2723960383713962703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465729228637230290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 064699f678c8d8b44a0036d2d0ff9d71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footCenter: {fileID: 6971072296763249053}
 --- !u!1 &1674021466903017570
 GameObject:
   m_ObjectHideFlags: 0

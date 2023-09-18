@@ -1606,8 +1606,9 @@ GameObject:
   - component: {fileID: 8346933464000441934}
   - component: {fileID: 8346933463991435754}
   - component: {fileID: -8052490005510590746}
-  - component: {fileID: -9198851117805930931}
   - component: {fileID: -2446662873464896900}
+  - component: {fileID: -9198851117805930931}
+  - component: {fileID: 4295623393640634008}
   m_Layer: 10
   m_Name: Tiger
   m_TagString: Animal
@@ -1670,28 +1671,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &-9198851117805930931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8346933464000803438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf55231d5118c8143b9fdd8602f7be07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 435d3c564271fe34a820f0c86f306423, type: 2}
-  animalName: 1
-  footCenter: {fileID: 2556052818871979187}
-  fieldOfView: {fileID: 1102072524167059740}
-  GroundLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!82 &-2446662873464896900
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1788,3 +1767,38 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-9198851117805930931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8346933464000803438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf55231d5118c8143b9fdd8602f7be07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 435d3c564271fe34a820f0c86f306423, type: 2}
+  animalName: 1
+  footCenter: {fileID: 2556052818871979187}
+  fieldOfView: {fileID: 1102072524167059740}
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 8
+--- !u!114 &4295623393640634008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8346933464000803438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 064699f678c8d8b44a0036d2d0ff9d71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footCenter: {fileID: 2556052818871979187}

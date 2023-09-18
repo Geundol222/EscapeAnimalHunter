@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Profiling;
 using UnityEngine.SocialPlatforms;
 using static AnimalData;
@@ -10,13 +11,12 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
 {
     [SerializeField] public AnimalData data;
     [SerializeField] public AnimalName animalName;
-    [SerializeField] private Transform footCenter;
     [SerializeField] public FieldOfView fieldOfView;
-    [SerializeField] LayerMask GroundLayer;
+    [SerializeField] private Transform footCenter;
+    [SerializeField] private LayerMask GroundLayer;
 
     // 각 노드에서 사용할 변수들
     [NonSerialized] public Animator animator;
-    [NonSerialized] public Collider hitCollider;
     [NonSerialized] public int curHp;
     [NonSerialized] public float waryTime;
     [NonSerialized] public bool isHit;
@@ -25,16 +25,17 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
     [NonSerialized] public bool isTracking;
     [NonSerialized] public bool isSit;
     [NonSerialized] public Vector2 bulletDirection;
-    [SerializeField] LayerMask playerLayer;
 
     protected BTBase bTBase;
     protected SelectorNode rootNode = new SelectorNode();
 
     protected void Awake()
     {
+        gameObject.name = animalName.ToString();
         animator = GetComponent<Animator>();
         SetUpBT();
         //StartCoroutine(StepOnGrounRoutine());
+        GameManager.Resource.Destroy(gameObject, 5);
     }
     
     public abstract void SetUpBT();
@@ -59,27 +60,13 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (gameObject.layer != LayerMask.NameToLayer("Carnivore"))
-            return;
-
-        ContactPoint contactPoint = collision.contacts[0];
-
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
+        if (fieldOfView.AttackFOV())
         {
-            Vector3 hitDir = footCenter.InverseTransformDirection(footCenter.position - contactPoint.point).normalized;
-
-            if (hitDir.x > 0)
-                hitDir.x = 1;
-            else
-                hitDir.x = -1;
-
-            if (hitDir.z > 0)
-                hitDir.z = 1;
-            else
-                hitDir.z = -1;
-
-            animator.SetFloat("HitX", hitDir.x);
-            animator.SetFloat("HitZ", hitDir.z);
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Player") || collision.gameObject.layer == LayerMask.NameToLayer("Car"))
+            {
+                IHittable hittable = collision.gameObject.GetComponent<IHittable>();
+                hittable?.TakeHit(data.Animals[(int)animalName].attackDamage);
+            }
         }
     }
 
@@ -134,6 +121,4 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
         yield return new WaitForSeconds(1f);
         animator.applyRootMotion = true;
     }
-
-
 }

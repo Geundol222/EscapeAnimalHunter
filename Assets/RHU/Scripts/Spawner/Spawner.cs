@@ -167,8 +167,8 @@ public class Spawner : MonoBehaviour
 
     public void OnDiedAnimal(GameObject animal)
     {
-        RenewalCurAnimal(animal);
-
+        Debug.Log(animal.name);
+        //RenewalCurAnimal(animal);
     }
 
     private void OnDrawGizmosSelected()
