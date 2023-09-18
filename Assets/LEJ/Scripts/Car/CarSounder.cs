@@ -48,7 +48,7 @@ public class CarSounder : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="name">drive, openDoor, closeDoor, gearHandle</param>
+    /// <param name="name">drive, openDoor, closeDoor, gearHandle, accel</param>
     /// <returns></returns>
     private GameObject FindSound(string name)
     {
@@ -80,12 +80,12 @@ public class CarSounder : MonoBehaviour
     {
         if (driver.CurSpeed > 1)
         {
-            FindSound("drive").GetComponent<AudioSource>().Play();
+            FindSound("accel").GetComponent<AudioSource>().Play();
             FindSound("engine").GetComponent<AudioSource>().Stop();
         }
         else
         {
-            FindSound("drive").GetComponent<AudioSource>().Stop();
+            FindSound("accel").GetComponent<AudioSource>().Stop();
             FindSound("engine").GetComponent<AudioSource>().Play();
         }
     }
