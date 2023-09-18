@@ -3,39 +3,47 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Account : MonoBehaviour
 {
-    /// <summary>
-    /// 현재 내가 가지고 있는 돈
-    /// 1초마다 코르틴으로 확인
-    /// </summary>
     [SerializeField] TMP_Text my_Money_Text;
-    public int getMoney;
-    public bool a;
+    public bool collingMoney;
+
     private void Start()
     {
-        StartCoroutine(AccountBalance());
+        my_Money_Text.text = $"{GameManager.Data.Money.ToString()}";
+        //StartCoroutine(AccountBalance());
     }
 
     public void GetMoney()
     {
-        getMoney = GameManager.Data.Money;
+        collingMoney = true ;
+    }
+
+    private void Update()
+    {
+        Debug.Log(collingMoney);
+        if (collingMoney)
+        {
+            my_Money_Text.text = $"{GameManager.Data.Money.ToString()}";
+            collingMoney = false;
+        }
     }
 
     IEnumerator AccountBalance()
     {
-        while (true)
+        if (!collingMoney)
         {
-            if (a)
             {
-                my_Money_Text.text = $"{getMoney.ToString()}$";
-                //my_Money_Text.text = $"{GameManager.Data.Money.ToString()} $ ";
-                yield return new WaitForSeconds(1f);
+                my_Money_Text.text = $"{GameManager.Data.Money.ToString()}";
+                collingMoney= true;
+                Debug.Log(collingMoney);
             }
-
+            yield return null;
         }
-        
     }
 }
+
