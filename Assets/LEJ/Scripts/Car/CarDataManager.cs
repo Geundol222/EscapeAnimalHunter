@@ -185,8 +185,7 @@ public class CarDataManager : MonoBehaviour
 
     public void ChangeExteriorToPattern(string patternName)
     {
-        Material matToChange = car.GetComponent<CarDecorator>().FindMaterial(patternName);
-        car.GetComponent<CarDecorator>().ChangeMaterial(matToChange);
+        car.GetComponent<CarDecorator>().ChangeMaterial(patternName);
     }
 
     /// <summary>
@@ -195,10 +194,17 @@ public class CarDataManager : MonoBehaviour
     /// <param name="colorName"></param>
     public void ChangeExteriorColor(string colorName)
     {
-        Color colorToChange = car.GetComponent<CarDecorator>().FindColor(colorName);
-        car.GetComponent<CarDecorator>().ChangeColor(colorToChange);
+        car.GetComponent<CarDecorator>().ChangeColor(colorName);
     }
 
+    /// <summary>
+    /// isMetalic이 true면 광택, false면 매트
+    /// </summary>
+    /// <param name="isMetalic"></param>
+    public void ChangeExterialMetalic(bool isMetalic)
+    {
+        car.GetComponent<CarDecorator>().ChangeMetalic(isMetalic);
+    }
 
 
     //안 봐도 됩니다--------------------------------------------------------
