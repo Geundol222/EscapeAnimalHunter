@@ -145,7 +145,6 @@ public class CarDriver : MonoBehaviour
             return;
         else
         {
-            Debug.Log("speed is almost zero");
             CurSpeed = rb.velocity.magnitude;
         }
     }

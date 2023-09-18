@@ -83,14 +83,12 @@ public class CarSounder : MonoBehaviour
     {
         if (driver.CurSpeed >= 1f && !FindSound("accel").GetComponent<AudioSource>().isPlaying)
         {
-            Debug.Log("play accel sound");
             PlayAccelSound();
             StopEngineSound();
         }
         
         if (driver.CurSpeed < 1f && FindSound("accel").GetComponent<AudioSource>().isPlaying)
         {
-            Debug.Log("stop accel sound");
             StopAccelSound();
             PlayEngineSound();
         }
