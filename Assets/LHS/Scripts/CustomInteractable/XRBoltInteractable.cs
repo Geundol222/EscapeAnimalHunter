@@ -9,6 +9,7 @@ public class XRBoltInteractable : XRBaseInteractable
 {
     [SerializeField] Transform boltTransform;
     [SerializeField] Transform attachPoint;
+    [SerializeField] Transform originPosition;
     [SerializeField] Gun gun;
     [SerializeField] float maxAngle;
     [SerializeField] float minAngle;
@@ -18,7 +19,7 @@ public class XRBoltInteractable : XRBaseInteractable
     float currentAngle = 0.0f;
     int tapCount = 0;
 
-    Vector3 originPosition;
+    bool isOpen = false;
 
     /// <summary>
     /// OnSelectEntered, Init Valiable
@@ -28,7 +29,6 @@ public class XRBoltInteractable : XRBaseInteractable
     {
         base.OnSelectEntered(args);
         selectInteractor = args.interactorObject;
-        originPosition = boltTransform.position;
     }
 
     protected override void OnSelectExited(SelectExitEventArgs args)
@@ -75,6 +75,25 @@ public class XRBoltInteractable : XRBaseInteractable
         attachPoint.position = selectInteractor.transform.position;
 
         currentAngle = FindBoltAngle();
+
+        currentAngle = Mathf.Clamp(currentAngle, minAngle, maxAngle);
+
+        if (currentAngle == minAngle)
+        {
+            if (isOpen)
+            {
+                GameManager.Sound.PlaySound("Bolt/BoltClose");
+                isOpen = false;
+            }
+        }
+        else if (currentAngle == maxAngle)
+        {
+            if (!isOpen)
+            {
+                GameManager.Sound.PlaySound("Bolt/BoltOpen");
+                isOpen = true;
+            }
+        }
 
         //boltTransform.Rotate(new Vector3(0, 0, currentAngle));
         boltTransform.localEulerAngles = new Vector3(0, 0, currentAngle);
@@ -123,14 +142,17 @@ public class XRBoltInteractable : XRBaseInteractable
     private void ReloadingProcess()
     {
         Vector3 localAttach = transform.InverseTransformPoint(attachPoint.position);
-        Vector3 localOrigin = boltTransform.InverseTransformPoint(originPosition);
+        Vector3 localOrigin = boltTransform.InverseTransformPoint(originPosition.position);
 
         if (localAttach.z > localOrigin.z)
         {
             boltTransform.localPosition = localOrigin;
 
             if (tapCount == 1)
+            {
                 tapCount = 2;
+                GameManager.Sound.PlaySound("Bolt/BoltPush");
+            }
         }
         else if (localAttach.z < localOrigin.z)
         {
@@ -141,7 +163,10 @@ public class XRBoltInteractable : XRBaseInteractable
                 boltTransform.localPosition = new Vector3(boltTransform.localPosition.x, boltTransform.localPosition.y, localOrigin.z - 0.15f);
 
                 if (tapCount == 0)
+                {
                     tapCount = 1;
+                    GameManager.Sound.PlaySound("Bolt/BoltPull");
+                }
             }
         }
 

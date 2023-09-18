@@ -20,6 +20,7 @@ public class GameScene : BaseScene
         yield return new WaitForSecondsRealtime(0.5f);
 
         progress = 1f;
+        GameManager.Sound.PlaySound("BGM", Audio.BGM, 0.7f);
         yield return new WaitForSecondsRealtime(0.1f);
     }
 

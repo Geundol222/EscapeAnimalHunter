@@ -62,25 +62,35 @@ public class CarRepairCanvas : MonoBehaviour
 
     public void PressOkButton()
     {
-        GameManager.Data.RemoveMoney(cost);
-        DataManager.Car.SetHP(car.CurHp + sliderValue);
+        if (GameManager.Data.Money < cost)
+        {
+            GameManager.Sound.PlaySound("NegativeBeep");
+            return;
+        }
+        else
+        {
+            GameManager.Sound.PlaySound("ConfirmSound");
 
-        okButton.gameObject.SetActive(false);
+            GameManager.Data.RemoveMoney(cost);
+            DataManager.Car.SetHP(car.CurHp + sliderValue);
 
-        cost = 0;
-        sliderValue = 0;
-        enableRepairValue = car.MaxHp - car.CurHp;
+            okButton.gameObject.SetActive(false);
 
-        costText.text = cost.ToString();
-        sliderText.text = sliderValue.ToString();
-        enableRepairText.text = enableRepairValue.ToString();
+            cost = 0;
+            sliderValue = 0;
+            enableRepairValue = car.MaxHp - car.CurHp;
 
-        repairSlider.value = 0;
-        repairSlider.maxValue = enableRepairValue;
+            costText.text = cost.ToString();
+            sliderText.text = sliderValue.ToString();
+            enableRepairText.text = enableRepairValue.ToString();
 
-        playerMoneyText.text = GameManager.Data.Money.ToString();
+            repairSlider.value = 0;
+            repairSlider.maxValue = enableRepairValue;
 
-        okButton.gameObject.SetActive(false);
+            playerMoneyText.text = GameManager.Data.Money.ToString();
+
+            okButton.gameObject.SetActive(false);
+        }
     }
 
     private void OnDisable()
