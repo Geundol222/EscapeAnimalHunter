@@ -12,6 +12,7 @@ public class CarSounder : MonoBehaviour
     XRSliderLEJ slider;
     SetGearState gearState;
     CarDamager damager;
+    CarDriver driver;
 
     List<GameObject> sounds = new List<GameObject>();
 
@@ -20,6 +21,7 @@ public class CarSounder : MonoBehaviour
         slider = gear.GetComponent<XRSliderLEJ>();
         gearState = gear.GetComponent<SetGearState>();
         damager = GetComponent<CarDamager>();
+        driver = GetComponent<CarDriver>();
 
         for (int i = 0; i < soundsObj.transform.childCount; i++)
         {
@@ -32,6 +34,7 @@ public class CarSounder : MonoBehaviour
         slider.OnStartGrab += PlayGearSoundOnce;
         gearState.OnCurGearStateChanged += MakeGearSound;
         damager.OnDie += StopEngineSound;
+        driver.OnCurSpeedChanged += PlayAccelSound;
     }
 
     private void OnDisable()
@@ -39,6 +42,7 @@ public class CarSounder : MonoBehaviour
         slider.OnStartGrab -= PlayGearSoundOnce;
         gearState.GetComponent<SetGearState>().OnCurGearStateChanged -= MakeGearSound;
         damager.OnDie -= StopEngineSound;
+        driver.OnCurSpeedChanged -= PlayAccelSound;
     }
 
     /// <summary>
@@ -72,14 +76,28 @@ public class CarSounder : MonoBehaviour
         }
     }
 
+    private void PlayAccelSound()
+    {
+        if (driver.CurSpeed > 1)
+        {
+            FindSound("drive").GetComponent<AudioSource>().Play();
+            FindSound("engine").GetComponent<AudioSource>().Stop();
+        }
+        else
+        {
+            FindSound("drive").GetComponent<AudioSource>().Stop();
+            FindSound("engine").GetComponent<AudioSource>().Play();
+        }
+    }
+
     private void PlayEngineSound()
     {
-        FindSound("drive").GetComponent<AudioSource>().Play();
+        FindSound("engine").GetComponent<AudioSource>().Play();
     }
 
     private void StopEngineSound()
     {
-        FindSound("drive").GetComponent<AudioSource>().Stop();
+        FindSound("engine").GetComponent<AudioSource>().Stop();
     }
 
     private void PlayGearSoundOnce()
