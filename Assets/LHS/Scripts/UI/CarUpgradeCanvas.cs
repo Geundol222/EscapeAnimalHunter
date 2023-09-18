@@ -217,19 +217,19 @@ public class CarUpgradeCanvas : MonoBehaviour
         if (materialIndex >= exteriorName.Count - 1)
         {
             materialIndex = exteriorName.Count - 1;
-
-            if (upgradeMatObj.transform.GetChild(0).GetComponent<Renderer>().material.name == exteriorName[materialIndex])
-                okButton.gameObject.SetActive(false);
-            else
-                okButton.gameObject.SetActive(true);
-
-            materialNameText.text = exteriorName[materialIndex];
-
-            if (materialIndex < 5)
-                DataManager.Car.ChangeExteriorPattern(exteriorName[materialIndex]);
-            else
-                DataManager.Car.ChangeExteriorColor(exteriorName[materialIndex]);
         }
+
+        if (materialIndex < 5)
+            DataManager.Car.ChangeExteriorPattern(exteriorName[materialIndex]);
+        else
+            DataManager.Car.ChangeExteriorColor(exteriorName[materialIndex]);
+
+        if (upgradeMatObj.transform.GetChild(0).GetComponent<Renderer>().material.name == exteriorName[materialIndex])
+            okButton.gameObject.SetActive(false);
+        else
+            okButton.gameObject.SetActive(true);
+
+        materialNameText.text = exteriorName[materialIndex];
     }
 
     public void MatLeft()
@@ -239,19 +239,19 @@ public class CarUpgradeCanvas : MonoBehaviour
         if (materialIndex <= 0)
         {
             materialIndex = 0;
-
-            if (upgradeMatObj.transform.GetChild(0).GetComponent<Renderer>().material.name == exteriorName[materialIndex])
-                okButton.gameObject.SetActive(false);
-            else
-                okButton.gameObject.SetActive(true);
-
-            materialNameText.text = exteriorName[materialIndex];
-
-            if (materialIndex < 5)
-                DataManager.Car.ChangeExteriorPattern(exteriorName[materialIndex]);
-            else
-                DataManager.Car.ChangeExteriorColor(exteriorName[materialIndex]);
         }
+
+        if (materialIndex < 5)
+            DataManager.Car.ChangeExteriorPattern(exteriorName[materialIndex]);
+        else
+            DataManager.Car.ChangeExteriorColor(exteriorName[materialIndex]);
+
+        if (upgradeMatObj.transform.GetChild(0).GetComponent<Renderer>().material.name == exteriorName[materialIndex])
+            okButton.gameObject.SetActive(false);
+        else
+            okButton.gameObject.SetActive(true);
+
+        materialNameText.text = exteriorName[materialIndex];
     }
 
     private void OnDisable()

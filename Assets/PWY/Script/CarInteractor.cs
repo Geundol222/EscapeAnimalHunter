@@ -18,20 +18,17 @@ public class CarInteractor : MonoBehaviour
     [SerializeField] CharacterController xROrigin_CharacterController;  // 플레이어의 캐릭터 컨트롤러
     [SerializeField] Animator fade_Animator;        // 타고 내릴떄의 페이드 애니메이션 xr 오리진의 카메라 하위자식으로 있음
 
-    public bool car;                                // 탑승 유무
+    public bool isInCar;                                // 탑승 유무
 
     private void Update()
     {
-        if (car)    // 운전석의 위치와 회전을 동기화함
+        if (isInCar)    // 운전석의 위치와 회전을 동기화함
         {
             Operator.transform.position = car_Enter_Point.transform.position;
 
-            float operatorX = car_Enter_Point.transform.rotation.eulerAngles.x;
-            float operatorZ = car_Enter_Point.transform.rotation.eulerAngles.z;
+            Quaternion lookRotation = Quaternion.LookRotation(car_Enter_Point.transform.forward);
 
-            Vector3 newRotation = new Vector3(operatorX, Operator.transform.rotation.eulerAngles.y, operatorZ);
-
-            Operator.transform.rotation = Quaternion.Euler(newRotation);
+            Operator.transform.rotation = lookRotation;
         }
     }
 
@@ -50,48 +47,32 @@ public class CarInteractor : MonoBehaviour
         Operator.transform.rotation = Quaternion.Euler(newRotation);
     }
 
-    public void Car_Enter() // 차량에 탑승시 탑승버튼을 눌러도 반응없게 함
+    public void Car_Interactor() // 차량에 탑승시 탑승버튼을 눌러도 반응없게 함
     {
-        if (!car)   // 탑승상태가 아님
+        if (!isInCar)   // 탑승상태가 아님
         {
-            car = true;
+            isInCar = true;
             CarCoordinate();
         }
         else        // 탑승한 상태
         {
-            return;
-        }
-    }
-
-    public void BoardingConfirmation()  // 차량 탑승시 로코모션의 Move와 플레이어의 캐릭터 컨트롤러를 끔
-    {
-        if (car)    // 끄기(탑승)
-        {
-            locomotion_Move.SetActive(false);
-            xROrigin_CharacterController.enabled = false;
-        }
-
-        else        // 켜기(내림)
-        {
-            locomotion_Move.SetActive(true);
-            xROrigin_CharacterController.enabled = true;
-        }
-    }
-
-    public void CarExit()   // 차에서 내리기 위한 함수
-    {
-        if (car)    // 차에 탄 상태
-        {
-            car = false;
+            isInCar = false;
             BoardingConfirmation();
             fade_Animator.Play("Fade");
             Operator.transform.position = exit_Point.transform.position;
             Operator.transform.rotation = exit_Point.transform.rotation;
         }
-        else    // 차에 내린상태면 작동안하게
-        {
-            return;
-        }
+    }
 
+    public void BoardingConfirmation()  // 차량 탑승시 로코모션의 Move와 플레이어의 캐릭터 컨트롤러를 끔
+    {
+        if (isInCar)    // 끄기(탑승)
+        {
+            xROrigin_CharacterController.enabled = false;
+        }
+        else        // 켜기(내림)
+        {
+            xROrigin_CharacterController.enabled = true;
+        }
     }
 }

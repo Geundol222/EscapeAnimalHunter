@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class GameScene : BaseScene
 {
+    [SerializeField] CharacterController characterController;
+
+    Bullet bullet;
+
     protected override IEnumerator LoadingRoutine()
     {
         progress = 0f;
+        characterController.enabled = false;
         yield return new WaitForSecondsRealtime(0.5f);
 
         progress = 0.2f;
@@ -21,11 +26,16 @@ public class GameScene : BaseScene
 
         progress = 1f;
         GameManager.Sound.PlaySound("BGM", Audio.BGM, 0.7f);
+        characterController.enabled = true;
         yield return new WaitForSecondsRealtime(0.1f);
     }
 
     private void CreatePrefab()
     {
-
+       for (int i = 0; i < 10; i++)
+       {
+            bullet = GameManager.Resource.Instantiate<Bullet>("Prefabs/Bullet", true);
+            GameManager.Resource.Destroy(bullet.gameObject);
+       }
     }
 }
