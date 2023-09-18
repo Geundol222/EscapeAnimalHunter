@@ -160,10 +160,18 @@ public class Spawner : MonoBehaviour
     /// <returns> 멀면 true 아니면 false </returns>
     private bool DistanceCheck(GameObject animal)
     {
-        if (Vector3.Distance(animal.transform.position, focusPoint.position) > maxRange)
+        float distanceSquared = (animal.transform.position - focusPoint.position).sqrMagnitude;
+
+        if (distanceSquared > maxRange * maxRange)
             return true;
 
         return false;
+    }
+
+    public void OnDiedAnimal(GameObject animal)
+    {
+        RenewalCurAnimal(animal);
+
     }
 
     private void OnDrawGizmosSelected()

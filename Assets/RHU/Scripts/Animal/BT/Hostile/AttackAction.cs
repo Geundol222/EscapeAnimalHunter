@@ -17,7 +17,7 @@ public class AttackAction : ActionNode
         {
             animator.SetTrigger("IsAttack");
 
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
+            if (curAnimationCheck("Run"))
                 animator.SetInteger("RandomAttack", RandomAction(4));
 
             return NodeState.Success;
