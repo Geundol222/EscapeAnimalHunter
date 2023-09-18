@@ -5,36 +5,83 @@ using UnityEngine;
 
 public class CarDecorator : MonoBehaviour
 {
-    // 미완
 
     [SerializeField] GameObject materialObj; //contains 5 objects
 
-    [SerializeField] Dictionary<string, Material> materials = new Dictionary<string, Material>();
-    [SerializeField] Dictionary<string, Color> colors = new Dictionary<string, Color>();
+    [SerializeField] Material solidMat;
 
-    public Material FindMaterial(string name)
-    {
-        return materials[name];
-    }
+    [SerializeField] List<string> colorsName = new List<string>();
+    [SerializeField] List<Color> colors = new List<Color>();
 
-    public Color FindColor(string name)
-    {
-        return colors[name];
-    }
+    [SerializeField] List<string> materialsName = new List<string>();
+    [SerializeField] List<Material> materials = new List<Material>();
 
-    public void ChangeMaterial(Material whichMat)
+    int index;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name">giraffe, leopard1, leopard2, zebra, carbon</param>
+    public void ChangeMaterial(string name)
     {
+        for (int i = 0; i < materialsName.Count; i++)
+        {
+            if (Equals(materialsName[i], name))
+            {
+                index = i;
+                break;
+            }
+        }
+
         for (int i = 0; i < 5; i++)
         {
-            materialObj.transform.GetChild(i).GetComponent<Renderer>().material = whichMat;
+            materialObj.transform.GetChild(i).GetComponent<Renderer>().material = materials[i];
         }
     }
 
-    public void ChangeColor(Color color)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name">black, white, silver, gold, green, red, blue, cyan, hotPink, pink</param>
+    public void ChangeColor(string name)
     {
+        for (int i = 0; i < colorsName.Count; i++)
+        {
+            if (Equals(colorsName[i], name))
+            {
+                index = i;
+                break;
+            }
+        }
+
         for (int i = 0; i < 5; i++)
         {
-            materialObj.transform.GetChild(i).GetComponent<Renderer>().material.color = color;
+            materialObj.transform.GetChild(i).GetComponent<Renderer>().material = solidMat;
+            materialObj.transform.GetChild(i).GetComponent<Renderer>().material.color = colors[i];
+        }
+    }
+
+    /// <summary>
+    /// isMetalic이 true면 광택, false면 매트
+    /// </summary>
+    /// <param name="isMetalic"></param>
+    public void ChangeMetalic(bool isMetalic)
+    {
+        if (isMetalic)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                materialObj.transform.GetChild(i).GetComponent<Renderer>().material.SetFloat("_Glossiness", 0.7f);
+                materialObj.transform.GetChild(i).GetComponent<Renderer>().material.SetFloat("_Metallic", 0.2f);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                materialObj.transform.GetChild(i).GetComponent<Renderer>().material.SetFloat("_Glossiness", 0.3f);
+                materialObj.transform.GetChild(i).GetComponent<Renderer>().material.SetFloat("_Metallic", 0.3f);
+            }
         }
     }
 }

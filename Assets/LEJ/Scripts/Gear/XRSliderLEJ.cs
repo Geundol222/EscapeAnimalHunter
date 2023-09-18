@@ -9,7 +9,16 @@ namespace UnityEngine.XR.Content.Interaction
     /// </summary>
     public class XRSliderLEJ : XRBaseInteractable
     {
-        public bool isGrabbing;
+        public UnityAction OnStartGrab;
+        private bool isGrabbing;
+        public bool IsGrabbing 
+        { 
+            get { return isGrabbing; }
+            set { 
+                isGrabbing = value;
+                OnStartGrab?.Invoke();
+            }
+        } 
         public UnityAction OnStopGrabbing;
 
         [Serializable]
@@ -78,7 +87,7 @@ namespace UnityEngine.XR.Content.Interaction
 
         void StartGrab(SelectEnterEventArgs args)
         {
-            isGrabbing = true;
+            IsGrabbing = true;
 
             m_Interactor = args.interactorObject;
             UpdateSliderPosition();
@@ -87,7 +96,7 @@ namespace UnityEngine.XR.Content.Interaction
         void EndGrab(SelectExitEventArgs args)
         {
             OnStopGrabbing?.Invoke();
-            isGrabbing = false;
+            IsGrabbing = false;
 
             m_Interactor = null;
         }

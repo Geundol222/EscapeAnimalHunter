@@ -6,10 +6,12 @@ using UnityEngine.Events;
 
 public class CarDamager : MonoBehaviour, IHittable
 {
-    [SerializeField] Transform parkingPosition;
-    [SerializeField] GameObject carBodyCol;
+    [SerializeField] GameObject carForwardCol;
+    [SerializeField] GameObject carBackCol;
     
     [SerializeField] int maxHp;
+    CarReturner returner;
+
     public int MaxHp
     {
         get { return maxHp; }
@@ -31,32 +33,30 @@ public class CarDamager : MonoBehaviour, IHittable
         }
     }
 
-    [SerializeField] int damageAmountWhenCarHitAnimal;
+    [SerializeField] int takeDamageAmount = 10;
     [SerializeField] float canHitSpeed;
 
-    int carnivoreLayerMask;
-    int harbivoreLayerMask;
-    int groundLayerMask;
 
+    public UnityAction OnDie;
     public UnityAction OnHitSomething;
 
     private void Awake()
     {
-        carnivoreLayerMask = 1 << LayerMask.NameToLayer("Carnivore");
-        harbivoreLayerMask = 1 << LayerMask.NameToLayer("Harbivore");
-        groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
+        returner = GetComponent<CarReturner>();
     }
 
     public void OnEnable()
     {
         OnCurHpChanged += CheckCurDamage;
-        carBodyCol.GetComponent<CarBodyCollider>().OnHit += HitSomething;
+        carForwardCol.GetComponent<CarBodyCollider>().OnHit += HitSomething;
+        carBackCol.GetComponent<CarBodyCollider>().OnHit += HitSomething;
     }
 
     public void OnDisable()
     {
         OnCurHpChanged -= CheckCurDamage;
-        carBodyCol.GetComponent<CarBodyCollider>().OnHit -= HitSomething;
+        carForwardCol.GetComponent<CarBodyCollider>().OnHit -= HitSomething;
+        carBackCol.GetComponent<CarBodyCollider>().OnHit -= HitSomething;
     }
 
     /// <summary>
@@ -66,17 +66,13 @@ public class CarDamager : MonoBehaviour, IHittable
     /// <param name="obj">박은 오브젝트의 gameObject</param>
     public void HitSomething(GameObject obj, Vector3 direction)
     {
-        /*
         if (Math.Abs(GetComponent<Rigidbody>().velocity.magnitude) < canHitSpeed)
             return;
-        */
-
-        Debug.Log("Hit Something");
 
         if (obj.layer == 10 || obj.layer == 11)
             GiveDamage(obj, direction);
 
-        TakeHit(damageAmountWhenCarHitAnimal);
+        TakeHit(takeDamageAmount);
 
         OnHitSomething?.Invoke();
     }
@@ -87,8 +83,6 @@ public class CarDamager : MonoBehaviour, IHittable
     /// <param name="gameObject"></param>
     public void GiveDamage(GameObject gameObject, Vector3 direction)
     {
-        Debug.Log($"{gameObject.name} GiveDamage()");
-
         if (gameObject.GetComponent<ICrusher>() != null)
         {
             gameObject.GetComponent<ICrusher>().Crusher(GetComponent<Rigidbody>().mass, GetComponent<CarDriver>().CurSpeed, direction);
@@ -115,15 +109,8 @@ public class CarDamager : MonoBehaviour, IHittable
     {
         if (curHp <= 0)
         {
-            ReturnToSwamp();
+            returner.ReturnToBaseCamp();
+            OnDie?.Invoke();
         }
-    }
-
-    /// <summary>
-    /// 차를 베이스캠프로 강제 귀환 시키는 함수
-    /// </summary>
-    public void ReturnToSwamp()
-    {
-        transform.position = parkingPosition.position;
     }
 }
