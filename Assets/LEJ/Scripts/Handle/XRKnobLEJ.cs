@@ -20,6 +20,9 @@ namespace UnityEngine.XR.Content.Interaction
         float prevValue;
         float knobRotation;
 
+        float prevLocalOffsetX;
+        float curLocalOffsetX;
+
         [SerializeField] PlayerControllerMoveDetecter moveDetecter;
 
         
@@ -240,8 +243,6 @@ namespace UnityEngine.XR.Content.Interaction
             enteredInteractors.Add(args.interactorObject);
             authorInteractor = enteredInteractors[enteredInteractors.Count - 1];
 
-            AuthorIsChanged();
-
             m_PositionAngles.Reset();
             m_UpVectorAngles.Reset();
             m_ForwardVectorAngles.Reset();
@@ -260,15 +261,11 @@ namespace UnityEngine.XR.Content.Interaction
                 if (authorInteractor != enteredInteractors[enteredInteractors.Count - 1])
                 {
                     authorInteractor = enteredInteractors[enteredInteractors.Count - 1];
-                    AuthorIsChanged();
                 }
             }
         }
 
-        void AuthorIsChanged()
-        {
 
-        }
 
         public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
         {
@@ -294,7 +291,12 @@ namespace UnityEngine.XR.Content.Interaction
 
             // We cache the three potential sources of rotation - the position offset, the forward vector of the controller, and up vector of the controller
             // We store any data used for determining which rotation to use, then flatten the vectors to the local xz plane
-            var localOffset = transform.InverseTransformVector(interactorTransform.position - m_Handle.position);
+
+            //original
+            //var localOffset = transform.InverseTransformVector(interactorTransform.position - m_Handle.position);
+            var localOffset = transform.InverseTransformVector(interactorTransform.position);
+            curLocalOffsetX = localOffset.x;
+
             localOffset.y = 0.0f;
             var radiusOffset = transform.TransformVector(localOffset).magnitude;
             localOffset.Normalize();
@@ -374,9 +376,9 @@ namespace UnityEngine.XR.Content.Interaction
 
         }
 
+
         public void SetValueWhenOnEvent(bool isRight)
         {
-
             if (isRight && authorInteractor.transform.tag == "RightController" || !isRight && authorInteractor.transform.tag == "LeftController")
             {
                 SetKnobRotation(knobRotation);
@@ -400,12 +402,11 @@ namespace UnityEngine.XR.Content.Interaction
 
             if (m_Handle != null)
                 m_Handle.localEulerAngles = new Vector3(0.0f, angle, 0.0f);
+
         }
 
         void SetValue(float value)
         {
-            
-
             if (m_ClampedMotion)
                 value = Mathf.Clamp(value, -1f, 1f);
 
@@ -421,6 +422,8 @@ namespace UnityEngine.XR.Content.Interaction
 
             m_Value = value;
             m_OnValueChange.Invoke(m_Value);
+
+
         }
 
         float ValueToRotation()

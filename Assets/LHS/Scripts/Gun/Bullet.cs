@@ -11,8 +11,10 @@ public class Bullet : MonoBehaviour
     [SerializeField] LayerMask herbivoreMask;
 
     Rigidbody rb;
+    Collider col;
 
     private int damage;
+    private int collisionCount;
 
     private float bulletSpeed;
     private float fireAngle;
@@ -28,10 +30,19 @@ public class Bullet : MonoBehaviour
     private Vector3 initialPosition;
     private Vector3 initialVelocity;
 
+    private bool isEffectiveCollider;
+
     private void Start()
     {
+        collisionCount = 0;
         damage = DataManager.Bullet.damage;
         bulletSpeed = DataManager.Bullet.bulletSpeed;
+
+        col = GetComponent<Collider>();
+        rb = GetComponent<Rigidbody>();
+        grav = Physics.gravity.magnitude;
+
+        isEffectiveCollider = false;
 
         xSpeed = transform.forward.x * bulletSpeed;
         ySpeed = transform.forward.y * bulletSpeed;
@@ -39,12 +50,21 @@ public class Bullet : MonoBehaviour
 
         initialPosition = transform.position;
 
-        rb = GetComponent<Rigidbody>();
-        grav = Physics.gravity.magnitude;
         fireAngle = transform.rotation.x;
         maxHeight = transform.position.y + (Mathf.Pow(initialVelocity.y, 2) / (2 * grav)) + initialPosition.y;
 
+        StartCoroutine(BulletSurvivalRoutine());
         StartCoroutine(BulletFlyRoutine());
+    }
+
+    IEnumerator BulletSurvivalRoutine()
+    {
+        yield return new WaitForSeconds(20f);
+
+        if (!isEffectiveCollider)
+            GameManager.Resource.Destroy(gameObject);
+
+        yield break;
     }
 
     /// <summary>
@@ -80,32 +100,47 @@ public class Bullet : MonoBehaviour
 
             gameObject.transform.rotation = Quaternion.Euler(tipAngle, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
 
-            yield return new WaitForEndOfFrame();
+            if (isEffectiveCollider)
+                yield break;
+
+            yield return new WaitForFixedUpdate();
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        collisionCount++;
+        StopProjectile();
+        StopCoroutine(BulletFlyRoutine());
+
+        if (collisionCount > 1)
+            return;
+
         if (carnivoreMask.IsContain(collision.gameObject.layer) || herbivoreMask.IsContain(collision.gameObject.layer))
         {
-            StopCoroutine(BulletFlyRoutine());
-            StopProjectile();
+            isEffectiveCollider = true;
+
+            ContactPoint contactPoint = collision.contacts[0];
+            Vector3 StuckBulletVector = contactPoint.point;
 
             IHittable hittable = collision.gameObject.GetComponent<IHittable>();
             hittable?.TakeHit(damage);
 
-            ContactPoint contactPoint = collision.contacts[0];
-            Vector3 StuckBulletVector = contactPoint.point;
             GameManager.Resource.Instantiate<GameObject>
-                ("Prefabs/StuckBullet", StuckBulletVector, transform.rotation, collision.collider.transform, true);
+                ("Prefabs/StuckBullet", StuckBulletVector, Quaternion.LookRotation(-contactPoint.normal), collision.collider.transform, true);
             GameManager.Resource.Destroy(gameObject);
         }
         else
         {
-            StopCoroutine(BulletFlyRoutine());
-            StopProjectile();
+            isEffectiveCollider = true;
+
             GameManager.Resource.Destroy(gameObject, 10f);
         }
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
 
     private void StopProjectile()

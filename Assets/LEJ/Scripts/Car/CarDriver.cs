@@ -10,9 +10,9 @@ using static UnityEngine.Rendering.DebugUI;
 public class CarDriver : MonoBehaviour
 {
     
+    [SerializeField] CarInteractor carInteractor;
     GameObject player;
     Rigidbody rb;
-    PlayerCarInteractor carInteractor;
     PlayerInputDetecter inputDetecter;
     SetGearState gearState;
     XRKnobLEJ handleKnob;
@@ -59,7 +59,6 @@ public class CarDriver : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         player = GameObject.FindWithTag("Player");
-        carInteractor = player.GetComponent<PlayerCarInteractor>();
         inputDetecter = player.GetComponent<PlayerInputDetecter>();
         damager = GetComponent<CarDamager>();
 
@@ -95,10 +94,10 @@ public class CarDriver : MonoBehaviour
         }
         
         
-        if (!handleGrab.isRightGrip|| !handleGrab.isLeftGrip)
+        if (!handleGrab.isRightGrip && !handleGrab.isLeftGrip)
             handleKnob.value = Mathf.Lerp(handleKnob.value, 0.5f, backToZeroSpeed);
-        
-        
+
+
     }
 
     private void OnEnable()
@@ -117,7 +116,7 @@ public class CarDriver : MonoBehaviour
 
     private void WhichPedalIsUsing()
     {
-        if (carInteractor.isPlayerTakingCar)
+        if (carInteractor.car)
         {
             if (inputDetecter.rightJoyStickYValue > 0 || inputDetecter.leftJoyStickYValue > 0)
             {
@@ -185,9 +184,6 @@ public class CarDriver : MonoBehaviour
         }
     }
 
-    float prevValue;
-    float curValue;
-    
     private void Handling()
     {
         SetHandleValue();
@@ -212,9 +208,6 @@ public class CarDriver : MonoBehaviour
 
         else
             setHandleValue = (handleKnob.value - 0.5f) * 2f; //0f ~ 1f
-
-        prevHandleRot = setHandleValue;
-
 
     }
 

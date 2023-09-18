@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CarReturner : MonoBehaviour
 {
-    [SerializeField] Transform baseCampParkingSpot;
+    [SerializeField] Transform parkingPosition;
     LayerMask water;
 
     private void Start()
@@ -13,8 +13,8 @@ public class CarReturner : MonoBehaviour
     }
     public void ReturnToBaseCamp()
     {
-        transform.position = baseCampParkingSpot.position;
-        transform.rotation = baseCampParkingSpot.rotation;
+        transform.position = parkingPosition.position;
+        transform.rotation = parkingPosition.rotation;
     }
 
     private void OnTriggerEnter(Collider other)

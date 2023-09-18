@@ -7,13 +7,13 @@ using UnityEngine.XR.Content.Interaction;
 public class CarDataManager : MonoBehaviour
 {
     GameObject car;
-    float damageTime = 3f;
+    float damageTime = 60f;
     int damageAmount = 5;
     int maxUpgradableSpeed = 55;
 
     public int carCurHP = 100;
     public int carMaxHP = 100;
-    public float carCurMaxSpeed = 20;
+    public float carCurMaxSpeed = 30;
     public string carCurExterior;
     public enum GearState { Parking, Neutral, Drive, Reverse };
     public GearState carCurState;
@@ -32,6 +32,7 @@ public class CarDataManager : MonoBehaviour
     {
         carCurState = GearState.Parking;
         StartCoroutine(FindRoutine());
+
     }
 
     IEnumerator FindRoutine()
@@ -87,6 +88,9 @@ public class CarDataManager : MonoBehaviour
         car.GetComponent<CarDriver>().MaxSpeed = carCurMaxSpeed;
         car.GetComponent<CarReturner>().ReturnToBaseCamp();
         gear.GetComponent<XRSliderLEJ>().value = 0;
+        ChangeExteriorColor("green");
+        ChangeExterialMetalic(true);
+
     }
 
     /// <summary>
@@ -183,10 +187,9 @@ public class CarDataManager : MonoBehaviour
     /// </summary>
     /// <param name="patternName">메터리얼 이름</param>
 
-    public void ChangeExteriorToPattern(string patternName)
+    public void ChangeExteriorPattern(string patternName)
     {
-        Material matToChange = car.GetComponent<CarDecorator>().FindMaterial(patternName);
-        car.GetComponent<CarDecorator>().ChangeMaterial(matToChange);
+        car.GetComponent<CarDecorator>().ChangeMaterial(patternName);
     }
 
     /// <summary>
@@ -195,10 +198,17 @@ public class CarDataManager : MonoBehaviour
     /// <param name="colorName"></param>
     public void ChangeExteriorColor(string colorName)
     {
-        Color colorToChange = car.GetComponent<CarDecorator>().FindColor(colorName);
-        car.GetComponent<CarDecorator>().ChangeColor(colorToChange);
+        car.GetComponent<CarDecorator>().ChangeColor(colorName);
     }
 
+    /// <summary>
+    /// isMetalic이 true면 광택, false면 매트
+    /// </summary>
+    /// <param name="isMetalic"></param>
+    public void ChangeExterialMetalic(bool isMetalic)
+    {
+        car.GetComponent<CarDecorator>().ChangeMetalic(isMetalic);
+    }
 
 
     //안 봐도 됩니다--------------------------------------------------------

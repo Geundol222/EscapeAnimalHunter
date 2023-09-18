@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.Profiling;
 using UnityEngine.SocialPlatforms;
 using Random = UnityEngine.Random;
 
