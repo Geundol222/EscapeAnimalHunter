@@ -26,9 +26,12 @@ public class CarInteractor : MonoBehaviour
         {
             Operator.transform.position = car_Enter_Point.transform.position;
 
-            Quaternion lookRotation = Quaternion.LookRotation(car_Enter_Point.transform.forward);
+            float operatorX = car_Enter_Point.transform.rotation.eulerAngles.x;
+            float operatorZ = car_Enter_Point.transform.rotation.eulerAngles.z;
 
-            Operator.transform.rotation = lookRotation;
+            Vector3 newRotation = new Vector3(operatorX, Operator.transform.rotation.eulerAngles.y, operatorZ);
+
+            Operator.transform.rotation = Quaternion.Euler(newRotation);
         }
     }
 
@@ -47,7 +50,7 @@ public class CarInteractor : MonoBehaviour
         Operator.transform.rotation = Quaternion.Euler(newRotation);
     }
 
-    public void CarInteraction() // 차량에 탑승시 탑승버튼을 눌러도 반응없게 함
+    public void Car_Enter() // 차량에 탑승시 탑승버튼을 눌러도 반응없게 함
     {
         if (!car)   // 탑승상태가 아님
         {
@@ -56,18 +59,14 @@ public class CarInteractor : MonoBehaviour
         }
         else        // 탑승한 상태
         {
-            car = false;
-            BoardingConfirmation();
-            fade_Animator.Play("Fade");
-            Operator.transform.position = exit_Point.transform.position;
-            Operator.transform.rotation = exit_Point.transform.rotation;
+            return;
         }
     }
 
     public void BoardingConfirmation()  // 차량 탑승시 로코모션의 Move와 플레이어의 캐릭터 컨트롤러를 끔
     {
         if (car)    // 끄기(탑승)
-        {            
+        {
             locomotion_Move.SetActive(false);
             xROrigin_CharacterController.enabled = false;
         }
@@ -79,16 +78,20 @@ public class CarInteractor : MonoBehaviour
         }
     }
 
-    //public void CarExit()   // 차에서 내리기 위한 함수
-    //{
-    //    if (car)    // 차에 탄 상태
-    //    {
-            
-    //    }
-    //    else    // 차에 내린상태면 작동안하게
-    //    {
-    //        return;
-    //    }
+    public void CarExit()   // 차에서 내리기 위한 함수
+    {
+        if (car)    // 차에 탄 상태
+        {
+            car = false;
+            BoardingConfirmation();
+            fade_Animator.Play("Fade");
+            Operator.transform.position = exit_Point.transform.position;
+            Operator.transform.rotation = exit_Point.transform.rotation;
+        }
+        else    // 차에 내린상태면 작동안하게
+        {
+            return;
+        }
 
-    //}
+    }
 }
