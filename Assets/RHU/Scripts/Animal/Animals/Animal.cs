@@ -13,8 +13,9 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
     [SerializeField] public AnimalName animalName;
     [SerializeField] public FieldOfView fieldOfView;
     [SerializeField] private Transform footCenter;
-    [SerializeField] private LayerMask GroundLayer;
-
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask waterLayer;
+        
     // 각 노드에서 사용할 변수들
     [NonSerialized] public Animator animator;
     [NonSerialized] public int curHp;
@@ -28,14 +29,15 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
 
     protected BTBase bTBase;
     protected SelectorNode rootNode = new SelectorNode();
+    protected AudioSource audioSource;
 
     protected void Awake()
     {
         gameObject.name = animalName.ToString();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         SetUpBT();
         //StartCoroutine(StepOnGrounRoutine());
-        GameManager.Resource.Destroy(gameObject, 5);
     }
     
     public abstract void SetUpBT();
@@ -70,13 +72,19 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Water"))
+            Destroy(gameObject, 3f);
+    }
+
     IEnumerator StepOnGrounRoutine()
     {
         RaycastHit hitInfo;
 
         while (true)
         {
-            if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 1, GroundLayer))
+            if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 1, groundLayer))
             {
                 Debug.Log(transform.rotation);
 
@@ -120,5 +128,11 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
         transform.GetComponent<Rigidbody>().AddForce(new Vector3(0f, 0f, targetsForward.z * speed * 5f), ForceMode.Impulse);
         yield return new WaitForSeconds(1f);
         animator.applyRootMotion = true;
+    }
+
+    public void PlaySound(AudioClip audioClip)
+    {
+        audioSource.clip = audioClip;
+        audioSource.Play();
     }
 }

@@ -8,14 +8,14 @@ using Random = UnityEngine.Random;
 public class Spawner : MonoBehaviour
 {
     [Header("SpawnData")]
-    [SerializeField] Transform spawnPoint;
-    [SerializeField] Transform focusPoint;                      // 플레이어의 시작 위치
-    [SerializeField] AnimalSpawnArray[] animalSpawnArray;
+    [SerializeField] private Transform spawnPoint;
+    [SerializeField] private Transform focusPoint;                      // 플레이어의 시작 위치
+    [SerializeField] private AnimalSpawnArray[] animalSpawnArray;
+    [SerializeField] private LayerMask groundLayer;
 
     [Header("SpawnRange")]
-    [SerializeField][Range(0, 1000)] int maxRange;              // 플레이어를 기준으로 도넛 모양의 범위에 생성하기위해 maxRange에서 minRange를 제외한 위치에 생성
-    [SerializeField][Range(0, 1000)] int minRange;
-    [SerializeField] LayerMask groundLayer;
+    [SerializeField][Range(0, 1000)] private int maxRange;              // 플레이어를 기준으로 도넛 모양의 범위에 생성하기위해 maxRange에서 minRange를 제외한 위치에 생성
+    [SerializeField][Range(0, 1000)] private int minRange;
 
     private RaycastHit hitInfo;
     private List<GameObject> curExistAnimals = new List<GameObject>();
@@ -25,6 +25,11 @@ public class Spawner : MonoBehaviour
     {
         public AnimalData.AnimalName animalName;                // 지정한 동물
         public int spawnCount;                                  // 생성할 개수
+    }
+
+    private void Awake()
+    {
+        groundLayer = 1 << LayerMask.NameToLayer("Ground");
     }
 
     /// <summary>
@@ -64,7 +69,7 @@ public class Spawner : MonoBehaviour
     private void InstantiateAnimal(string animalName)
     {
         GameObject animal = GameManager.Resource.Instantiate<GameObject>($"Prefabs/Animals/{animalName}",
-            hitInfo.point, Quaternion.Euler(0, Random.Range(-180, 180), 0), true);
+            hitInfo.point, Quaternion.Euler(0, Random.Range(-180, 180), 0), false);
         curExistAnimals.Add(animal);
     }
 
@@ -128,7 +133,7 @@ public class Spawner : MonoBehaviour
                 if (DistanceCheck(curExistAnimals[i]))
                 {
                     yield return StartCoroutine(GroundCheckRoutine());
-                    Debug.Log("동물이 범위 벗어남");
+
                     RenewalCurAnimal(curExistAnimals[i]);
                 }
 
@@ -146,7 +151,7 @@ public class Spawner : MonoBehaviour
     private void RenewalCurAnimal(GameObject animal)
     {
         curExistAnimals.Remove(animal);
-        GameManager.Resource.Destroy(animal);
+        Destroy(animal);
         InstantiateAnimal(animal.name);
     }
 
@@ -167,8 +172,7 @@ public class Spawner : MonoBehaviour
 
     public void OnDiedAnimal(GameObject animal)
     {
-        Debug.Log(animal.name);
-        //RenewalCurAnimal(animal);
+        RenewalCurAnimal(animal);
     }
 
     private void OnDrawGizmosSelected()

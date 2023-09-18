@@ -1001,14 +1001,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 435d3c564271fe34a820f0c86f306423, type: 2}
   animalName: 2
-  footCenter: {fileID: 2050099851584991942}
   fieldOfView: {fileID: 202505615596210071}
-  GroundLayer:
+  footCenter: {fileID: 2050099851584991942}
+  groundLayer:
     serializedVersion: 2
     m_Bits: 256
-  playerLayer:
+  waterLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 16
 --- !u!1 &2471215384402868534
 GameObject:
   m_ObjectHideFlags: 0

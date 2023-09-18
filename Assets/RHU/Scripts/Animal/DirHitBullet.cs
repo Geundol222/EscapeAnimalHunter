@@ -5,7 +5,7 @@ using UnityEngine;
 public class DirHitBullet : MonoBehaviour
 {
     [SerializeField] private Transform footCenter;
-
+    [SerializeField] private LayerMask bulletLayer;
     private Animator animator;
 
     private void Awake()
@@ -17,7 +17,7 @@ public class DirHitBullet : MonoBehaviour
     {
         ContactPoint contactPoint = collision.contacts[0];
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
+        if (bulletLayer.IsContain(collision.gameObject.layer))
         {
             Vector3 hitDir = footCenter.InverseTransformDirection(footCenter.position - contactPoint.point).normalized;
 
