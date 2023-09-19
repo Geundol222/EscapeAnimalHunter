@@ -10,12 +10,12 @@ using static UnityEngine.Rendering.DebugUI;
 public class CarDriver : MonoBehaviour
 {
     
-    [SerializeField] CarInteractor carInteractor;
+    [SerializeField] PlayerCarInteractor playerCarInteractor;
     GameObject player;
     Rigidbody rb;
     PlayerInputDetecter inputDetecter;
     SetGearState gearState;
-    XRKnobLEJ handleKnob;
+    XRKnob handleKnob;
     DetectHandleGrab handleGrab;
     CarDamager damager;
 
@@ -48,6 +48,7 @@ public class CarDriver : MonoBehaviour
         }
     }
 
+    public UnityAction OnNotStepOn;
     bool isAcceling;
     bool isBreaking;
     float setHandleValue;
@@ -63,7 +64,7 @@ public class CarDriver : MonoBehaviour
         damager = GetComponent<CarDamager>();
 
         gearState = gearObj.GetComponent<SetGearState>();
-        handleKnob = handleObj.GetComponent<XRKnobLEJ>();
+        handleKnob = handleObj.GetComponent<XRKnob>();
         handleGrab = handleObj.GetComponent<DetectHandleGrab>();
 
         handleKnob.value = 0.5f;
@@ -86,11 +87,13 @@ public class CarDriver : MonoBehaviour
                 Handling();
             }
 
-            if (isBreaking)
+            else if (isBreaking)
             {
                 UseBreakPedal();
                 Handling();
             }
+
+            
         }
         
         
@@ -116,7 +119,7 @@ public class CarDriver : MonoBehaviour
 
     private void WhichPedalIsUsing()
     {
-        if (carInteractor.car)
+        if (playerCarInteractor.isPlayerTakingCar)
         {
             if (inputDetecter.rightJoyStickYValue > 0 || inputDetecter.leftJoyStickYValue > 0)
             {
@@ -128,7 +131,21 @@ public class CarDriver : MonoBehaviour
                 isAcceling = false;
                 isBreaking = true;
             }
+            else if (inputDetecter.rightJoyStickYValue == 0 || inputDetecter.leftJoyStickYValue == 0)
+            {
+                NotUsingPedal();
+            }
             
+        }
+    }
+
+    private void NotUsingPedal()
+    {
+        if (rb.velocity.magnitude < 0.001f)
+            return;
+        else
+        {
+            CurSpeed = rb.velocity.magnitude;
         }
     }
 
@@ -189,7 +206,7 @@ public class CarDriver : MonoBehaviour
         SetHandleValue();
 
         if (rb.velocity.magnitude > 1f)
-            transform.RotateAround(transform.position, new Vector3(0f, 1f, 0f), -handleRotateSpeed * setHandleValue);
+            transform.RotateAround(transform.position, new Vector3(0f, 1f, 0f), handleRotateSpeed * setHandleValue);
         
     }
 

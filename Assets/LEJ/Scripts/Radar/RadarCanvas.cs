@@ -40,12 +40,14 @@ public class RadarCanvas : MonoBehaviour
     {
         sphereCaster.OnDetectHerbivore += MakePoint;
         sphereCaster.OnDetectCarnivore += MakePoint;
+        sphereCaster.OnReset += ResetCircles;
     }
 
     private void OnDisable()
     {
         sphereCaster.OnDetectHerbivore -= MakePoint;
         sphereCaster.OnDetectCarnivore -= MakePoint;
+        sphereCaster.OnReset -= ResetCircles;
     }
 
     Coroutine returnCircleRoutine;
@@ -60,14 +62,22 @@ public class RadarCanvas : MonoBehaviour
             circles[index].gameObject.GetComponent<Image>().color = Color.green;
 
         returnCircleRoutine = StartCoroutine(ReturnCircle());
+
         index++;
         if (index >= circles.Length)
             index = 0;
     }
 
+    private void ResetCircles()
+    {
+        for (int i = circles.Length - 1; i > -1; i--)
+            circles[i].SetActive(false);
+    }
+
     IEnumerator ReturnCircle()
     {
         yield return new WaitForSeconds(0.002f);
+        
         circles[index].gameObject.SetActive(false);
     }
 

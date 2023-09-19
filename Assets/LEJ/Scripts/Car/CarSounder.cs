@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.XR.Content.Interaction;
 
@@ -12,6 +13,7 @@ public class CarSounder : MonoBehaviour
     XRSliderLEJ slider;
     SetGearState gearState;
     CarDamager damager;
+    CarDriver driver;
 
     List<GameObject> sounds = new List<GameObject>();
 
@@ -20,6 +22,7 @@ public class CarSounder : MonoBehaviour
         slider = gear.GetComponent<XRSliderLEJ>();
         gearState = gear.GetComponent<SetGearState>();
         damager = GetComponent<CarDamager>();
+        driver = GetComponent<CarDriver>();
 
         for (int i = 0; i < soundsObj.transform.childCount; i++)
         {
@@ -32,6 +35,8 @@ public class CarSounder : MonoBehaviour
         slider.OnStartGrab += PlayGearSoundOnce;
         gearState.OnCurGearStateChanged += MakeGearSound;
         damager.OnDie += StopEngineSound;
+        damager.OnDie += StopAccelSound;
+        driver.OnCurSpeedChanged += PlaySound;
     }
 
     private void OnDisable()
@@ -39,12 +44,14 @@ public class CarSounder : MonoBehaviour
         slider.OnStartGrab -= PlayGearSoundOnce;
         gearState.GetComponent<SetGearState>().OnCurGearStateChanged -= MakeGearSound;
         damager.OnDie -= StopEngineSound;
+        damager.OnDie -= StopAccelSound;
+        driver.OnCurSpeedChanged -= PlaySound;
     }
 
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="name">drive, openDoor, closeDoor, gearHandle</param>
+    /// <param name="name">drive, openDoor, closeDoor, gearHandle, accel</param>
     /// <returns></returns>
     private GameObject FindSound(string name)
     {
@@ -72,14 +79,42 @@ public class CarSounder : MonoBehaviour
         }
     }
 
+    private void PlaySound()
+    {
+        if (driver.CurSpeed >= 1f && !FindSound("accel").GetComponent<AudioSource>().isPlaying)
+        {
+            PlayAccelSound();
+            StopEngineSound();
+        }
+        
+        if (driver.CurSpeed < 1f && FindSound("accel").GetComponent<AudioSource>().isPlaying)
+        {
+            StopAccelSound();
+            PlayEngineSound();
+        }
+    }
+
+    private void PlayAccelSound()
+    {
+        if (!FindSound("accel").GetComponent<AudioSource>().isPlaying)
+            FindSound("accel").GetComponent<AudioSource>().Play();
+    }
+    private void StopAccelSound()
+    {
+        if (FindSound("accel").GetComponent<AudioSource>().isPlaying)
+            FindSound("accel").GetComponent<AudioSource>().Stop();
+    }
+
     private void PlayEngineSound()
     {
-        FindSound("drive").GetComponent<AudioSource>().Play();
+        if (!FindSound("engine").GetComponent<AudioSource>().isPlaying)
+            FindSound("engine").GetComponent<AudioSource>().Play();
     }
 
     private void StopEngineSound()
     {
-        FindSound("drive").GetComponent<AudioSource>().Stop();
+        if (FindSound("engine").GetComponent<AudioSource>().isPlaying)
+            FindSound("engine").GetComponent<AudioSource>().Stop();
     }
 
     private void PlayGearSoundOnce()
