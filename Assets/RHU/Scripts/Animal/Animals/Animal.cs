@@ -25,7 +25,6 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
     [NonSerialized] public bool isWary;
     [NonSerialized] public bool isTracking;
     [NonSerialized] public bool isSit;
-    [NonSerialized] public Vector2 bulletDirection;
 
     public UnityEvent onDied;
     protected BTBase bTBase;
@@ -52,13 +51,14 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
         isWary = false;
         isTracking = false;
         isSit = false;
-        bulletDirection = new Vector2();
     }
 
     private void Update()
     {
         if (!isDie)
             bTBase.Update();
+
+        Debug.Log(animator.IsInTransition(0));
     }
 
     private void OnCollisionEnter(Collision collision)
