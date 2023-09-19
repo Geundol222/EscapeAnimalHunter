@@ -16,7 +16,8 @@ public class StartCalling : MonoBehaviour
             colling_Activate[0].SetActive(true);  // Colling_Activate 활성화
             colling_Activate[1].SetActive(true);  // Answer The Phone_Start 활성화
             colling_Activate[2].SetActive(false); // Center Display 비활성화
-            colling_Activate[3].SetActive(false); // Phone_BackGround 비활성화 
+            colling_Activate[3].SetActive(false); // Phone_BackGround 비활성화
+            colling_Activate[6].SetActive(false);
         }
     }
 
@@ -36,6 +37,7 @@ public class StartCalling : MonoBehaviour
         // colling_Activate[3].SetActive(true);  // Phone_BackGround 활성화 
         // colling_Activate[4].SetActive(true);  // Answer The Phone 활성화
         colling_Activate[5].SetActive(true);  // Answer The Phone_Quit 활성화
+        colling_Activate[6].SetActive(true);
     }
 
 

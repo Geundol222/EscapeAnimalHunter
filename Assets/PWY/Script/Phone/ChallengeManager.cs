@@ -11,20 +11,17 @@ public class ChallengeManager: MonoBehaviour
     public int deerCount = 0;
     public int tigerCount = 0;
 
-    public int bearCaptureCount = 0;
-    public int mooseCaptureCount = 0;
-    public int deerCaptureCount = 0;
-    public int tigerCaptureCount = 0;
-
     public int bear_Challenge_Exit;     // 업적이 완료되는 크기
     public int moose_Challenge_Exit;    // 업적이 완료되는 크기
     public int deer_Challenge_Exit;     // 업적이 완료되는 크기
     public int tiger_Challenge_Exit;    // 업적이 완료되는 크기
 
-
     public Dictionary<string, bool> unLockRewardDic {get; private set;}
     public bool startcalling;
-     
+
+    List<GameManager> t1;
+    List<GameObject> dieAnimals = new List<GameObject>();
+
     private void Awake()
     {
         bear_Challenge_Exit = 4;
@@ -56,28 +53,25 @@ public class ChallengeManager: MonoBehaviour
     }
 
     #region 동물 카운팅
-    public void AnimalCount(Animal animal)    // 죽은 곰과 무스만 카운팅됨
+    public void AnimalCount(Animal animal)
     {
         if (animal.name == "Bear")
         {
             bearCount++;
-            bearCaptureCount++;
         }
         if (animal.name == "Moose")
         {
             mooseCount++;
-            mooseCaptureCount++;
         }
         if (animal.name == "Deer")
         {
             deerCount++;
-            deerCaptureCount++;
         }
         if (animal.name == "Tiger")
         {
             tigerCount++;
-            tigerCaptureCount++;
         }
+        dieAnimals.Add(animal.gameObject); 
     }
     #endregion
 
@@ -208,6 +202,16 @@ public class ChallengeManager: MonoBehaviour
             startcalling = false;
         }
         yield return null;
+    }
+    #endregion
+
+    #region 동물 잡아가기
+    public void Capture()
+    {
+        foreach (GameObject animal in dieAnimals)
+        {
+            Destroy(animal);
+        }
     }
     #endregion
 }
