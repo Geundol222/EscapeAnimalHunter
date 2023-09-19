@@ -1,28 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Serialization;
-using Unity.VisualScripting;
-using Unity.XR.CoreUtils;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Animations;
-using UnityEngine.Scripting.APIUpdating;
 
 public class CarInteractor : MonoBehaviour
 {
 
-    [SerializeField] GameObject car_Enter_Point;    // ¿îÀü¼®ÀÇ À§Ä¡
-    [SerializeField] GameObject Operator;           // ÇÃ·¹ÀÌ¾î
-    [SerializeField] GameObject locomotion_Move;    // ÇÃ·¹ÀÌ¾îÀÇ ·ÎÄÚ¸ğ¼Ç¿¡¼­ Move¿ÀºêÁ§Æ®
-    [SerializeField] GameObject exit_Point;         // ³»¸®´Â °÷ÀÇ À§Ä¡
-    [SerializeField] CharacterController xROrigin_CharacterController;  // ÇÃ·¹ÀÌ¾îÀÇ Ä³¸¯ÅÍ ÄÁÆ®·Ñ·¯
-    [SerializeField] Animator fade_Animator;        // Å¸°í ³»¸±‹šÀÇ ÆäÀÌµå ¾Ö´Ï¸ŞÀÌ¼Ç xr ¿À¸®ÁøÀÇ Ä«¸Ş¶ó ÇÏÀ§ÀÚ½ÄÀ¸·Î ÀÖÀ½
+    [SerializeField] GameObject car_Enter_Point;    // ìš´ì „ì„ì˜ ìœ„ì¹˜
+    [SerializeField] GameObject Operator;           // í”Œë ˆì´ì–´
+    [SerializeField] GameObject locomotion_Move;    // í”Œë ˆì´ì–´ì˜ ë¡œì½”ëª¨ì…˜ì—ì„œ Moveì˜¤ë¸Œì íŠ¸
+    [SerializeField] GameObject exit_Point;         // ë‚´ë¦¬ëŠ” ê³³ì˜ ìœ„ì¹˜
+    [SerializeField] CharacterController xROrigin_CharacterController;  // í”Œë ˆì´ì–´ì˜ ìºë¦­í„° ì»¨íŠ¸ë¡¤ëŸ¬
+    [SerializeField] Animator fade_Animator;        // íƒ€ê³  ë‚´ë¦´Â‹Âšì˜ í˜ì´ë“œ ì• ë‹ˆë©”ì´ì…˜ xr ì˜¤ë¦¬ì§„ì˜ ì¹´ë©”ë¼ í•˜ìœ„ìì‹ìœ¼ë¡œ ìˆìŒ
 
-    public bool isInCar;                                // Å¾½Â À¯¹«
+    public bool isInCar;                                // íƒ‘ìŠ¹ ìœ ë¬´
 
     private void Update()
     {
-        if (isInCar)    // ¿îÀü¼®ÀÇ À§Ä¡¿Í È¸ÀüÀ» µ¿±âÈ­ÇÔ
+        if (isInCar)    // ìš´ì „ì„ì˜ ìœ„ì¹˜ì™€ íšŒì „ì„ ë™ê¸°í™”í•¨
         {
             Operator.transform.position = car_Enter_Point.transform.position;
 
@@ -40,21 +32,21 @@ public class CarInteractor : MonoBehaviour
     }
 
 
-    public void Car_Front_View() // Å¾½Â½Ã Â÷ ¾ÕÀ» ¹Ù¶óº½
+    public void Car_Front_View() // íƒ‘ìŠ¹ì‹œ ì°¨ ì•ì„ ë°”ë¼ë´„
     {
         float operatorY = car_Enter_Point.transform.rotation.eulerAngles.y;
         Vector3 newRotation = new Vector3(Operator.transform.rotation.eulerAngles.x, operatorY, Operator.transform.rotation.z);
         Operator.transform.rotation = Quaternion.Euler(newRotation);
     }
 
-    public void Car_Interactor() // Â÷·®¿¡ Å¾½Â½Ã Å¾½Â¹öÆ°À» ´­·¯µµ ¹İÀÀ¾ø°Ô ÇÔ
+    public void Car_Interactor() // ì°¨ëŸ‰ì— íƒ‘ìŠ¹ì‹œ íƒ‘ìŠ¹ë²„íŠ¼ì„ ëˆŒëŸ¬ë„ ë°˜ì‘ì—†ê²Œ í•¨
     {
-        if (!isInCar)   // Å¾½Â»óÅÂ°¡ ¾Æ´Ô
+        if (!isInCar)   // íƒ‘ìŠ¹ìƒíƒœê°€ ì•„ë‹˜
         {
             isInCar = true;
             CarCoordinate();
         }
-        else        // Å¾½ÂÇÑ »óÅÂ
+        else        // íƒ‘ìŠ¹í•œ ìƒíƒœ
         {
             isInCar = false;
             BoardingConfirmation();
@@ -64,13 +56,13 @@ public class CarInteractor : MonoBehaviour
         }
     }
 
-    public void BoardingConfirmation()  // Â÷·® Å¾½Â½Ã ·ÎÄÚ¸ğ¼ÇÀÇ Move¿Í ÇÃ·¹ÀÌ¾îÀÇ Ä³¸¯ÅÍ ÄÁÆ®·Ñ·¯¸¦ ²û
+    public void BoardingConfirmation()  // ì°¨ëŸ‰ íƒ‘ìŠ¹ì‹œ ë¡œì½”ëª¨ì…˜ì˜ Moveì™€ í”Œë ˆì´ì–´ì˜ ìºë¦­í„° ì»¨íŠ¸ë¡¤ëŸ¬ë¥¼ ë”
     {
-        if (isInCar)    // ²ô±â(Å¾½Â)
+        if (isInCar)    // ë„ê¸°(íƒ‘ìŠ¹)
         {
             xROrigin_CharacterController.enabled = false;
         }
-        else        // ÄÑ±â(³»¸²)
+        else        // ì¼œê¸°(ë‚´ë¦¼)
         {
             xROrigin_CharacterController.enabled = true;
         }

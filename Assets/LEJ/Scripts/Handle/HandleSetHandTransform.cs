@@ -45,7 +45,7 @@ public class HandleSetHandTransform : MonoBehaviour
             r_handleModel.transform.SetParent(r_transform.transform);
             r_handleModel.transform.localPosition = Vector3.zero;
             r_handleModel.transform.localRotation = Quaternion.identity;
-            SetActiveFalse(false);
+            SetActiveFalse(true);
         }
         else
         {

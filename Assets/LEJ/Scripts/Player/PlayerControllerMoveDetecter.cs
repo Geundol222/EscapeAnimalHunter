@@ -10,7 +10,7 @@ public class PlayerControllerMoveDetecter : MonoBehaviour
     [SerializeField] GameObject leftController;
     [SerializeField] GameObject handle;
 
-    XRKnobLEJ handleKnob;
+    XRKnob handleKnob;
     DetectHandleGrab handleGrab;
     
     public UnityAction<bool> OnRotationChanged; //true : rightController, false : leftController
@@ -23,7 +23,7 @@ public class PlayerControllerMoveDetecter : MonoBehaviour
 
     private void Awake()
     {
-        handleKnob = handle.GetComponent<XRKnobLEJ>();
+        handleKnob = handle.GetComponent<XRKnob>();
         handleGrab = handle.GetComponent<DetectHandleGrab>();
     }
 

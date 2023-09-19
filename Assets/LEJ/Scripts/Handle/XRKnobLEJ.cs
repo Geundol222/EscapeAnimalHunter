@@ -25,7 +25,7 @@ namespace UnityEngine.XR.Content.Interaction
 
         [SerializeField] PlayerControllerMoveDetecter moveDetecter;
 
-        
+
         //=====================================================================
 
 
@@ -217,7 +217,7 @@ namespace UnityEngine.XR.Content.Interaction
             SetValue(m_Value);
             SetKnobRotation(ValueToRotation());
 
-           
+
         }
 
         protected override void OnEnable()
@@ -285,7 +285,7 @@ namespace UnityEngine.XR.Content.Interaction
             if (enteredInteractors.Count <= 0)
                 return;
 
-            
+
             // Are we in position offset or direction rotation mode?
             var interactorTransform = authorInteractor.GetAttachTransform(this);
 
@@ -328,9 +328,9 @@ namespace UnityEngine.XR.Content.Interaction
                 m_PositionDriven = false;
 
             // If it's not a fresh check, then we weight the local Y up or down to keep it from flickering back and forth at boundaries
-            
-            
-            
+
+
+
             if (!freshCheck)
             {
                 if (!m_UpVectorDriven)
@@ -355,7 +355,7 @@ namespace UnityEngine.XR.Content.Interaction
                     m_UpVectorDriven = false;
                 }
             }
-            
+
 
 
             // Get angle from position
@@ -389,7 +389,7 @@ namespace UnityEngine.XR.Content.Interaction
             }
             else
                 return;
-            
+
         }
 
         void SetKnobRotation(float angle)
