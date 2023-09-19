@@ -2,22 +2,22 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class StartColling : MonoBehaviour
+public class StartCalling : MonoBehaviour
 {
     [SerializeField] AudioSource startAudio;
     [SerializeField] List<GameObject> colling_Activate;
 
-
-    void Start()
+    private void Awake()
     {
-        //startAudio.Play(); // 진동소리 키기
-        //startAudio.loop = true; // 진동소리 무한반복
-        StopAudio();
-        //Invoke("StartAudio", 20);
-        colling_Activate[0].SetActive(true);  // Colling_Activate 활성화
-        colling_Activate[1].SetActive(true);  // Answer The Phone_Start 활성화
-        colling_Activate[2].SetActive(false); // Center Display 비활성화
-        colling_Activate[3].SetActive(false); // Phone_BackGround 비활성화 
+        if (DataManager.Challenge.startcalling)
+        {
+            startAudio.Play();
+            startAudio.loop = true;
+            colling_Activate[0].SetActive(true);  // Colling_Activate 활성화
+            colling_Activate[1].SetActive(true);  // Answer The Phone_Start 활성화
+            colling_Activate[2].SetActive(false); // Center Display 비활성화
+            colling_Activate[3].SetActive(false); // Phone_BackGround 비활성화 
+        }
     }
 
     private void StopAudio()
