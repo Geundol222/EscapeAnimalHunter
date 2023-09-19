@@ -75,7 +75,6 @@ public class CarUpgradeCanvas : MonoBehaviour
             DataManager.Car.ChangeExteriorPattern(exteriorName[materialIndex]);
         else
             DataManager.Car.ChangeExteriorColor(exteriorName[materialIndex]);
-
     }
 
     private void IncreaseCost()
@@ -309,6 +308,13 @@ public class CarUpgradeCanvas : MonoBehaviour
             for (int i = 0; i < DataManager.Upgrade.carSpeedIndex; i++)
             {
                 speedImages[i].color = Color.black;
+            }
+
+            materialIndex = 0;
+
+            for (int i = 0; i < upgradeMatObj.transform.childCount; i++)
+            {
+                upgradeMatObj.transform.GetChild(i).GetComponent<Renderer>().material.name = exteriorName[materialIndex];
             }
         }
         

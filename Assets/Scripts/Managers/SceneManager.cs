@@ -5,6 +5,7 @@ using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public class SceneManager : MonoBehaviour
 {
+    private Camera mainCam;
     private LoadingUI loadingUI;
     private int nextIndex = 0;
 
@@ -20,9 +21,9 @@ public class SceneManager : MonoBehaviour
         }
     }
 
-    private void Awake()
+    private void Start()
     {
-        LoadingUI ui = GameManager.Resource.Load<LoadingUI>("UI/LoadingSceneUI");
+        LoadingUI ui = GameManager.Resource.Load<LoadingUI>("UI/LoadingSphere");
         loadingUI = Instantiate(ui);
         loadingUI.transform.SetParent(transform, false);
     }
@@ -45,8 +46,12 @@ public class SceneManager : MonoBehaviour
 
     IEnumerator LoadingRoutine(int index)
     {
-        loadingUI.FadeOut();
-        yield return new WaitForSeconds(1f);
+        mainCam = Camera.main;
+
+        loadingUI.transform.position = mainCam.transform.position;
+        loadingUI.transform.rotation = mainCam.transform.rotation;
+
+        yield return new WaitUntil(() => { return loadingUI.FadeOut(); });
         GameManager.Sound.Clear();
         yield return new WaitUntil(() => { return GameManager.Sound.IsMuted(); });
         Time.timeScale = 0f;
@@ -55,7 +60,6 @@ public class SceneManager : MonoBehaviour
 
         while (!oper.isDone)
         {
-            loadingUI.SetProgress(Mathf.Lerp(0f, 0.5f, oper.progress));
             yield return null;
         }
 
@@ -66,12 +70,11 @@ public class SceneManager : MonoBehaviour
         CurScene.LoadAsync();
         while (CurScene.progress < 1f)
         {
-            loadingUI.SetProgress(Mathf.Lerp(0.5f, 1.0f, CurScene.progress));
             yield return null;
         }
 
         Time.timeScale = 1f;
-        loadingUI.FadeIn();
+        yield return new WaitUntil(() => { return loadingUI.FadeIn(); });
         yield return new WaitWhile(() => { return GameManager.Sound.IsMuted(); });
     }
 }
