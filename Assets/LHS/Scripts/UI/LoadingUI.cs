@@ -17,18 +17,14 @@ public class LoadingUI : MonoBehaviour
         loadingMat = GetComponent<Renderer>().material;
     }
 
-    public bool FadeOut()
+    public void FadeOut()
     {
         StartCoroutine(TransparentRoutine(0f, 1f));
-
-        return loadingMat.color.a >= 0.9f;
     }
 
-    public bool FadeIn()
+    public void FadeIn()
     {
         StartCoroutine(TransparentRoutine(1f, 0f));
-
-        return loadingMat.color.a <= 0.1f;
     }
 
     IEnumerator TransparentRoutine(float first, float second)
@@ -37,7 +33,7 @@ public class LoadingUI : MonoBehaviour
 
         while (lerpTime < fadeduration)
         {
-            lerpTime += Time.deltaTime;
+            lerpTime += Time.deltaTime * 3f;
 
             Color color = loadingMat.color;
             color.a = Mathf.Lerp(first, second, lerpTime / fadeduration);

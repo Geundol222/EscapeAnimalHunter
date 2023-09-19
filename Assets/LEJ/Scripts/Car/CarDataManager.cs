@@ -97,7 +97,7 @@ public class CarDataManager : MonoBehaviour
         car.GetComponent<CarDriver>().MaxSpeed = carCurMaxSpeed;
         car.GetComponent<CarReturner>().ReturnToBaseCamp();
         gear.GetComponent<XRSliderLEJ>().value = 0;
-        ChangeExteriorColor("green");
+        ChangeExteriorColor("Green");
         ChangeExterialMetalic(true);
 
     }
@@ -146,6 +146,11 @@ public class CarDataManager : MonoBehaviour
             canRepair = false;
         else
             canRepair = true;
+    }
+
+    public void PlusMaxHP(int value)
+    {
+        car.GetComponent<CarDamager>().MaxHp += value;
     }
 
     public void PlusHP(int value)
