@@ -57,8 +57,6 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
     {
         if (!isDie)
             bTBase.Update();
-
-        Debug.Log(animator.IsInTransition(0));
     }
 
     private void OnCollisionEnter(Collision collision)

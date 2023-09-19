@@ -12,13 +12,14 @@ public class Spawner : MonoBehaviour
     [SerializeField] private Transform focusPoint;                      // 플레이어의 시작 위치
     [SerializeField] private AnimalSpawnArray[] animalSpawnArray;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private SpawnManager spawnManager;
 
     [Header("SpawnRange")]
     [SerializeField][Range(0, 1000)] private int maxRange;              // 플레이어를 기준으로 도넛 모양의 범위에 생성하기위해 maxRange에서 minRange를 제외한 위치에 생성
     [SerializeField][Range(0, 1000)] private int minRange;
 
     private RaycastHit hitInfo;
-    private List<GameObject> curExistAnimals = new List<GameObject>();
+    //private List<GameObject> curExistAnimals = new List<GameObject>();
 
     [Serializable]
     public class AnimalSpawnArray
@@ -70,7 +71,9 @@ public class Spawner : MonoBehaviour
     {
         GameObject animal = GameManager.Resource.Instantiate<GameObject>($"Prefabs/Animals/{animalName}",
             hitInfo.point, Quaternion.Euler(0, Random.Range(-180, 180), 0), false);
-        curExistAnimals.Add(animal);
+        //curExistAnimals.Add(animal);
+        spawnManager.AddExistAnimal(animal);
+        
     }
 
     /// <summary>
@@ -128,13 +131,14 @@ public class Spawner : MonoBehaviour
 
         while (true)
         {
-            for (int i = 0; i < curExistAnimals.Count; i++)         // foreach쓰면 InvalidOperationException 발생
+            //for (int i = 0; i < curExistAnimals.Count; i++)         // foreach쓰면 InvalidOperationException 발생
+            for (int i = 0; i < spawnManager.CurExistAnimals.Count; i++)
             {
-                if (DistanceCheck(curExistAnimals[i]))
+                if (DistanceCheck(spawnManager.CurExistAnimals[i]))
                 {
                     yield return StartCoroutine(GroundCheckRoutine());
 
-                    RenewalCurAnimal(curExistAnimals[i]);
+                    RenewalCurAnimal(spawnManager.CurExistAnimals[i]);
                 }
 
                 yield return new WaitForSeconds(1f);
@@ -150,7 +154,7 @@ public class Spawner : MonoBehaviour
     /// <param name="animal">재생성할 동물</param>
     private void RenewalCurAnimal(GameObject animal)
     {
-        curExistAnimals.Remove(animal);
+        spawnManager.RemoveExistAnimal(animal);
         Destroy(animal);
         InstantiateAnimal(animal.name);
     }
