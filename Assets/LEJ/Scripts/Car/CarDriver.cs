@@ -95,17 +95,22 @@ public class CarDriver : MonoBehaviour
 
             
         }
-        
-        
-        if (!handleGrab.isRightGrip && !handleGrab.isLeftGrip && handleRotatePivotObj.transform.localRotation.y > 0.01f || handleRotatePivotObj.transform.localRotation.y < -0.01f)
+    }
+
+    private void Update()
+    {
+        if (handleGrab.isRightGrip || handleGrab.isLeftGrip)
+            handleKnob.changeAmount = handleKnob.handleChangeAmount;
+
+        if (!handleGrab.isRightGrip && !handleGrab.isLeftGrip)
         {
+            handleKnob.changeAmount = 180f;
+            handleKnob.m_MaxAngle = 180f;
+            handleKnob.m_MinAngle = -180f;
+
             handleKnob.value = Mathf.Lerp(handleKnob.value, 0.5f, backToZeroSpeed);
-            Debug.Log(handleRotatePivotObj.transform.localRotation.y * Time.deltaTime);
-            handleRotatePivotObj.transform.localRotation = Quaternion.Euler(0f, handleRotatePivotObj.transform.localRotation.y - handleRotatePivotObj.transform.localRotation.y * Time.deltaTime, 0f);
+            //handleRotatePivotObj.transform.localRotation = Quaternion.Euler(0f, Mathf.Lerp(handleRotatePivotObj.transform.localRotation.y, 0f, 1f), 0f);
         }
-
-
-
     }
 
     private void OnEnable()

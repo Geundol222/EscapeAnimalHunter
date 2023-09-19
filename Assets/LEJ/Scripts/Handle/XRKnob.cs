@@ -118,11 +118,11 @@ namespace UnityEngine.XR.Content.Interaction
 
         [SerializeField]
         [Tooltip("Rotation of the knob at value '1'")]
-        float m_MaxAngle = 180.0f;
+        public float m_MaxAngle = 180.0f;
 
         [SerializeField]
         [Tooltip("Rotation of the knob at value '0'")]
-        float m_MinAngle = -180.0f;
+        public float m_MinAngle = -180.0f;
 
         [SerializeField]
         [Tooltip("Angle increments to support, if greater than '0'")]
@@ -384,7 +384,7 @@ namespace UnityEngine.XR.Content.Interaction
             SetKnobRotation(knobRotation);
 
             // Reverse to get value
-            var knobValue = (knobRotation - m_MinAngle) / (m_MaxAngle - m_MinAngle);
+            var knobValue = (knobRotation - -180f) / (180f - -180f);
             SetValue(knobValue);
         }
 
