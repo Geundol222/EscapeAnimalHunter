@@ -95,12 +95,21 @@ public class CarDriver : MonoBehaviour
 
             
         }
-        
-        
+    }
+
+    private void Update()
+    {
+        if (handleGrab.isRightGrip || handleGrab.isLeftGrip)
+            handleKnob.changeAmount = handleKnob.handleChangeAmount;
+
         if (!handleGrab.isRightGrip && !handleGrab.isLeftGrip)
+        {
+            handleKnob.changeAmount = 180f;
+            handleKnob.m_MaxAngle = 180f;
+            handleKnob.m_MinAngle = -180f;
+
             handleKnob.value = Mathf.Lerp(handleKnob.value, 0.5f, backToZeroSpeed);
-
-
+        }
     }
 
     private void OnEnable()

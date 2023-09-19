@@ -109,6 +109,7 @@ public class CarDamager : MonoBehaviour, IHittable
     {
         if (curHp <= 0)
         {
+            GameManager.Scene.LoadScene(1);
             returner.ReturnToBaseCamp();
             OnDie?.Invoke();
         }

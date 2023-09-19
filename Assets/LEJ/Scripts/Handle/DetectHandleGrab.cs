@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Content.Interaction;
 
 public class DetectHandleGrab : MonoBehaviour
 {
@@ -12,80 +13,68 @@ public class DetectHandleGrab : MonoBehaviour
     [SerializeField] private GameObject rightHandleHand;
     [SerializeField] private GameObject leftHandleHand;
 
-    private bool isRightAttach;
-    private bool isLeftAttach;
-
     public bool isRightGrip;
     public bool isLeftGrip;
 
-
     private PlayerInputDetecter playerInput;
-
+    XRKnob knob;
 
 
     private void Awake()
     {
+        knob = GetComponent<XRKnob>();
         playerInput = GameObject.FindWithTag("Player").GetComponent<PlayerInputDetecter>();
         
         rightControllerModel.SetActive(false);
         leftControllerModel.SetActive(false);
+
+        rightControllerModel.SetActive(true);
+        leftControllerModel.SetActive(true);
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (isRightAttach && playerInput.isRightGripPressed)
-            isRightGrip = true;
+        knob.OnStartGrab += SetActiveTrue;
+        knob.OnExitGrab += SetActiveFalse;
+    }
 
+    private void OnDisable()
+    {
+        knob.OnStartGrab -= SetActiveTrue;
+        knob.OnExitGrab -= SetActiveFalse;
+    }
 
-        if (isLeftAttach && playerInput.isLeftGripPressed)
-            isLeftGrip = true;
-
-        if (isRightGrip)
+    private void SetActiveTrue(bool isRight)
+    {
+        if (isRight)
         {
             rightControllerModel.SetActive(false);
             rightHandleHand.SetActive(true);
-
+            isRightGrip = true;
         }
-
-        if (!isRightGrip)
-        {
-            rightControllerModel.SetActive(true);
-            rightHandleHand.SetActive(false);
-
-
-        }
-
-        if (isLeftGrip)
+        else
         {
             leftControllerModel.SetActive(false);
             leftHandleHand.SetActive(true);
+            isLeftGrip = true;
         }
-        if (!isLeftGrip)
-        {
 
+    }
+
+    private void SetActiveFalse(bool isRight)
+    {
+        if (isRight)
+        {
+            rightControllerModel.SetActive(true);
+            rightHandleHand.SetActive(false);
+            isRightGrip = false;
+        }
+        else
+        {
             leftControllerModel.SetActive(true);
             leftHandleHand.SetActive(false);
+            isLeftGrip = false;
         }
-        
-    }
 
-   
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "RightController")
-            isRightAttach = true;
-
-        if (other.tag == "LeftController")
-            isLeftAttach = true;
-
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "RightController")
-            isRightAttach = false;
-        if (other.tag == "LeftController")
-            isLeftAttach = false;
     }
 }

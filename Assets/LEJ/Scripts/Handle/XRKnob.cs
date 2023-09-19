@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -13,6 +14,12 @@ namespace UnityEngine.XR.Content.Interaction
         public List<IXRSelectInteractor> enteredInteractors = new List<IXRSelectInteractor>();
         IXRSelectInteractor authorInteractor;
 
+        [SerializeField] public float handleChangeAmount = 0.1f;
+        public float changeAmount = 0.1f;
+
+        public UnityAction<bool> OnStartGrab; //right controller == true;
+        public UnityAction<bool> OnExitGrab;
+
         float curValue;
         float prevValue;
         float knobRotation;
@@ -24,7 +31,7 @@ namespace UnityEngine.XR.Content.Interaction
         //============================================================
 
 
-        const float k_ModeSwitchDeadZone = 0.000001f; // Prevents rapid switching between the different rotation tracking modes
+        const float k_ModeSwitchDeadZone = 0.1f; // Prevents rapid switching between the different rotation tracking modes
 
         /// <summary>
         /// Helper class used to track rotations that can go beyond 180 degrees while minimizing accumulation error
@@ -111,11 +118,11 @@ namespace UnityEngine.XR.Content.Interaction
 
         [SerializeField]
         [Tooltip("Rotation of the knob at value '1'")]
-        float m_MaxAngle = 90.0f;
+        public float m_MaxAngle = 180.0f;
 
         [SerializeField]
         [Tooltip("Rotation of the knob at value '0'")]
-        float m_MinAngle = -90.0f;
+        public float m_MinAngle = -180.0f;
 
         [SerializeField]
         [Tooltip("Angle increments to support, if greater than '0'")]
@@ -232,6 +239,11 @@ namespace UnityEngine.XR.Content.Interaction
             enteredInteractors.Add(args.interactorObject);
             authorInteractor = enteredInteractors[enteredInteractors.Count - 1];
 
+            if (authorInteractor.transform.gameObject.tag == "RightController")
+                OnStartGrab?.Invoke(true);
+            else
+                OnStartGrab?.Invoke(false);
+
             m_PositionAngles.Reset();
             m_UpVectorAngles.Reset();
             m_ForwardVectorAngles.Reset();
@@ -239,11 +251,15 @@ namespace UnityEngine.XR.Content.Interaction
             UpdateBaseKnobRotation();
             UpdateRotation(true);
 
-
         }
 
         void EndGrab(SelectExitEventArgs args)
         {
+            if (args.interactorObject.transform.gameObject.tag == "RightController")
+                OnExitGrab?.Invoke(true);
+            else
+                OnExitGrab?.Invoke(false);
+
             enteredInteractors.Remove(args.interactorObject);
             if (enteredInteractors.Count != 0)
             {
@@ -252,6 +268,7 @@ namespace UnityEngine.XR.Content.Interaction
                     authorInteractor = enteredInteractors[enteredInteractors.Count - 1];
                 }
             }
+
         }
 
         public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
@@ -267,6 +284,7 @@ namespace UnityEngine.XR.Content.Interaction
             }
         }
 
+        float prevAngle;
         void UpdateRotation(bool freshCheck = false)
         {
             // Are we in position offset or direction rotation mode?
@@ -345,6 +363,20 @@ namespace UnityEngine.XR.Content.Interaction
             // Apply offset to base knob rotation to get new knob rotation
             var knobRotation = m_BaseKnobRotation - ((m_UpVectorAngles.totalOffset + m_ForwardVectorAngles.totalOffset) * m_TwistSensitivity) - m_PositionAngles.totalOffset;
 
+            m_MinAngle = prevAngle - changeAmount;
+            m_MaxAngle = prevAngle + changeAmount;
+
+            if (m_MaxAngle > 179f)
+            {
+                m_MinAngle = 180f - changeAmount * 2;
+                m_MaxAngle = 180f;
+            }
+            if (m_MinAngle < -179f)
+            {
+                m_MinAngle = -180f;
+                m_MaxAngle = -180f + changeAmount * 2f;
+            }
+
             // Clamp to range
             if (m_ClampedMotion)
                 knobRotation = Mathf.Clamp(knobRotation, m_MinAngle, m_MaxAngle);
@@ -352,9 +384,10 @@ namespace UnityEngine.XR.Content.Interaction
             SetKnobRotation(knobRotation);
 
             // Reverse to get value
-            var knobValue = (knobRotation - m_MinAngle) / (m_MaxAngle - m_MinAngle);
+            var knobValue = (knobRotation - -180f) / (180f - -180f);
             SetValue(knobValue);
         }
+
 
         void SetKnobRotation(float angle)
         {
@@ -367,6 +400,7 @@ namespace UnityEngine.XR.Content.Interaction
             if (m_Handle != null)
                 m_Handle.localEulerAngles = new Vector3(0.0f, angle, 0.0f);
 
+            prevAngle = angle;
         }
 
         void SetValue(float value)
