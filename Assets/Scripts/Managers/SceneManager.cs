@@ -51,7 +51,7 @@ public class SceneManager : MonoBehaviour
         loadingUI.transform.position = mainCam.transform.position;
         loadingUI.transform.rotation = mainCam.transform.rotation;
 
-        yield return new WaitUntil(() => { return loadingUI.FadeOut(); });
+        loadingUI.FadeOut();
         GameManager.Sound.Clear();
         yield return new WaitUntil(() => { return GameManager.Sound.IsMuted(); });
         Time.timeScale = 0f;
@@ -74,7 +74,7 @@ public class SceneManager : MonoBehaviour
         }
 
         Time.timeScale = 1f;
-        yield return new WaitUntil(() => { return loadingUI.FadeIn(); });
+        loadingUI.FadeIn();
         yield return new WaitWhile(() => { return GameManager.Sound.IsMuted(); });
     }
 }

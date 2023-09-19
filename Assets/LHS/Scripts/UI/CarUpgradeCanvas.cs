@@ -31,8 +31,11 @@ public class CarUpgradeCanvas : MonoBehaviour
     int confirmDuraIndex;
     int confirmSpeedIndex;
     int materialIndex;
+    int confirmMatIndex;
 
     bool completeUpgrade;
+
+    string defaultMat = "Green";
 
     private void Awake()
     {
@@ -201,6 +204,8 @@ public class CarUpgradeCanvas : MonoBehaviour
             confirmDuraIndex = DataManager.Upgrade.durabilityIndex;
             confirmSpeedIndex = DataManager.Upgrade.carSpeedIndex;
 
+            confirmMatIndex = materialIndex;
+
             playerMoneyText.text = GameManager.Data.Money.ToString();
 
             completeUpgrade = true;
@@ -260,6 +265,7 @@ public class CarUpgradeCanvas : MonoBehaviour
         DataManager.Upgrade.applyCost = 0;
         costText.text = DataManager.Upgrade.applyCost.ToString();
 
+        materialIndex = 0;
         speedPlus = 0;
         duraPlus = 0;
 
@@ -297,20 +303,31 @@ public class CarUpgradeCanvas : MonoBehaviour
                     speedImages[i].color = Color.black;
                 }
             }
+
+            if (confirmMatIndex < 5)
+                DataManager.Car.ChangeExteriorPattern(exteriorName[confirmMatIndex]);
+            else
+                DataManager.Car.ChangeExteriorColor(exteriorName[confirmMatIndex]);
         }
         else
         {
-            for (int i = 1; i < DataManager.Upgrade.durabilityIndex; i++)
+            for (int i = 1; i < DataManager.Upgrade.durabilityIndex + 1; i++)
             {
                 durabilityImages[i].color = Color.black;
             }
 
-            for (int i = 0; i < DataManager.Upgrade.carSpeedIndex; i++)
+            for (int i = 0; i < DataManager.Upgrade.carSpeedIndex + 1; i++)
             {
                 speedImages[i].color = Color.black;
             }
 
-            materialIndex = 0;
+            DataManager.Upgrade.durabilityIndex = confirmDuraIndex;
+            DataManager.Upgrade.carSpeedIndex = confirmSpeedIndex;
+
+            if (confirmMatIndex < 5)
+                DataManager.Car.ChangeExteriorPattern(exteriorName[confirmMatIndex]);
+            else
+                DataManager.Car.ChangeExteriorColor(exteriorName[confirmMatIndex]);
 
             for (int i = 0; i < upgradeMatObj.transform.childCount; i++)
             {

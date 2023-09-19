@@ -233,15 +233,19 @@ public class BulletUpgradeCanvas : MonoBehaviour
         }
         else
         {
-            for (int i = 1; i < DataManager.Upgrade.durabilityIndex; i++)
+            for (int i = 1; i < DataManager.Upgrade.damageIndex + 1; i++)
             {
                 damageImages[i].color = Color.black;
             }
 
-            for (int i = 0; i < DataManager.Upgrade.bulletSpeedIndex; i++)
+            for (int i = 0; i < DataManager.Upgrade.bulletSpeedIndex + 1; i++)
             {
                 speedImages[i].color = Color.black;
             }
+
+            DataManager.Upgrade.damageIndex = confirmDamageIndex;
+            DataManager.Upgrade.bulletSpeedIndex = confirmSpeedIndex;
+
         }
 
         if (bulletObject != null)
