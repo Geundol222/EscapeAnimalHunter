@@ -17,10 +17,10 @@ public class Account : MonoBehaviour
         my_Money_Text.text = $"{GameManager.Data.Money.ToString()}";
         //StartCoroutine(AccountBalance());
     }
-
+    // 터치 이벤트 함수
     public void GetMoney()
     {
-        collingMoney = true ;
+        collingMoney = true;
     }
 
     private void Update()
