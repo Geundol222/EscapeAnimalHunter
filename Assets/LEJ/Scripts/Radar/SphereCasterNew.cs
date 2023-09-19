@@ -12,14 +12,18 @@ public class SphereCasterNew : MonoBehaviour
 
     float maxDistance = 0.1f;
     public float curRadius;
-    int layerMaskForCarnivore;
-    int layerMaskForHerbivore;
+    int radarLayer;
+    int carnivoreLayer;
+    int harbivoreLayer;
     private void Start()
     {
-        layerMaskForCarnivore = 1 << LayerMask.NameToLayer("Carnivore");
-        layerMaskForHerbivore = 1 << LayerMask.NameToLayer("Herbivore");
+        radarLayer = 1 << LayerMask.NameToLayer("Radar");
+        carnivoreLayer = 1 << LayerMask.NameToLayer("Carnivore");
+        harbivoreLayer = 1 << LayerMask.NameToLayer("Harbivore");
         curRadius = radiusMax;
     }
+
+        RaycastHit[] hits;
 
     private void Update()
     {
@@ -28,18 +32,17 @@ public class SphereCasterNew : MonoBehaviour
         if (curRadius > radiusMax)
             curRadius = 0;
 
-        RaycastHit[] hits;
-        hits = Physics.SphereCastAll(transform.position, curRadius, transform.forward, maxDistance, layerMaskForHerbivore);
-
-        for (int i = 0; i < hits.Length; i++)
-            OnDetectHerbivore?.Invoke(hits[i].transform, false);
-
-        hits = Physics.SphereCastAll(transform.position, curRadius, transform.forward, maxDistance, layerMaskForCarnivore);
+        hits = Physics.SphereCastAll(transform.position, curRadius, transform.forward, maxDistance, radarLayer);
 
         for (int i = 0; i < hits.Length; i++)
         {
-            OnDetectCarnivore?.Invoke(hits[i].transform, true);
+            if (hits[i].collider.gameObject.transform.parent.gameObject.layer == 11)
+                OnDetectHerbivore?.Invoke(hits[i].collider.transform, false);
+
+            if (hits[i].collider.gameObject.transform.parent.gameObject.layer == 10)
+                OnDetectCarnivore?.Invoke(hits[i].collider.transform, true);
         }
+
     }
 
     private void OnDrawGizmos()

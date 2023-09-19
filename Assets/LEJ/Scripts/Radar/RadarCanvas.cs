@@ -60,6 +60,7 @@ public class RadarCanvas : MonoBehaviour
             circles[index].gameObject.GetComponent<Image>().color = Color.green;
 
         returnCircleRoutine = StartCoroutine(ReturnCircle());
+
         index++;
         if (index >= circles.Length)
             index = 0;
@@ -68,6 +69,7 @@ public class RadarCanvas : MonoBehaviour
     IEnumerator ReturnCircle()
     {
         yield return new WaitForSeconds(0.002f);
+        
         circles[index].gameObject.SetActive(false);
     }
 
