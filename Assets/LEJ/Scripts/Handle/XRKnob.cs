@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -13,7 +14,11 @@ namespace UnityEngine.XR.Content.Interaction
         public List<IXRSelectInteractor> enteredInteractors = new List<IXRSelectInteractor>();
         IXRSelectInteractor authorInteractor;
 
-        [SerializeField] float changeAmount;
+        [SerializeField] public float handleChangeAmount = 0.1f;
+        public float changeAmount = 0.1f;
+
+        public UnityAction<bool> OnStartGrab; //right controller == true;
+        public UnityAction<bool> OnExitGrab;
 
         float curValue;
         float prevValue;
@@ -26,7 +31,7 @@ namespace UnityEngine.XR.Content.Interaction
         //============================================================
 
 
-        const float k_ModeSwitchDeadZone = 0.000001f; // Prevents rapid switching between the different rotation tracking modes
+        const float k_ModeSwitchDeadZone = 0.1f; // Prevents rapid switching between the different rotation tracking modes
 
         /// <summary>
         /// Helper class used to track rotations that can go beyond 180 degrees while minimizing accumulation error
@@ -113,11 +118,11 @@ namespace UnityEngine.XR.Content.Interaction
 
         [SerializeField]
         [Tooltip("Rotation of the knob at value '1'")]
-        float m_MaxAngle = 90.0f;
+        float m_MaxAngle = 180.0f;
 
         [SerializeField]
         [Tooltip("Rotation of the knob at value '0'")]
-        float m_MinAngle = -90.0f;
+        float m_MinAngle = -180.0f;
 
         [SerializeField]
         [Tooltip("Angle increments to support, if greater than '0'")]
@@ -234,6 +239,11 @@ namespace UnityEngine.XR.Content.Interaction
             enteredInteractors.Add(args.interactorObject);
             authorInteractor = enteredInteractors[enteredInteractors.Count - 1];
 
+            if (authorInteractor.transform.gameObject.tag == "RightController")
+                OnStartGrab?.Invoke(true);
+            else
+                OnStartGrab?.Invoke(false);
+
             m_PositionAngles.Reset();
             m_UpVectorAngles.Reset();
             m_ForwardVectorAngles.Reset();
@@ -241,11 +251,15 @@ namespace UnityEngine.XR.Content.Interaction
             UpdateBaseKnobRotation();
             UpdateRotation(true);
 
-
         }
 
         void EndGrab(SelectExitEventArgs args)
         {
+            if (args.interactorObject.transform.gameObject.tag == "RightController")
+                OnExitGrab?.Invoke(true);
+            else
+                OnExitGrab?.Invoke(false);
+
             enteredInteractors.Remove(args.interactorObject);
             if (enteredInteractors.Count != 0)
             {
@@ -254,6 +268,7 @@ namespace UnityEngine.XR.Content.Interaction
                     authorInteractor = enteredInteractors[enteredInteractors.Count - 1];
                 }
             }
+
         }
 
         public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)

@@ -98,7 +98,10 @@ public class CarDriver : MonoBehaviour
         
         
         if (!handleGrab.isRightGrip && !handleGrab.isLeftGrip)
+        {
             handleKnob.value = Mathf.Lerp(handleKnob.value, 0.5f, backToZeroSpeed);
+        }
+
 
 
     }
