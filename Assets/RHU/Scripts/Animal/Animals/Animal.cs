@@ -27,6 +27,7 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
     [NonSerialized] public bool isSit;
     [NonSerialized] public Vector2 bulletDirection;
 
+    public UnityEvent onDied;
     protected BTBase bTBase;
     protected SelectorNode rootNode = new SelectorNode();
     protected AudioSource audioSource;

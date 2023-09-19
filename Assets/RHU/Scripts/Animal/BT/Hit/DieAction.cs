@@ -34,6 +34,7 @@ public class DieAction : ActionNode
             IsDie = true;
             GameManager.Data.AddMoney(Cost);
             DataManager.Challenge.AnimalCount(owner);
+            owner.onDied?.Invoke();
 
             return NodeState.Running;
         }
