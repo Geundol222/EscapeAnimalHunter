@@ -366,6 +366,17 @@ namespace UnityEngine.XR.Content.Interaction
             m_MinAngle = prevAngle - changeAmount;
             m_MaxAngle = prevAngle + changeAmount;
 
+            if (prevAngle > 179f)
+            {
+                m_MinAngle = 178f;
+                m_MaxAngle = 180f;
+            }
+            if (prevAngle < -179f)
+            {
+                m_MinAngle = -180f;
+                m_MaxAngle = -178f;
+            }
+
             // Clamp to range
             if (m_ClampedMotion)
                 knobRotation = Mathf.Clamp(knobRotation, m_MinAngle, m_MaxAngle);

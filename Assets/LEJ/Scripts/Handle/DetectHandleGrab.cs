@@ -58,6 +58,9 @@ public class DetectHandleGrab : MonoBehaviour
             leftHandleHand.SetActive(true);
             isLeftGrip = true;
         }
+
+        if (isRightGrip || isLeftGrip)
+            knob.changeAmount = knob.handleChangeAmount;
     }
 
     private void SetActiveFalse(bool isRight)
@@ -74,5 +77,8 @@ public class DetectHandleGrab : MonoBehaviour
             leftHandleHand.SetActive(false);
             isLeftGrip = false;
         }
+
+        if (!isRightGrip && !isLeftGrip)
+            knob.changeAmount = 180f;
     }
 }

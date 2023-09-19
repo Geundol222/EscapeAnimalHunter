@@ -97,9 +97,12 @@ public class CarDriver : MonoBehaviour
         }
         
         
-        if (!handleGrab.isRightGrip && !handleGrab.isLeftGrip)
+        if (!handleGrab.isRightGrip && !handleGrab.isLeftGrip && handleRotatePivotObj.transform.localRotation.y > 0f || handleRotatePivotObj.transform.localRotation.y < 0f)
         {
             handleKnob.value = Mathf.Lerp(handleKnob.value, 0.5f, backToZeroSpeed);
+            Debug.Log(handleKnob.value);
+
+            handleRotatePivotObj.transform.localRotation = Quaternion.Euler(0f, Mathf.Lerp(handleRotatePivotObj.transform.localRotation.y * handleKnob.value, 0f, backToZeroSpeed), 0f);
         }
 
 
