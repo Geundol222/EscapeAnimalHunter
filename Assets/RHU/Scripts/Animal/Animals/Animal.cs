@@ -15,7 +15,10 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
     [SerializeField] private Transform footCenter;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask waterLayer;
-        
+    [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private LayerMask carLayer;
+
+
     // 각 노드에서 사용할 변수들
     [NonSerialized] public Animator animator;
     [NonSerialized] public int curHp;
@@ -26,7 +29,6 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
     [NonSerialized] public bool isTracking;
     [NonSerialized] public bool isSit;
 
-    public UnityEvent onDied;
     protected BTBase bTBase;
     protected SelectorNode rootNode = new SelectorNode();
     protected AudioSource audioSource;
@@ -57,27 +59,23 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
     {
         if (!isDie)
             bTBase.Update();
-
-        Debug.Log(animator.IsInTransition(0));
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (fieldOfView.AttackFOV())
         {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Player") || collision.gameObject.layer == LayerMask.NameToLayer("Car"))
+            if (collision.gameObject.layer == playerLayer || collision.gameObject.layer == carLayer)
             {
                 IHittable hittable = collision.gameObject.GetComponent<IHittable>();
                 hittable?.TakeHit(data.Animals[(int)animalName].attackDamage);
             }
         }
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Water"))
+        if (collision.gameObject.layer == waterLayer)
             Destroy(gameObject, 3f);
     }
+
 
     IEnumerator StepOnGrounRoutine()
     {

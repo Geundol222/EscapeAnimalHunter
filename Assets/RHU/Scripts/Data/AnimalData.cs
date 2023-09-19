@@ -15,6 +15,7 @@ public class AnimalData : ScriptableObject
         public AnimalName name;
         public string description;
         public GameObject prefab;
+        public float weight;
 
         public int maxHp;
         public int attackDamage;
