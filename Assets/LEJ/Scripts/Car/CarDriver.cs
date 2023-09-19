@@ -15,7 +15,7 @@ public class CarDriver : MonoBehaviour
     Rigidbody rb;
     PlayerInputDetecter inputDetecter;
     SetGearState gearState;
-    XRKnobLEJ handleKnob;
+    XRKnob handleKnob;
     DetectHandleGrab handleGrab;
     CarDamager damager;
 
@@ -64,7 +64,7 @@ public class CarDriver : MonoBehaviour
         damager = GetComponent<CarDamager>();
 
         gearState = gearObj.GetComponent<SetGearState>();
-        handleKnob = handleObj.GetComponent<XRKnobLEJ>();
+        handleKnob = handleObj.GetComponent<XRKnob>();
         handleGrab = handleObj.GetComponent<DetectHandleGrab>();
 
         handleKnob.value = 0.5f;
@@ -206,7 +206,7 @@ public class CarDriver : MonoBehaviour
         SetHandleValue();
 
         if (rb.velocity.magnitude > 1f)
-            transform.RotateAround(transform.position, new Vector3(0f, 1f, 0f), -handleRotateSpeed * setHandleValue);
+            transform.RotateAround(transform.position, new Vector3(0f, 1f, 0f), handleRotateSpeed * setHandleValue);
         
     }
 
