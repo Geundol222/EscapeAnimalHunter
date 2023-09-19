@@ -35,7 +35,7 @@ public class CarDecorator : MonoBehaviour
 
         for (int i = 0; i < 5; i++)
         {
-            materialObj.transform.GetChild(i).GetComponent<Renderer>().material = materials[i];
+            materialObj.transform.GetChild(i).GetComponent<Renderer>().material = materials[index];
         }
     }
 
@@ -57,7 +57,7 @@ public class CarDecorator : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             materialObj.transform.GetChild(i).GetComponent<Renderer>().material = solidMat;
-            materialObj.transform.GetChild(i).GetComponent<Renderer>().material.color = colors[i];
+            materialObj.transform.GetChild(i).GetComponent<Renderer>().material.color = colors[index];
         }
     }
 
