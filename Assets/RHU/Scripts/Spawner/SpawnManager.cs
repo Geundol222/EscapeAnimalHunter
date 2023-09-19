@@ -2,63 +2,79 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SRandom = System.Random;
-using URandom = UnityEngine.Random;
+using UnityEngine.SceneManagement;
+using Random = System.Random;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] private AnimalData animalData;
-    [SerializeField] private int maxWeight;
+    private static SpawnManager spawn;
+    public static SpawnManager Spawn { get { return spawn; } }
 
-    private List<GameObject> AnimalsToAdd = new List<GameObject>();
+    private List<GameObject> animalsToAdd = new List<GameObject>();                     // 생성될 동물의 prefab을 가지고 있음
+    public List<GameObject> AnimalsToAdd { get { return animalsToAdd; } }
     
-    private List<GameObject> curExistAnimals = new List<GameObject>();
+    private List<GameObject> curExistAnimals = new List<GameObject>();                  // Hierarchy상의 GameObject를 가지고 있음
     public List<GameObject> CurExistAnimals { get { return curExistAnimals; } }
 
-    private SRandom random = new SRandom();
+    [SerializeField] private AnimalData animalData;
+    [SerializeField] private Spawner spawner;
+
+    private List<float> weights = new List<float>();
+    private Random random = new Random();
     private float totalWeight = 0;
-    float cumulativeWeight = 0;
 
     private void Awake()
     {
-        AnimalsToAdd.Clear();
-        curExistAnimals.Clear();
+        spawn = this;
+        ClearVariables();
         AnimalSettingsToAdd();
-
-        foreach(GameObject animal in AnimalsToAdd)
-        {
-            Debug.Log(animal.name);
-        }
     }
 
-    private void Update()
+    private void ClearVariables()
     {
+        if (animalsToAdd.Count != 0)
+            animalsToAdd.Clear();
 
-    }
-
-    private void ToTalWeight()
-    {
-        foreach (AnimalData.AnimalInfo animalInfo in animalData.Animals)
+        if (curExistAnimals.Count != 0)
         {
-            totalWeight += animalInfo.weight;
+            foreach (GameObject animal in curExistAnimals)
+            {
+                Destroy(animal);
+                curExistAnimals.Remove(animal);
+            }
         }
+
+        totalWeight = 0;
     }
 
     private void AnimalSettingsToAdd()
     {
-        ToTalWeight();
+        foreach (AnimalData.AnimalInfo animalInfo in animalData.Animals)
+        {
+            weights.Add(animalInfo.weight);
+            totalWeight += animalInfo.weight;
+        }
 
-        int randomAniaml;
+        float randomValue;
+        float cumulativeWeight;
 
         for (int i = 0; i < 9; i++)
         {
-            randomAniaml = URandom.Range(0, animalData.Animals.Length);
+            cumulativeWeight = 0;
 
-            AnimalsToAdd.Add(animalData.Animals[randomAniaml].prefab);
-            cumulativeWeight += animalData.Animals[randomAniaml].weight;
+            for (int j = 0; j < animalData.Animals.Length; j++)
+            {
+                randomValue = (float)random.NextDouble() * totalWeight;
 
-            if (cumulativeWeight < maxWeight)
-                break;
+                cumulativeWeight += animalData.Animals[j].weight;
+
+                if (cumulativeWeight > randomValue)
+                {
+                    AnimalsToAdd.Add(animalData.Animals[j].prefab);
+
+                    break;
+                }
+            }
         }
     }
 
