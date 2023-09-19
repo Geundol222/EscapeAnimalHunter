@@ -15,19 +15,22 @@ public class CarUpgradeCanvas : MonoBehaviour
     [SerializeField] TMP_Text speedPlusText;
     [SerializeField] TMP_Text duraPlusText;
     [SerializeField] TMP_Text playerMoneyText;
-    [SerializeField] List<Material> carMat;
+    [SerializeField] TMP_Text materialNameText;
+    [SerializeField] List<string> exteriorName;
 
     [SerializeField] Transform itemTransform;
 
     List<Image> durabilityImages;
     List<Image> speedImages;
     GameObject carObject;
+    GameObject upgradeMatObj;
 
     int speedPlus;
     int duraPlus;
 
     int confirmDuraIndex;
     int confirmSpeedIndex;
+    int materialIndex;
 
     bool completeUpgrade;
 
@@ -60,9 +63,18 @@ public class CarUpgradeCanvas : MonoBehaviour
     {
         completeUpgrade = false;
 
+        materialNameText.text = exteriorName[materialIndex].ToString();
         okButton.gameObject.SetActive(false);
         playerMoneyText.text = GameManager.Data.Money.ToString();
         carObject = GameManager.Resource.Instantiate<GameObject>("Prefabs/ItemCar", itemTransform.position, Quaternion.Euler(0, -90, 0), true);
+        DataManager.Car.GetUpgradeCar(carObject);
+
+        upgradeMatObj = carObject.transform.GetChild(2).gameObject;
+
+        if (materialIndex < 5)
+            DataManager.Car.ChangeExteriorPattern(exteriorName[materialIndex]);
+        else
+            DataManager.Car.ChangeExteriorColor(exteriorName[materialIndex]);
     }
 
     private void IncreaseCost()
@@ -197,31 +209,49 @@ public class CarUpgradeCanvas : MonoBehaviour
         }
     }
 
-    //public void MatRight()
-    //{
-    //    if (materialIndex >= carMat.Count - 1)
-    //    {
-    //        materialIndex = carMat.Count - 1;
+    public void MatRight()
+    {
+        materialIndex++;
 
-    //        if (materialIndex < 4)
-    //            DataManager.Car.ChangeExteriorToPattern(carMat[materialIndex].name);
-    //        else
-    //            DataManager.Car.ChangeExteriorColor(carMat[materialIndex].name);
-    //    }
-    //}
+        if (materialIndex >= exteriorName.Count - 1)
+        {
+            materialIndex = exteriorName.Count - 1;
+        }
 
-    //public void MatLeft()
-    //{
-    //    if (materialIndex <= 0)
-    //    {
-    //        materialIndex = 0;
+        if (materialIndex < 5)
+            DataManager.Car.ChangeExteriorPattern(exteriorName[materialIndex]);
+        else
+            DataManager.Car.ChangeExteriorColor(exteriorName[materialIndex]);
 
-    //        if (materialIndex < 4)
-    //            DataManager.Car.ChangeExteriorToPattern(carMat[materialIndex].name);
-    //        else
-    //            DataManager.Car.ChangeExteriorColor(carMat[materialIndex].name);
-    //    }
-    //}
+        if (upgradeMatObj.transform.GetChild(0).GetComponent<Renderer>().material.name == exteriorName[materialIndex])
+            okButton.gameObject.SetActive(false);
+        else
+            okButton.gameObject.SetActive(true);
+
+        materialNameText.text = exteriorName[materialIndex];
+    }
+
+    public void MatLeft()
+    {
+        materialIndex--;
+
+        if (materialIndex <= 0)
+        {
+            materialIndex = 0;
+        }
+
+        if (materialIndex < 5)
+            DataManager.Car.ChangeExteriorPattern(exteriorName[materialIndex]);
+        else
+            DataManager.Car.ChangeExteriorColor(exteriorName[materialIndex]);
+
+        if (upgradeMatObj.transform.GetChild(0).GetComponent<Renderer>().material.name == exteriorName[materialIndex])
+            okButton.gameObject.SetActive(false);
+        else
+            okButton.gameObject.SetActive(true);
+
+        materialNameText.text = exteriorName[materialIndex];
+    }
 
     private void OnDisable()
     {
@@ -278,6 +308,13 @@ public class CarUpgradeCanvas : MonoBehaviour
             for (int i = 0; i < DataManager.Upgrade.carSpeedIndex; i++)
             {
                 speedImages[i].color = Color.black;
+            }
+
+            materialIndex = 0;
+
+            for (int i = 0; i < upgradeMatObj.transform.childCount; i++)
+            {
+                upgradeMatObj.transform.GetChild(i).GetComponent<Renderer>().material.name = exteriorName[materialIndex];
             }
         }
         

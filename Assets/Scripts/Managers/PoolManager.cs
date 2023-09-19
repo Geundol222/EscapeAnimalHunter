@@ -9,6 +9,7 @@ public class PoolManager : MonoBehaviour
     Dictionary<string, Transform> poolContainer;
     Transform poolRoot;
     Canvas canvasRoot;
+    public bool poolingComplete;
 
     private void Awake()
     {
@@ -17,6 +18,7 @@ public class PoolManager : MonoBehaviour
 
     public void InitPool()
     {
+        poolingComplete = false;
         poolDic = new Dictionary<string, ObjectPool<GameObject>>();
         poolContainer = new Dictionary<string, Transform>();
         poolRoot = new GameObject("PoolRoot").transform;
@@ -37,6 +39,7 @@ public class PoolManager : MonoBehaviour
             obj.transform.SetParent(parent, false);
             obj.transform.position = position;
             obj.transform.rotation = rotation;
+            poolingComplete = true;
             return obj as T;
         }
         else if (original is Component)
@@ -51,6 +54,7 @@ public class PoolManager : MonoBehaviour
             obj.transform.parent = parent;
             obj.transform.position = position;
             obj.transform.rotation = rotation;
+            poolingComplete = true;
             return obj.GetComponent<T>();
         }
         else
@@ -85,6 +89,7 @@ public class PoolManager : MonoBehaviour
                 return false;
 
             poolDic[key].Release(go);
+            poolingComplete = false;
             return true;
         }
         else if (instance is Component)
@@ -96,6 +101,7 @@ public class PoolManager : MonoBehaviour
                 return false;
 
             poolDic[key].Release(component.gameObject);
+            poolingComplete = false;
             return true;
         }
         else

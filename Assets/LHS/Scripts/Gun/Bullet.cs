@@ -1,17 +1,14 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.XR.CoreUtils;
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
 
 public class Bullet : MonoBehaviour
 {    
     [SerializeField] LayerMask carnivoreMask;
     [SerializeField] LayerMask herbivoreMask;
 
+    GameObject scopeCamera;
+    TrailRenderer trailRenderer;
     Rigidbody rb;
-    Collider col;
 
     private int damage;
     private int collisionCount;
@@ -32,15 +29,30 @@ public class Bullet : MonoBehaviour
 
     private bool isEffectiveCollider;
 
-    private void Start()
+    private void Awake()
     {
-        collisionCount = 0;
-        damage = DataManager.Bullet.damage;
-        bulletSpeed = DataManager.Bullet.bulletSpeed;
-
-        col = GetComponent<Collider>();
+        scopeCamera = GameObject.FindGameObjectWithTag("ScopeCamera");
+        trailRenderer = GetComponent<TrailRenderer>();
         rb = GetComponent<Rigidbody>();
         grav = Physics.gravity.magnitude;
+    }
+
+    private void OnEnable()
+    {
+        StartCoroutine(BulletSurvivalRoutine());
+    }
+
+    IEnumerator BulletSurvivalRoutine()
+    {
+        yield return new WaitUntil(() => { return gameObject.activeSelf && GameManager.Pool.poolingComplete; });        
+
+        transform.position = scopeCamera.transform.position;
+        transform.rotation = scopeCamera.transform.rotation;
+
+        collisionCount = 0;
+
+        damage = DataManager.Bullet.damage;
+        bulletSpeed = DataManager.Bullet.bulletSpeed;
 
         isEffectiveCollider = false;
 
@@ -53,12 +65,8 @@ public class Bullet : MonoBehaviour
         fireAngle = transform.rotation.x;
         maxHeight = transform.position.y + (Mathf.Pow(initialVelocity.y, 2) / (2 * grav)) + initialPosition.y;
 
-        StartCoroutine(BulletSurvivalRoutine());
         StartCoroutine(BulletFlyRoutine());
-    }
 
-    IEnumerator BulletSurvivalRoutine()
-    {
         yield return new WaitForSeconds(20f);
 
         if (!isEffectiveCollider)
@@ -100,15 +108,14 @@ public class Bullet : MonoBehaviour
 
             gameObject.transform.rotation = Quaternion.Euler(tipAngle, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
 
-            if (isEffectiveCollider)
-                yield break;
-
             yield return new WaitForFixedUpdate();
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log($"bullet is Contact to {collision.gameObject.name}");
+
         collisionCount++;
         StopProjectile();
         StopCoroutine(BulletFlyRoutine());
@@ -140,17 +147,15 @@ public class Bullet : MonoBehaviour
 
     private void OnDisable()
     {
-        StopAllCoroutines();
+        trailRenderer.Clear();
     }
 
     private void StopProjectile()
     {
         // Stop the projectile
-        enabled = false;
         if (rb != null)
         {
             rb.velocity = Vector3.zero;
-            rb.isKinematic = true;
         }
 
         // Handle collision or other cleanup logic here

@@ -5,30 +5,54 @@ using UnityEngine.UI;
 
 public class LoadingUI : MonoBehaviour
 {
-    [SerializeField] Image slider;
+    [SerializeField] GameObject loadingSceneUI;
 
-    private Animator anim;
+    Material loadingMat;
+
+    float fadeduration = 1f;
+    float lerpTime;
 
     private void Awake()
     {
-        anim = GetComponent<Animator>();
+        loadingMat = GetComponent<Renderer>().material;
     }
 
-    public void FadeIn()
+    public bool FadeOut()
     {
-        anim.Play("LoadingFadeIn");
-        slider.fillAmount = 0;
-        slider.gameObject.SetActive(false);
+        StartCoroutine(TransparentRoutine(0f, 1f));
+
+        return loadingMat.color.a >= 0.9f;
     }
 
-    public void FadeOut()
+    public bool FadeIn()
     {
-        anim.Play("LoadingFadeOut");
-        slider.gameObject.SetActive(true);
+        StartCoroutine(TransparentRoutine(1f, 0f));
+
+        return loadingMat.color.a <= 0.1f;
     }
 
-    public void SetProgress(float progress)
+    IEnumerator TransparentRoutine(float first, float second)
     {
-        slider.fillAmount = progress;
+        lerpTime = 0;
+
+        while (lerpTime < fadeduration)
+        {
+            lerpTime += Time.deltaTime;
+
+            Color color = loadingMat.color;
+            color.a = Mathf.Lerp(first, second, lerpTime / fadeduration);
+
+            loadingMat.color = color;
+            yield return new WaitForEndOfFrame();
+        }
+
+        if (loadingMat.color.a >= 0.9f)
+        {
+            loadingSceneUI.SetActive(true);
+        }
+        else if (loadingMat.color.a <= 0.1f)
+        {
+            loadingSceneUI.SetActive(false);
+        }
     }
 }

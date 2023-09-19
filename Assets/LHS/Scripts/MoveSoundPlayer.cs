@@ -6,6 +6,8 @@ using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 
 public class MoveSoundPlayer : MonoBehaviour
 {
+    [SerializeField] CharacterController controller;
+
     DynamicMoveProvider dynamicMoveProvider;
 
     private void Awake()
@@ -24,12 +26,12 @@ public class MoveSoundPlayer : MonoBehaviour
         {
             if (dynamicMoveProvider != null)
             {
-                if (dynamicMoveProvider.locomotionPhase == LocomotionPhase.Moving)
+                if (dynamicMoveProvider.locomotionPhase == LocomotionPhase.Moving && controller.enabled)
                     GameManager.Sound.PlaySound("Walk1");
 
                 yield return new WaitForSeconds(0.7f);
 
-                if (dynamicMoveProvider.locomotionPhase == LocomotionPhase.Moving)
+                if (dynamicMoveProvider.locomotionPhase == LocomotionPhase.Moving && controller.enabled)
                     GameManager.Sound.PlaySound("Walk2");
             }
 
