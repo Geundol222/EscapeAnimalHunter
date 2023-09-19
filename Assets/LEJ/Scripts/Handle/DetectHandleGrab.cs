@@ -59,8 +59,6 @@ public class DetectHandleGrab : MonoBehaviour
             isLeftGrip = true;
         }
 
-        if (isRightGrip || isLeftGrip)
-            
     }
 
     private void SetActiveFalse(bool isRight)

@@ -109,7 +109,6 @@ public class CarDriver : MonoBehaviour
             handleKnob.m_MinAngle = -180f;
 
             handleKnob.value = Mathf.Lerp(handleKnob.value, 0.5f, backToZeroSpeed);
-            //handleRotatePivotObj.transform.localRotation = Quaternion.Euler(0f, Mathf.Lerp(handleRotatePivotObj.transform.localRotation.y, 0f, 1f), 0f);
         }
     }
 
