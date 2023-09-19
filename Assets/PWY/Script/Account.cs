@@ -25,7 +25,6 @@ public class Account : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(collingMoney);
         if (collingMoney)
         {
             my_Money_Text.text = $"{GameManager.Data.Money.ToString()}";
