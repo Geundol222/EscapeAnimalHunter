@@ -366,15 +366,15 @@ namespace UnityEngine.XR.Content.Interaction
             m_MinAngle = prevAngle - changeAmount;
             m_MaxAngle = prevAngle + changeAmount;
 
-            if (prevAngle > 179f)
+            if (m_MaxAngle > 179f)
             {
-                m_MinAngle = 178f;
+                m_MinAngle = 180f - changeAmount * 2;
                 m_MaxAngle = 180f;
             }
-            if (prevAngle < -179f)
+            if (m_MinAngle < -179f)
             {
                 m_MinAngle = -180f;
-                m_MaxAngle = -178f;
+                m_MaxAngle = -180f + changeAmount * 2f;
             }
 
             // Clamp to range
