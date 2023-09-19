@@ -74,7 +74,9 @@ public class CarUpgradeCanvas : MonoBehaviour
 
         upgradeMatObj = carObject.transform.GetChild(2).gameObject;
 
-        if (materialIndex < 5)
+        if (materialIndex == 0)
+            DataManager.Car.ChangeExteriorColor(defaultMat);
+        else if (0 < materialIndex && materialIndex < 5)
             DataManager.Car.ChangeExteriorPattern(exteriorName[materialIndex]);
         else
             DataManager.Car.ChangeExteriorColor(exteriorName[materialIndex]);
@@ -198,11 +200,14 @@ public class CarUpgradeCanvas : MonoBehaviour
             DataManager.Upgrade.applyCost = 0;
             costText.text = DataManager.Upgrade.applyCost.ToString();
 
-            DataManager.Car.carMaxHP += duraPlus;
+            DataManager.Car.PlusMaxHP(duraPlus);
             DataManager.Car.SetMaxSpeed(DataManager.Car.carCurMaxSpeed + speedPlus);
 
             confirmDuraIndex = DataManager.Upgrade.durabilityIndex;
             confirmSpeedIndex = DataManager.Upgrade.carSpeedIndex;
+
+            if (materialIndex == 0)
+                DataManager.Car.ChangeExteriorColor(defaultMat);
 
             confirmMatIndex = materialIndex;
 
@@ -223,7 +228,9 @@ public class CarUpgradeCanvas : MonoBehaviour
             materialIndex = exteriorName.Count - 1;
         }
 
-        if (materialIndex < 5)
+        if (materialIndex == 0)
+            DataManager.Car.ChangeExteriorColor(defaultMat);
+        else if (0 < materialIndex && materialIndex < 5)
             DataManager.Car.ChangeExteriorPattern(exteriorName[materialIndex]);
         else
             DataManager.Car.ChangeExteriorColor(exteriorName[materialIndex]);
@@ -245,7 +252,9 @@ public class CarUpgradeCanvas : MonoBehaviour
             materialIndex = 0;
         }
 
-        if (materialIndex < 5)
+        if (materialIndex == 0)
+            DataManager.Car.ChangeExteriorColor(defaultMat);
+        else if (0 < materialIndex && materialIndex < 5)
             DataManager.Car.ChangeExteriorPattern(exteriorName[materialIndex]);
         else
             DataManager.Car.ChangeExteriorColor(exteriorName[materialIndex]);
@@ -304,10 +313,12 @@ public class CarUpgradeCanvas : MonoBehaviour
                 }
             }
 
-            if (confirmMatIndex < 5)
-                DataManager.Car.ChangeExteriorPattern(exteriorName[confirmMatIndex]);
+            if (confirmMatIndex == 0)
+                DataManager.Car.ChangeExteriorColor(defaultMat);
+            else if (0 < confirmMatIndex && confirmMatIndex < 5)
+                DataManager.Car.ChangeExteriorPattern(exteriorName[materialIndex]);
             else
-                DataManager.Car.ChangeExteriorColor(exteriorName[confirmMatIndex]);
+                DataManager.Car.ChangeExteriorColor(exteriorName[materialIndex]);
         }
         else
         {
@@ -324,10 +335,12 @@ public class CarUpgradeCanvas : MonoBehaviour
             DataManager.Upgrade.durabilityIndex = confirmDuraIndex;
             DataManager.Upgrade.carSpeedIndex = confirmSpeedIndex;
 
-            if (confirmMatIndex < 5)
-                DataManager.Car.ChangeExteriorPattern(exteriorName[confirmMatIndex]);
+            if (confirmMatIndex == 0)
+                DataManager.Car.ChangeExteriorColor(defaultMat);
+            else if (0 < confirmMatIndex && confirmMatIndex < 5)
+                DataManager.Car.ChangeExteriorPattern(exteriorName[materialIndex]);
             else
-                DataManager.Car.ChangeExteriorColor(exteriorName[confirmMatIndex]);
+                DataManager.Car.ChangeExteriorColor(exteriorName[materialIndex]);
 
             for (int i = 0; i < upgradeMatObj.transform.childCount; i++)
             {

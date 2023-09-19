@@ -62,7 +62,7 @@ public class DataManager : MonoBehaviour
         challenge = challengeObj.AddComponent<ChallengeManager>();
     }
     
-    private int money = 0;
+    private int money = 100;
 
     public int Money { get { return money; } }
 

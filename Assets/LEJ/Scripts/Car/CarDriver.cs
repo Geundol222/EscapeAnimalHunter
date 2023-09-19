@@ -10,7 +10,7 @@ using static UnityEngine.Rendering.DebugUI;
 public class CarDriver : MonoBehaviour
 {
     
-    [SerializeField] PlayerCarInteractor playerCarInteractor;
+    [SerializeField] CarInteractor carInteractor;
     GameObject player;
     Rigidbody rb;
     PlayerInputDetecter inputDetecter;
@@ -119,7 +119,7 @@ public class CarDriver : MonoBehaviour
 
     private void WhichPedalIsUsing()
     {
-        if (playerCarInteractor.isPlayerTakingCar)
+        if (carInteractor.isInCar)
         {
             if (inputDetecter.rightJoyStickYValue > 0 || inputDetecter.leftJoyStickYValue > 0)
             {
