@@ -22,7 +22,7 @@ public class Bear : Animal
         hitNode.childrenNode = new List<Node>()
         {                                           // 사용하는 Owner의 변수
             new HitAction(this),                    // CurHp, IsHit, IsWary
-            new DieAction(this)                     // IsHit, IsDie
+            new DieAction(this)                     // IsHit, IsDie, Cost
         };
 
         hostileNode.childrenNode = new List<Node>

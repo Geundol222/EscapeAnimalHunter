@@ -16,11 +16,11 @@ public class SitAction : ActionNode
         if (!IsSit)
             animator.SetBool("IsSit", IsSit = true);
 
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f || animator.IsInTransition(0))
         {
-            RandomAction(4);
+            RandomAction(10);
 
-            if (random == 0)
+            if (random == 9)
                 animator.SetBool("IsSit", IsSit = false);
             else if (random == 1)
                 animator.SetInteger("RandomIdle", random);

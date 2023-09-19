@@ -22,7 +22,7 @@ public class Moose : Animal
         hitNode.childrenNode = new List<Node>()
         {                                           // 사용하는 Owner의 변수
             new HitAction(this),                    // CurHp, IsHit, IsWary
-            new DieAction(this)                     // IsHit, IsDie
+            new DieAction(this)                     // IsHit, IsDie, Cost
         };
 
         getAwayNode.childrenNode = new List<Node>
