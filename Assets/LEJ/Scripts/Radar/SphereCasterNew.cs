@@ -9,6 +9,7 @@ public class SphereCasterNew : MonoBehaviour
     [SerializeField] float radiusGrowUpSpeed; //10f
     public UnityAction<Transform, bool> OnDetectCarnivore;
     public UnityAction<Transform, bool> OnDetectHerbivore;
+    public UnityAction OnReset;
 
     float maxDistance = 0.1f;
     public float curRadius;
@@ -23,14 +24,17 @@ public class SphereCasterNew : MonoBehaviour
         curRadius = radiusMax;
     }
 
-        RaycastHit[] hits;
+    RaycastHit[] hits;
 
     private void Update()
     {
         curRadius += radiusGrowUpSpeed * Time.deltaTime;
 
         if (curRadius > radiusMax)
+        {
             curRadius = 0;
+            OnReset?.Invoke();
+        }
 
         hits = Physics.SphereCastAll(transform.position, curRadius, transform.forward, maxDistance, radarLayer);
 

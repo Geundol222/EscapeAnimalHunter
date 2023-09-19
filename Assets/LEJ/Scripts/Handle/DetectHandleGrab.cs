@@ -35,18 +35,11 @@ public class DetectHandleGrab : MonoBehaviour
     {
         if (isRightAttach && playerInput.isRightGripPressed)
             isRightGrip = true;
-        else if (isRightGrip && !isRightAttach)
-            isRightGrip = true;
-        else
-            isRightGrip = false;
+
 
         if (isLeftAttach && playerInput.isLeftGripPressed)
             isLeftGrip = true;
-        else if (isLeftGrip && !isLeftAttach)
-            isLeftGrip = true;
-        else
-            isLeftGrip = false;
-        
+
         if (isRightGrip)
         {
             rightControllerModel.SetActive(false);

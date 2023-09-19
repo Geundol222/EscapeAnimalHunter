@@ -24,7 +24,7 @@ namespace UnityEngine.XR.Content.Interaction
         //============================================================
 
 
-        const float k_ModeSwitchDeadZone = 0.1f; // Prevents rapid switching between the different rotation tracking modes
+        const float k_ModeSwitchDeadZone = 0.000001f; // Prevents rapid switching between the different rotation tracking modes
 
         /// <summary>
         /// Helper class used to track rotations that can go beyond 180 degrees while minimizing accumulation error
@@ -366,6 +366,7 @@ namespace UnityEngine.XR.Content.Interaction
 
             if (m_Handle != null)
                 m_Handle.localEulerAngles = new Vector3(0.0f, angle, 0.0f);
+
         }
 
         void SetValue(float value)
@@ -385,8 +386,6 @@ namespace UnityEngine.XR.Content.Interaction
 
             m_Value = value;
             m_OnValueChange.Invoke(m_Value);
-
-
         }
 
         float ValueToRotation()
