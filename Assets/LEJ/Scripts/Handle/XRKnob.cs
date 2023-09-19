@@ -13,6 +13,8 @@ namespace UnityEngine.XR.Content.Interaction
         public List<IXRSelectInteractor> enteredInteractors = new List<IXRSelectInteractor>();
         IXRSelectInteractor authorInteractor;
 
+        [SerializeField] float changeAmount;
+
         float curValue;
         float prevValue;
         float knobRotation;
@@ -267,6 +269,7 @@ namespace UnityEngine.XR.Content.Interaction
             }
         }
 
+        float prevAngle;
         void UpdateRotation(bool freshCheck = false)
         {
             // Are we in position offset or direction rotation mode?
@@ -345,6 +348,9 @@ namespace UnityEngine.XR.Content.Interaction
             // Apply offset to base knob rotation to get new knob rotation
             var knobRotation = m_BaseKnobRotation - ((m_UpVectorAngles.totalOffset + m_ForwardVectorAngles.totalOffset) * m_TwistSensitivity) - m_PositionAngles.totalOffset;
 
+            m_MinAngle = prevAngle - changeAmount;
+            m_MaxAngle = prevAngle + changeAmount;
+
             // Clamp to range
             if (m_ClampedMotion)
                 knobRotation = Mathf.Clamp(knobRotation, m_MinAngle, m_MaxAngle);
@@ -355,6 +361,7 @@ namespace UnityEngine.XR.Content.Interaction
             var knobValue = (knobRotation - m_MinAngle) / (m_MaxAngle - m_MinAngle);
             SetValue(knobValue);
         }
+
 
         void SetKnobRotation(float angle)
         {
@@ -367,6 +374,7 @@ namespace UnityEngine.XR.Content.Interaction
             if (m_Handle != null)
                 m_Handle.localEulerAngles = new Vector3(0.0f, angle, 0.0f);
 
+            prevAngle = angle;
         }
 
         void SetValue(float value)

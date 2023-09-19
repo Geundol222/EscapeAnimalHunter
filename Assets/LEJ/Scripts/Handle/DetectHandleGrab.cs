@@ -35,10 +35,13 @@ public class DetectHandleGrab : MonoBehaviour
     {
         if (isRightAttach && playerInput.isRightGripPressed)
             isRightGrip = true;
-
+        else
+            isRightGrip = false;
 
         if (isLeftAttach && playerInput.isLeftGripPressed)
             isLeftGrip = true;
+        else
+            isLeftGrip = false;
 
         if (isRightGrip)
         {
