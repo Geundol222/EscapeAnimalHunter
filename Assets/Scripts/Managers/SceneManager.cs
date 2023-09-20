@@ -7,7 +7,8 @@ public class SceneManager : MonoBehaviour
 {
     private Camera mainCam;
     private LoadingUI loadingUI;
-    private int nextIndex = 0;
+    private int sceneIndex = 0;
+    public int SceneIndex { get { return sceneIndex; } }
 
     private BaseScene curScene;
     public BaseScene CurScene
@@ -28,19 +29,9 @@ public class SceneManager : MonoBehaviour
         loadingUI.transform.SetParent(transform, false);
     }
 
-    public void NextScene()
-    {
-        int index = UnitySceneManager.GetActiveScene().buildIndex;
-        if (UnitySceneManager.sceneCountInBuildSettings - 1 > index)
-            nextIndex = index + 1;
-        else
-            nextIndex = index;
-
-        LoadScene(nextIndex);
-    }
-
     public void LoadScene(int index)
     {
+        sceneIndex = index;
         StartCoroutine(LoadingRoutine(index));
     }
 
@@ -74,7 +65,7 @@ public class SceneManager : MonoBehaviour
         }
 
         Time.timeScale = 1f;
-        loadingUI.FadeIn();
         yield return new WaitWhile(() => { return GameManager.Sound.IsMuted(); });
+        loadingUI.FadeIn();
     }
 }

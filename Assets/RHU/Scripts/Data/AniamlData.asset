@@ -18,30 +18,34 @@ MonoBehaviour:
     prefab: {fileID: 1465729228637230290, guid: 3f4e2493746eb2748851fa884faf8566,
       type: 3}
     weight: 0.1
-    maxHp: 2
+    maxHp: 9
     attackDamage: 1
     cost: 90
+    maxDistance: 300
   - name: 1
     description: 
     prefab: {fileID: 8346933464000803438, guid: 635bf2b1b1eaec043b75eb3fa9cfe078,
       type: 3}
     weight: 0.2
-    maxHp: 12
+    maxHp: 7
     attackDamage: 1
     cost: 80
+    maxDistance: 300
   - name: 2
     description: 
     prefab: {fileID: 2471215384402868530, guid: 0e4686612bd772340b6469adac31169b,
       type: 3}
     weight: 0.3
-    maxHp: 1
+    maxHp: 8
     attackDamage: 0
     cost: 65
+    maxDistance: 300
   - name: 3
     description: 
     prefab: {fileID: 5360700942124476747, guid: badddf64ecc10844faa88b68126a5435,
       type: 3}
     weight: 0.4
-    maxHp: 20
+    maxHp: 4
     attackDamage: 0
     cost: 50
+    maxDistance: 300

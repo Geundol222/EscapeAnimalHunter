@@ -13,12 +13,7 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
     [SerializeField] public AnimalName animalName;
     [SerializeField] public FieldOfView fieldOfView;
     [SerializeField] private Transform footCenter;
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private LayerMask waterLayer;
-    [SerializeField] private LayerMask playerLayer;
-    [SerializeField] private LayerMask carLayer;
-
-
+    
     // 각 노드에서 사용할 변수들
     [NonSerialized] public Animator animator;
     [NonSerialized] public int curHp;
@@ -29,6 +24,10 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
     [NonSerialized] public bool isTracking;
     [NonSerialized] public bool isSit;
 
+    private LayerMask groundLayer;
+    private LayerMask waterLayer;
+    private LayerMask playerLayer;
+    private LayerMask carLayer;
     protected BTBase bTBase;
     protected SelectorNode rootNode = new SelectorNode();
     protected AudioSource audioSource;
@@ -38,6 +37,10 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
         gameObject.name = animalName.ToString();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+        groundLayer = LayerMask.NameToLayer("Ground");
+        waterLayer = LayerMask.NameToLayer("Water");
+        playerLayer = LayerMask.NameToLayer("Player");
+        carLayer = LayerMask.NameToLayer("Car");
         SetUpBT();
         //StartCoroutine(StepOnGrounRoutine());
     }
@@ -73,7 +76,7 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
         }
 
         if (collision.gameObject.layer == waterLayer)
-            Destroy(gameObject, 3f);
+            Destroy(gameObject, 1f);
     }
 
 
@@ -83,16 +86,13 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
 
         while (true)
         {
-            if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 1, groundLayer))
+            if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 10, groundLayer))
             {
-                Debug.Log(transform.rotation);
-
-                transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
                 Debug.Log(hitInfo.normal);
-                Debug.Log(transform.rotation);
+                transform.rotation = Quaternion.FromToRotation(Vector3.up, new Vector3(transform.rotation.x, hitInfo.normal.y, transform.rotation.z));
             }
 
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 

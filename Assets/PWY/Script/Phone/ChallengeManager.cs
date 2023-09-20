@@ -19,7 +19,6 @@ public class ChallengeManager: MonoBehaviour
     public Dictionary<string, bool> unLockRewardDic {get; private set;}
     public bool startcalling;
 
-    List<GameManager> t1;
     List<GameObject> dieAnimals = new List<GameObject>();
 
     private void Awake()
@@ -30,8 +29,6 @@ public class ChallengeManager: MonoBehaviour
         tiger_Challenge_Exit = 2;
 
         startcalling = true;
-
-        StartCoroutine(StartCalling());
 
         unLockRewardDic = new Dictionary<string, bool> // 곰과 무스의 bool을 false로 만듬
         {
@@ -192,25 +189,12 @@ public class ChallengeManager: MonoBehaviour
     }
     #endregion
 
-    #region 처음 전화한번만 오게하기
-    IEnumerator StartCalling()
-    {
-        startcalling = true;
-        yield return null;
-        if (startcalling)
-        {
-            startcalling = false;
-        }
-        yield return null;
-    }
-    #endregion
-
     #region 동물 잡아가기
     public void Capture()
     {
         foreach (GameObject animal in dieAnimals)
         {
-            Destroy(animal);
+            SpawnManager.Spawn.ReSpawnAniaml(animal);
         }
     }
     #endregion

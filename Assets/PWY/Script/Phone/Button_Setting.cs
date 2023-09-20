@@ -66,7 +66,7 @@ public class Button_Setting : MonoBehaviour
         Activate_List[6].SetActive(false);
         Activate_List[7].SetActive(false);
         Activate_List[8].SetActive(false);
-
+        Activate_List[9].SetActive(false);
     }
     private void Activate_List_Alltrue()
     {
@@ -79,7 +79,7 @@ public class Button_Setting : MonoBehaviour
         Activate_List[6].SetActive(true);
         Activate_List[7].SetActive(true);
         Activate_List[8].SetActive(true);
-
+        Activate_List[9].SetActive(true);
     }
 
     private void Setting_Acivate_Allfalse()
@@ -159,7 +159,8 @@ public class Button_Setting : MonoBehaviour
         Activate_List[5].SetActive(false);    // 전화번호부        
         Activate_List[6].SetActive(false);    // 카메라            
         Activate_List[7].SetActive(false);    // 갤러리                
-        Activate_List[8].SetActive(false);    // 설정                 
+        Activate_List[8].SetActive(false);    // 설정
+        Activate_List[9].SetActive(false);     // 종료
         // Setting_Acivate 다 꺼주기
         Setting_Acivate_Allfalse();
         calling_Setting_Allfalse();
@@ -178,6 +179,7 @@ public class Button_Setting : MonoBehaviour
         Activate_List[6].SetActive(false);    // 카메라
         Activate_List[7].SetActive(false);    // 갤러리
         Activate_List[8].SetActive(false);    // 설정
+        Activate_List[9].SetActive(false);     // 종료
     }
 
     public void Challenge()
@@ -193,6 +195,7 @@ public class Button_Setting : MonoBehaviour
         Activate_List[6].SetActive(false);    // 카메라
         Activate_List[7].SetActive(false);    // 갤러리
         Activate_List[8].SetActive(false);    // 설정
+        Activate_List[9].SetActive(false);     // 종료
     }
 
     public void Account()
@@ -208,6 +211,7 @@ public class Button_Setting : MonoBehaviour
         Activate_List[6].SetActive(false);    // 카메라
         Activate_List[7].SetActive(false);    // 갤러리
         Activate_List[8].SetActive(false);    // 설정
+        Activate_List[9].SetActive(false);     // 종료
     }
 
     public void Phonelist()
@@ -223,6 +227,7 @@ public class Button_Setting : MonoBehaviour
         Activate_List[6].SetActive(false);    // 카메라
         Activate_List[7].SetActive(false);    // 갤러리
         Activate_List[8].SetActive(false);    // 설정
+        Activate_List[9].SetActive(false);     // 종료
     }
 
     public void Camera()
@@ -238,6 +243,7 @@ public class Button_Setting : MonoBehaviour
         Activate_List[5].SetActive(false);    // 전화번호부
         Activate_List[7].SetActive(false);    // 갤러리
         Activate_List[8].SetActive(false);    // 설정
+        Activate_List[9].SetActive(false);     // 종료
 
     }
 
@@ -254,6 +260,7 @@ public class Button_Setting : MonoBehaviour
         Activate_List[5].SetActive(false);    // 전화번호부
         Activate_List[6].SetActive(false);    // 카메라
         Activate_List[8].SetActive(false);    // 설정
+        Activate_List[9].SetActive(false);     // 종료
     }
 
     public void Setting()
@@ -269,8 +276,25 @@ public class Button_Setting : MonoBehaviour
         Activate_List[5].SetActive(false);    // 전화번호부
         Activate_List[6].SetActive(false);    // 카메라
         Activate_List[7].SetActive(false);    // 갤러리
+        Activate_List[9].SetActive(false);     // 종료
         // 추가 메뉴 활성화
         Setting_Acivate[0].SetActive(true);   // 0.Setting_Menu
+    }
+
+    public void Exit()
+    {
+        // 켜짐
+        Activate_List[9].SetActive(true);     // 종료
+        //꺼짐
+        Activate_List[0].SetActive(false);    // 백그라운드
+        Activate_List[1].SetActive(false);    // 센터
+        Activate_List[2].SetActive(false);    // 맵
+        Activate_List[3].SetActive(false);    // 챌린지
+        Activate_List[4].SetActive(false);    // 계좌
+        Activate_List[5].SetActive(false);    // 전화번호부
+        Activate_List[6].SetActive(false);    // 카메라
+        Activate_List[7].SetActive(false);    // 갤러리
+        Activate_List[8].SetActive(false);    // 설정
     }
     #endregion
 

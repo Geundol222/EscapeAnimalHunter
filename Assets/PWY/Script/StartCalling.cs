@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class StartCalling : MonoBehaviour
@@ -7,18 +7,26 @@ public class StartCalling : MonoBehaviour
     [SerializeField] AudioSource startAudio;
     [SerializeField] List<GameObject> colling_Activate;
 
-    private void Awake()
+    private void Start()
     {
-        if (DataManager.Challenge.startcalling)
-        {
-            startAudio.Play();
-            startAudio.loop = true;
-            colling_Activate[0].SetActive(true);  // Colling_Activate 활성화
-            colling_Activate[1].SetActive(true);  // Answer The Phone_Start 활성화
-            colling_Activate[2].SetActive(false); // Center Display 비활성화
-            colling_Activate[3].SetActive(false); // Phone_BackGround 비활성화
-            colling_Activate[6].SetActive(false);
-        }
+        StartCoroutine(StartCallingRoutine());
+    }
+
+    IEnumerator StartCallingRoutine()
+    {
+        yield return new WaitUntil(() => { return DataManager.Challenge.startcalling; });
+
+        startAudio.Play();
+        startAudio.loop = true;
+        colling_Activate[0].SetActive(true);  // Colling_Activate 활성화
+        colling_Activate[1].SetActive(true);  // Answer The Phone_Start 활성화
+        colling_Activate[2].SetActive(false); // Center Display 비활성화
+        colling_Activate[3].SetActive(false); // Phone_BackGround 비활성화
+        colling_Activate[5].SetActive(false);
+
+        DataManager.Challenge.startcalling = false;
+
+        yield break;
     }
 
     private void StopAudio()

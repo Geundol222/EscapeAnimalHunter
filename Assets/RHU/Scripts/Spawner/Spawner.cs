@@ -10,25 +10,13 @@ public class Spawner : MonoBehaviour
     [Header("SpawnData")]
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private Transform focusPoint;                      // 플레이어의 시작 위치
-    [SerializeField] private LayerMask groundLayer;
+    private LayerMask groundLayer;
 
     [Header("SpawnRange")]
     [SerializeField][Range(0, 1000)] private int maxRange;              // 플레이어를 기준으로 도넛 모양의 범위에 생성하기위해 maxRange에서 minRange를 제외한 위치에 생성
     [SerializeField][Range(0, 1000)] private int minRange;
 
-    [Header("Debug")]
-    [SerializeField] private bool isDebug;
-    [SerializeField] private AnimalSpawnArray[] animalSpawnArray;
-
     private RaycastHit hitInfo;
-    //private List<GameObject> curExistAnimals = new List<GameObject>();
-
-    [Serializable]
-    public class AnimalSpawnArray
-    {
-        public AnimalData.AnimalName animalName;                // 지정한 동물
-        public int spawnCount;                                  // 생성할 개수
-    }
 
     private void Awake()
     {
@@ -44,52 +32,31 @@ public class Spawner : MonoBehaviour
     }
 
     /// <summary>
-    /// 시작 시 animalSpawnArray에서 직접 설정한 만큼 동물 생성
+    /// isDebug = ture이면 animalSpawnArray에서 직접 설정한 만큼 동물 생성
+    /// false면 가중치기준 랜덤 생성
     /// </summary>
     IEnumerator StartSpawnRoutine()
     {
-        if (isDebug)
+        foreach (GameObject animal in SpawnManager.Spawn.AnimalsToAdd)
         {
-            foreach (AnimalSpawnArray animal in animalSpawnArray)                  // 생성
-            {
-                for (int i = 0; i < animal.spawnCount; i++)
-                {
-                    yield return StartCoroutine(GroundCheckRoutine());
-
-                    InstantiateAnimal(animal.animalName.ToString());
-                    
-                    yield return null;
-                }
-            }
-        }
-        else
-        {
-            foreach (GameObject animal in SpawnManager.Spawn.AnimalsToAdd)
-            {
-                yield return StartCoroutine(SpawnAnimalRoutine(animal));
-
-                yield return null;
-            }
-        }
+            yield return StartCoroutine(SpawnAnimalRoutine(animal));
         
+            yield return new WaitForSeconds(30f);
+        }
+
+        StartCoroutine(ReSpawnRoutine());
+
         yield break;
     }
 
     /// <summary>
-    /// 지정한 동물이름 기준으로 생성
+    /// 지정한 동물 생성
     /// </summary>
-    /// <param name="animalName">생성할 동물 이름</param>
+    /// <param name="prefab">만들 동물의 Prefab</param>
     private void InstantiateAnimal(GameObject prefab)
     {
         GameObject animal = Instantiate(prefab, hitInfo.point, Quaternion.Euler(0, Random.Range(-180, 180), 0));
-        SpawnManager.Spawn.AddExistAnimal(animal);
-    }
-
-    private void InstantiateAnimal(string animalName)
-    {
-        GameObject animal = GameManager.Resource.Instantiate<GameObject>($"Prefabs/Animals/{animalName}",
-            hitInfo.point, Quaternion.Euler(0, Random.Range(-180, 180), 0), false);
-        SpawnManager.Spawn.AddExistAnimal(animal);
+        SpawnManager.Spawn.CurExistAnimals.Add(animal);
     }
 
     /// <summary>
@@ -139,6 +106,50 @@ public class Spawner : MonoBehaviour
         yield break;
     }
 
+    /// <summary>
+    /// 각 동물이 maxRange 벗어나면 재생성, 체력 및 상태 초기화
+    /// </summary>
+    IEnumerator ReSpawnRoutine()
+    {
+        while (true)
+        {
+            //for (int i = 0; i < curExistAnimals.Count; i++)         // foreach쓰면 InvalidOperationException 발생
+            for (int i = 0; i < SpawnManager.Spawn.CurExistAnimals.Count; i++)
+            {
+                if (DistanceCheck(SpawnManager.Spawn.CurExistAnimals[i]))
+                {
+                    yield return StartCoroutine(GroundCheckRoutine());
+
+                    SpawnManager.Spawn.ReSpawnAniaml((SpawnManager.Spawn.CurExistAnimals[i]));
+                }
+
+                yield return new WaitForSeconds(0.2f);
+            }
+
+            yield return new WaitForSeconds(3f);
+        }
+    }
+
+    /// <summary>
+    /// 플레이어 기준으로 얼마나 멀어졌는지 체크
+    /// </summary>
+    /// <param name="animal"> 체크할 동물 </param>
+    /// <returns> 멀면 true 아니면 false </returns>
+    private bool DistanceCheck(GameObject animal)
+    {
+        float distanceSquared = (animal.transform.position - focusPoint.position).sqrMagnitude;
+
+        if (distanceSquared > maxRange * maxRange)
+            return true;
+
+        return false;
+    }
+
+    /// <summary>
+    /// 동물을 생성시키는 Coroutine, 기존 SpawnRoutine에서 분리구현
+    /// </summary>
+    /// <param name="animal">생성할 동물 Prefab</param>
+    /// <returns></returns>
     IEnumerator SpawnAnimalRoutine(GameObject animal)
     {
         yield return StartCoroutine(GroundCheckRoutine());
@@ -148,12 +159,14 @@ public class Spawner : MonoBehaviour
         yield break;
     }
 
-    //public void OnDiedAnimal(GameObject animal)
-    //{
-    //    SpawnManager.Spawn.RemoveExistAnimal(animal);
-    //    Destroy(animal);
-    //    StartCoroutine(SpawnAnimalRoutine(animal));
-    //}
+    /// <summary>
+    /// SpawnManager에서 동물이 Destroy되면 호출할 함수
+    /// </summary>
+    /// <param name="animal">생성할 동물 이름</param>
+    public void SpawnAnimal(GameObject animal)
+    {
+        StartCoroutine(SpawnAnimalRoutine(animal));
+    }
 
     private void OnDrawGizmosSelected()
     {

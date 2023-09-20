@@ -12,11 +12,12 @@ public class SpawnManager : MonoBehaviour
 
     private List<GameObject> animalsToAdd = new List<GameObject>();                     // 생성될 동물의 prefab을 가지고 있음
     public List<GameObject> AnimalsToAdd { get { return animalsToAdd; } }
-    
-    private List<GameObject> curExistAnimals = new List<GameObject>();                  // Hierarchy상의 GameObject를 가지고 있음
+
+    private List<GameObject> curExistAnimals = new List<GameObject>();
     public List<GameObject> CurExistAnimals { get { return curExistAnimals; } }
 
     [SerializeField] private AnimalData animalData;
+    [SerializeField] private int animalCount;
     [SerializeField] private Spawner spawner;
 
     private List<float> weights = new List<float>();
@@ -30,19 +31,21 @@ public class SpawnManager : MonoBehaviour
         AnimalSettingsToAdd();
     }
 
+    private void Update()
+    {
+        foreach(GameObject a in curExistAnimals)
+        {
+            Debug.Log(a.name);
+        }
+    }
+
     private void ClearVariables()
     {
         if (animalsToAdd.Count != 0)
             animalsToAdd.Clear();
 
         if (curExistAnimals.Count != 0)
-        {
-            foreach (GameObject animal in curExistAnimals)
-            {
-                Destroy(animal);
-                curExistAnimals.Remove(animal);
-            }
-        }
+            curExistAnimals.Clear();
 
         totalWeight = 0;
     }
@@ -58,7 +61,7 @@ public class SpawnManager : MonoBehaviour
         float randomValue;
         float cumulativeWeight;
 
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i < animalCount; i++)
         {
             cumulativeWeight = 0;
 
@@ -78,16 +81,15 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    public void AddExistAnimal(GameObject animal)
+    /// <summary>
+    /// ChallengeManager와 연계될 부분, 전화하면 해당 동물 지우고 가중치와 별개로 랜덤한 다른 동물 생성
+    /// 일정한 동물 수 유지를 위함
+    /// </summary>
+    /// <param name="animal">제거할 동물</param>
+    public void ReSpawnAniaml(GameObject animal)
     {
-        curExistAnimals.Add(animal);
-    }
-
-    public void RemoveExistAnimal(GameObject animal)
-    {
-        if (curExistAnimals.Contains(animal))
-            curExistAnimals.Remove(animal);
-        else
-            throw new ArgumentException("curExistAnimals에 해당 동물이 없음");
+        curExistAnimals.Remove(animal);
+        Destroy(animal);
+        spawner.SpawnAnimal(animalData.Animals[UnityEngine.Random.Range(0, animalData.Animals.Length)].prefab);
     }
 }
