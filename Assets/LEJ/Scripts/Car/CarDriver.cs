@@ -86,7 +86,6 @@ public class CarDriver : MonoBehaviour
                 UseAccelPedal();
                 Handling();
             }
-
             else if (isBreaking)
             {
                 UseBreakPedal();

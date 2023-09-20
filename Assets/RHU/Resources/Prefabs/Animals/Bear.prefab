@@ -777,7 +777,6 @@ Transform:
   - {fileID: 1462455686}
   - {fileID: 6971072296763249053}
   - {fileID: 6947471748522831092}
-  - {fileID: 1346606464904680780}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -830,7 +829,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -839,7 +838,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 20
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -874,7 +873,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -930,18 +929,6 @@ MonoBehaviour:
   animalName: 0
   fieldOfView: {fileID: 9166582474577770158}
   footCenter: {fileID: 6971072296763249053}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  waterLayer:
-    serializedVersion: 2
-    m_Bits: 16
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  carLayer:
-    serializedVersion: 2
-    m_Bits: 8192
 --- !u!114 &2723960383713962703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1487,68 +1474,6 @@ Transform:
   m_Father: {fileID: 4341638281753593211}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 19.379755, y: 18.458523, z: -19.451302}
---- !u!1 &5172315438766141118
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1346606464904680780}
-  - component: {fileID: 5089549374575492629}
-  - component: {fileID: 4341004826611588022}
-  m_Layer: 0
-  m_Name: DistanceChecker
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1346606464904680780
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5172315438766141118}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 1466800644951711528}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &5089549374575492629
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5172315438766141118}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4341004826611588022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5172315438766141118}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 988c1706120605f4f8a7be8a9ba3b2e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxDistance: 500
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!1 &6182203506393213259
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ public class CarInteractor : MonoBehaviour
     [SerializeField] GameObject exit_Point;         // 내리는 곳의 위치
     [SerializeField] CharacterController xROrigin_CharacterController;  // 플레이어의 캐릭터 컨트롤러
     [SerializeField] Animator fade_Animator;        // 타고 내릴의 페이드 애니메이션 xr 오리진의 카메라 하위자식으로 있음
+    [SerializeField] GameObject car;
 
     public bool isInCar;                                // 탑승 유무
 
@@ -44,11 +45,13 @@ public class CarInteractor : MonoBehaviour
         if (!isInCar)   // 탑승상태가 아님
         {
             isInCar = true;
+            car.GetComponent<CarDriver>().enabled = true;
             CarCoordinate();
         }
         else        // 탑승한 상태
         {
             isInCar = false;
+            car.GetComponent<CarDriver>().enabled = false;
             BoardingConfirmation();
             fade_Animator.Play("Fade");
             Operator.transform.position = exit_Point.transform.position;

@@ -54,6 +54,30 @@ public class Button_Setting : MonoBehaviour
     /// </summary>
     [SerializeField] List<GameObject> calling_Setting;
 
+    /// <summary>
+    /// 0.Clock_Style_Chang
+    /// 1.Round_Select_Outline
+    /// 2.Digital_Select_Outline
+    /// 3.Round_Time_ Clock
+    /// 4.Digital_Tiem_Clock
+    /// 5.Phone_BackGround_Upper/Under
+    /// 6.Harp_Seal
+    /// 7.BonoBono
+    /// 8.Null
+    /// 9.Null_Outline
+    /// 10.Round_Harp_Seal
+    /// 11.Round_Harp_Outline
+    /// 12.Round_BonoBono
+    /// 13.BonoBono_Outline
+    /// 14.Moon
+    /// 15.Moon_Outline
+    /// 16.Neogulmaen
+    /// 17.Neogulmaen_Outline
+    /// 18.Round_Moon
+    /// 19.Round_Neogulmaen
+    /// </summary>
+    [SerializeField] List<GameObject> clock_Setting;
+
     #region °¢ ¼³Á¤ ÇÑ¹ø¿¡ ²ô±â ¹× ÄÑ±â
     private void Activate_List_Allfalse()
     {
@@ -159,8 +183,9 @@ public class Button_Setting : MonoBehaviour
         Activate_List[5].SetActive(false);    // ÀüÈ­¹øÈ£ºÎ        
         Activate_List[6].SetActive(false);    // Ä«¸Þ¶ó            
         Activate_List[7].SetActive(false);    // °¶·¯¸®                
-        Activate_List[8].SetActive(false);    // ¼³Á¤                 
-        // Setting_Acivate ´Ù ²¨ÁÖ±â
+        Activate_List[8].SetActive(false);    // ¼³Á¤
+        Setting_Butting[4].SetActive(false);
+        // ´Ù ²¨ÁÖ±â
         Setting_Acivate_Allfalse();
         calling_Setting_Allfalse();
     }
@@ -238,7 +263,6 @@ public class Button_Setting : MonoBehaviour
         Activate_List[5].SetActive(false);    // ÀüÈ­¹øÈ£ºÎ
         Activate_List[7].SetActive(false);    // °¶·¯¸®
         Activate_List[8].SetActive(false);    // ¼³Á¤
-
     }
 
     public void Gallery()
@@ -271,6 +295,22 @@ public class Button_Setting : MonoBehaviour
         Activate_List[7].SetActive(false);    // °¶·¯¸®
         // Ãß°¡ ¸Þ´º È°¼ºÈ­
         Setting_Acivate[0].SetActive(true);   // 0.Setting_Menu
+    }
+
+    public void Exit()
+    {
+        // ÄÑÁü
+        Activate_List[9].SetActive(true);     // ¼³Á¤
+        //²¨Áü
+        Activate_List[0].SetActive(false);    // ¹é±×¶ó¿îµå
+        Activate_List[1].SetActive(false);    // ¼¾ÅÍ
+        Activate_List[2].SetActive(false);    // ¸Ê
+        Activate_List[3].SetActive(false);    // Ã§¸°Áö
+        Activate_List[4].SetActive(false);    // °èÁÂ
+        Activate_List[5].SetActive(false);    // ÀüÈ­¹øÈ£ºÎ
+        Activate_List[6].SetActive(false);    // Ä«¸Þ¶ó
+        Activate_List[7].SetActive(false);    // °¶·¯¸®
+        Activate_List[8].SetActive(false);    // °¶·¯¸®
     }
     #endregion
 
@@ -426,6 +466,131 @@ public class Button_Setting : MonoBehaviour
         Activate_List[1].SetActive(true);
         // ²¨Áü                                  
         calling_Setting[0].SetActive(false);
+
+    }
+    #endregion
+
+    #region ½Ã°è¹Ù²Ù±â
+    public void Digital_Clock_Change()
+    {
+        // ÄÑÁü
+        clock_Setting[0].SetActive(true);
+        clock_Setting[2].SetActive(true);
+        clock_Setting[4].SetActive(true);
+        // ²¨Áü
+        clock_Setting[1].SetActive(false);
+        clock_Setting[3].SetActive(false);
+        clock_Setting[5].SetActive(false);
+        clock_Setting[6].SetActive(false);
+        clock_Setting[7].SetActive(false);
+        clock_Setting[8].SetActive(false);
+        clock_Setting[10].SetActive(false);
+        clock_Setting[12].SetActive(false);
+        clock_Setting[14].SetActive(false);
+        clock_Setting[16].SetActive(false);
+        clock_Setting[18].SetActive(false);
+        clock_Setting[19].SetActive(false);
+    }
+
+    public void Round_Clock_Change()
+    {
+        // ÄÑÁü
+        clock_Setting[0].SetActive(true);
+        clock_Setting[1].SetActive(true);
+        clock_Setting[3].SetActive(true);
+        clock_Setting[5].SetActive(true);
+        clock_Setting[6].SetActive(true);
+        clock_Setting[7].SetActive(true);
+        clock_Setting[8].SetActive(true);
+        clock_Setting[10].SetActive(true);
+        clock_Setting[12].SetActive(true);
+        clock_Setting[14].SetActive(true);
+        clock_Setting[16].SetActive(true);
+        clock_Setting[18].SetActive(true);
+        clock_Setting[19].SetActive(true);
+        // ²¨Áü
+        clock_Setting[2].SetActive(false);
+        clock_Setting[4].SetActive(false);
+    }
+
+    public void Roune_Clock_Null_Style()
+    {
+        // ÄÑÁü
+        clock_Setting[9].SetActive(true);
+        // ²¨Áü
+        clock_Setting[6].SetActive(false);
+        clock_Setting[7].SetActive(false);
+        clock_Setting[11].SetActive(false);
+        clock_Setting[13].SetActive(false);
+        clock_Setting[14].SetActive(false);
+        clock_Setting[15].SetActive(false);
+        clock_Setting[16].SetActive(false);
+        clock_Setting[17].SetActive(false);
+    }
+
+    public void Roune_Clock_Harp_Style()
+    {
+        // ÄÑÁü
+        clock_Setting[5].SetActive(true);
+        clock_Setting[6].SetActive(true);
+        clock_Setting[11].SetActive(true);
+        // ²¨Áü
+        clock_Setting[7].SetActive(false);
+        clock_Setting[9].SetActive(false);
+        clock_Setting[13].SetActive(false);
+        clock_Setting[14].SetActive(false);
+        clock_Setting[15].SetActive(false);
+        clock_Setting[16].SetActive(false);
+        clock_Setting[17].SetActive(false);
+
+    }
+
+    public void Round_Clock_BonoBono_Style()
+    {
+        // ÄÑÁü
+        clock_Setting[5].SetActive(true);
+        clock_Setting[7].SetActive(true);
+        clock_Setting[13].SetActive(true);
+        // ²¨Áü
+        clock_Setting[6].SetActive(false);
+        clock_Setting[9].SetActive(false);
+        clock_Setting[11].SetActive(false);
+        clock_Setting[14].SetActive(false);
+        clock_Setting[15].SetActive(false);
+        clock_Setting[16].SetActive(false);
+        clock_Setting[17].SetActive(false);
+
+    }
+    public void Round_Clock_Moon_Style()
+    {
+        // ÄÑÁü
+        clock_Setting[5].SetActive(true);
+        clock_Setting[14].SetActive(true);
+        clock_Setting[15].SetActive(true);
+        // ²¨Áü
+        clock_Setting[6].SetActive(false);
+        clock_Setting[7].SetActive(false);
+        clock_Setting[9].SetActive(false);
+        clock_Setting[11].SetActive(false);
+        clock_Setting[13].SetActive(false);
+        clock_Setting[16].SetActive(false);
+        clock_Setting[17].SetActive(false);
+    }
+    public void Round_Clock_Neogulmaen_Style()
+    {
+        // ÄÑÁü
+        clock_Setting[5].SetActive(true);
+        clock_Setting[16].SetActive(true);
+        clock_Setting[17].SetActive(true);
+        // ²¨Áü
+        clock_Setting[6].SetActive(false);
+        clock_Setting[7].SetActive(false);
+        clock_Setting[9].SetActive(false);
+        clock_Setting[11].SetActive(false);
+        clock_Setting[13].SetActive(false);
+        clock_Setting[14].SetActive(false);
+        clock_Setting[15].SetActive(false);
+
 
     }
     #endregion
