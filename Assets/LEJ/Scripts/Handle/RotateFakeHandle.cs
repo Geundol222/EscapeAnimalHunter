@@ -7,7 +7,7 @@ public class RotateFakeHandle : MonoBehaviour
 {
     [SerializeField] GameObject realHandle;
     XRKnob knob;
-    float rotateAmount = 3f;
+    float rotateAmount = 5f;
 
     private void Awake()
     {

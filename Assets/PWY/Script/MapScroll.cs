@@ -3,21 +3,21 @@ using UnityEngine.UIElements;
 
 public class MapScroll : MonoBehaviour
 {
-    //[SerializeField] Transform phone_Map; // 핸드폰
-    //[SerializeField] Transform mapCamera; // 미니맵 카메라 위치
-    //[SerializeField] Transform Map_PinPoint; // 미니맵에 나타낼 내 위치
-    //[SerializeField] Transform pnPoint;
+    [SerializeField] Transform phone_Map; // 핸드폰
+    [SerializeField] Transform mapCamera; // 미니맵 카메라 위치
+    [SerializeField] Transform Map_PinPoint; // 미니맵에 나타낼 내 위치
+    [SerializeField] Transform pnPoint;
 
-    /*public bool isPhone; // true : 지도에 핸드폰 위치 고정
+    public bool isPhone; // true : 지도에 핸드폰 위치 고정
 
     private void Update()
     {
         //TouchMap();
         PinPoint();
         TouchSpeed();
-    }*/
+    }
 
-    /*private void PinPoint()
+    private void PinPoint()
     {
         float phoneY = phone_Map.position.y;
 
@@ -73,7 +73,5 @@ public class MapScroll : MonoBehaviour
 
         Vector3 phone = new Vector3(phoneX, cameraY, phoneZ);
         mapCamera.position = phone;
-    }*/
-
-
+    }
 }
