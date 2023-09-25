@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/LHS/GameStartScene.unity
     guid: fd212cc42dc32ed43b011e936ce0bdea
   - enabled: 1
-    path: Assets/LHS/LHSTestScene.unity
-    guid: 5cb8f9ac2ce93514d94f4bcb7042723a
+    path: Assets/PWY/Scenes/LHSTestScene.unity
+    guid: 44daaf84670cc5742bcf6114b7db4c8b
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: cfe33d1282871b34dac9893f31093b34,
       type: 2}

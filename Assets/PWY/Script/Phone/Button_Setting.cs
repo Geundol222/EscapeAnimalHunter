@@ -34,6 +34,7 @@ public class Button_Setting : MonoBehaviour
     /// 11.PhoneSize_Y
     /// 12.BackGround_Center
     /// 13.BackGrounds_Center
+    /// 14.Audio_Car
     /// </summary>
     [SerializeField] List<GameObject> Setting_Acivate;
 
@@ -121,6 +122,8 @@ public class Button_Setting : MonoBehaviour
         Setting_Acivate[10].SetActive(false);
         Setting_Acivate[11].SetActive(false);
         Setting_Acivate[12].SetActive(false);
+        Setting_Acivate[13].SetActive(false);
+        Setting_Acivate[14].SetActive(false);
     }
     private void Setting_Acivate_Alltrue()
     {
@@ -137,6 +140,8 @@ public class Button_Setting : MonoBehaviour
         Setting_Acivate[10].SetActive(true);
         Setting_Acivate[11].SetActive(true);
         Setting_Acivate[12].SetActive(true);
+        Setting_Acivate[13].SetActive(false);
+        Setting_Acivate[14].SetActive(false);
     }
 
     private void Setting_Butting_Allfalse()
@@ -329,14 +334,15 @@ public class Button_Setting : MonoBehaviour
         Setting_Acivate[3].SetActive(false);    // 3.Audio_Master
         Setting_Acivate[4].SetActive(false);    // 4.Audio_Vibration
         Setting_Acivate[5].SetActive(false);    // 5.Audio_Camera
-        Setting_Acivate[6].SetActive(false);   // 6.Brightness_Text
-        Setting_Acivate[7].SetActive(false);   // 7.Brightness.X
-        Setting_Acivate[8].SetActive(false);   // 8.Brightness.Y
-        Setting_Acivate[9].SetActive(false);   // 9.PhoneSize_Text
-        Setting_Acivate[10].SetActive(false);  // 10.PhoneSize_X
-        Setting_Acivate[11].SetActive(false);  // 11.PhoneSize_Y
+        Setting_Acivate[6].SetActive(false);    // 6.Brightness_Text
+        Setting_Acivate[7].SetActive(false);    // 7.Brightness.X
+        Setting_Acivate[8].SetActive(false);    // 8.Brightness.Y
+        Setting_Acivate[9].SetActive(false);    // 9.PhoneSize_Text
+        Setting_Acivate[10].SetActive(false);   // 10.PhoneSize_X
+        Setting_Acivate[11].SetActive(false);   // 11.PhoneSize_Y
         Setting_Acivate[12].SetActive(false);   // 12.BackGround_Center
-        Setting_Acivate[13].SetActive(false);  // 13.BackGround_Center
+        Setting_Acivate[13].SetActive(false);   // 13.BackGround_Center
+        Setting_Acivate[14].SetActive(false);   // 14.Audio_Car
         Setting_Butting[4].SetActive(false);
 
     }
@@ -350,6 +356,7 @@ public class Button_Setting : MonoBehaviour
         Setting_Acivate[4].SetActive(true);    // 4.Audio_Vibration
         Setting_Acivate[5].SetActive(true);    // 5.Audio_Camera
         Setting_Acivate[12].SetActive(true);   // 12.BackGround_Center
+        Setting_Acivate[14].SetActive(true);  // 14.Audio_Car
         // ²¨Áü
         Setting_Acivate[0].SetActive(false);   // 0.Setting_Menu
         Setting_Acivate[6].SetActive(false);   // 6.Brightness_Text
@@ -380,6 +387,7 @@ public class Button_Setting : MonoBehaviour
         Setting_Acivate[10].SetActive(false);  // 10.PhoneSize_X
         Setting_Acivate[11].SetActive(false);  // 11.PhoneSize_Y
         Setting_Acivate[13].SetActive(false);  // 13.BackGround_Center
+        Setting_Acivate[14].SetActive(false);   // 14.Audio_Car
         Setting_Butting[4].SetActive(false);
     }
 
@@ -401,6 +409,7 @@ public class Button_Setting : MonoBehaviour
         Setting_Acivate[7].SetActive(false);    // 7.Brightness.X
         Setting_Acivate[8].SetActive(false);    // 8.Brightness.Y
         Setting_Acivate[13].SetActive(false);   // 13.BackGround_Center
+        Setting_Acivate[14].SetActive(false);   // 14.Audio_Car
         Setting_Butting[4].SetActive(false);
     }
 
@@ -422,6 +431,7 @@ public class Button_Setting : MonoBehaviour
         Setting_Acivate[9].SetActive(false);    // 9.PhoneSize_Text
         Setting_Acivate[10].SetActive(false);   // 10.PhoneSize_X
         Setting_Acivate[11].SetActive(false);   // 11.PhoneSize_Y
+        Setting_Acivate[14].SetActive(false);   // 14.Audio_Car
         Setting_Butting[4].SetActive(false);
     }
 
@@ -444,6 +454,7 @@ public class Button_Setting : MonoBehaviour
         Setting_Acivate[10].SetActive(false);   // 10.PhoneSize_X
         Setting_Acivate[11].SetActive(false);   // 11.PhoneSize_Y
         Setting_Acivate[13].SetActive(false);    // 13.BackGround_Center
+        Setting_Acivate[14].SetActive(false);   // 14.Audio_Car
     }
     #endregion
 

@@ -62,7 +62,7 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
 
     public enum PoseState
     {
-        Socket, Main, Sub, Multi
+        Main, Sub, Multi
     }
 
     [SerializeField] Transform gripTransform;
@@ -131,12 +131,6 @@ public class XRGunDualGrabTransformer : XRBaseGrabTransformer
         if (grabInteractable.interactorsSelecting.Count == 1)
         {
             grabInteractable.ClearMultipleGrabTransformers();
-
-            if (mainInteractor is XRSocketInteractor)
-            {
-                state = PoseState.Socket;
-                return;
-            }
 
             if (ReferenceEquals(mainInteractor, grabInteractable.interactorsSelecting[0]))
             {

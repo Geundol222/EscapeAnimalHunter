@@ -19,6 +19,7 @@ public class Phone_Setting : MonoBehaviour
     [SerializeField] Slider audio_Master;           // 전체소리
     [SerializeField] Slider audio_Vibration;        // 진동음
     [SerializeField] Slider audio_CameraShutter;    // 카메라 셔터음
+    [SerializeField] Slider audio_Car;              // 자동차의 소리
     [Header("brightness")]
     [SerializeField] Transform directionalLight;    // Directional Light오브젝트
     [SerializeField] Slider brightness_X;           // Directional Light의 X회전
@@ -37,6 +38,8 @@ public class Phone_Setting : MonoBehaviour
     public float vibration;
     [Range(0f, 1f)]
     public float cameraShutter;
+    [Range(0f, 1f)]
+    public float carSound;
 
     // 빛
     [Range(0f, 360f)]
@@ -56,6 +59,7 @@ public class Phone_Setting : MonoBehaviour
         audio_Master.value = 1;
         audio_Vibration.value = 1 ;
         audio_CameraShutter.value = 1;
+        audio_Car.value = 1 ;
 
         phone_SizeX.value = 4f;
         phone_SizeY.value = 4f;
@@ -78,6 +82,7 @@ public class Phone_Setting : MonoBehaviour
         master = audio_Master.value;
         vibration = audio_Vibration.value;
         cameraShutter = audio_CameraShutter.value;
+        carSound = audio_Car.value;
     }
 
     //public void Audio_Vibration()
@@ -109,6 +114,4 @@ public class Phone_Setting : MonoBehaviour
         phoneScale.localScale = new Vector3(phoneSizeX, phoneSizeY, transform.localScale.z);
     }
     #endregion
-
-
 }
