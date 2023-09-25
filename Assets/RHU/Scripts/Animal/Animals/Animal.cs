@@ -13,7 +13,7 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
     [SerializeField] public AnimalName animalName;
     [SerializeField] public FieldOfView fieldOfView;
     [SerializeField] private Transform footCenter;
-    
+
     // 각 노드에서 사용할 변수들
     [NonSerialized] public Animator animator;
     [NonSerialized] public int curHp;
@@ -24,27 +24,23 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
     [NonSerialized] public bool isTracking;
     [NonSerialized] public bool isSit;
 
-    private LayerMask groundLayer;
-    private LayerMask waterLayer;
-    private LayerMask playerLayer;
-    private LayerMask carLayer;
     protected BTBase bTBase;
     protected SelectorNode rootNode = new SelectorNode();
     protected AudioSource audioSource;
+    [SerializeField] private LayerMask groundLayer;
+    private int waterLayer;
+    private int playerLayer;
+    private int carLayer;
 
     protected void Awake()
     {
         gameObject.name = animalName.ToString();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
-        groundLayer = LayerMask.NameToLayer("Ground");
-        waterLayer = LayerMask.NameToLayer("Water");
-        playerLayer = LayerMask.NameToLayer("Player");
-        carLayer = LayerMask.NameToLayer("Car");
         SetUpBT();
         //StartCoroutine(StepOnGrounRoutine());
     }
-    
+
     public abstract void SetUpBT();
 
     private void OnEnable()     // ReSpawn 시 초기화를 위해 OnEnable에서 초기화
@@ -56,6 +52,10 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
         isWary = false;
         isTracking = false;
         isSit = false;
+        groundLayer = 1 << LayerMask.NameToLayer("Ground");
+        waterLayer = LayerMask.NameToLayer("Water");
+        playerLayer = LayerMask.NameToLayer("Player");
+        carLayer = LayerMask.NameToLayer("Car");
     }
 
     private void Update()
@@ -66,7 +66,7 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (fieldOfView.AttackFOV())
+        if (fieldOfView.AttackFOV() && isWary)
         {
             if (collision.gameObject.layer == playerLayer || collision.gameObject.layer == carLayer)
             {
@@ -74,26 +74,12 @@ public abstract class Animal : MonoBehaviour, IHittable, ICrusher
                 hittable?.TakeHit(data.Animals[(int)animalName].attackDamage);
             }
         }
-
-        if (collision.gameObject.layer == waterLayer)
-            Destroy(gameObject, 1f);
     }
 
-
-    IEnumerator StepOnGrounRoutine()
+    private void OnTriggerEnter(Collider other)
     {
-        RaycastHit hitInfo;
-
-        while (true)
-        {
-            if (Physics.Raycast(footCenter.position, Vector3.down, out hitInfo, 10, groundLayer))
-            {
-                Debug.Log(hitInfo.normal);
-                transform.rotation = Quaternion.FromToRotation(Vector3.up, new Vector3(transform.rotation.x, hitInfo.normal.y, transform.rotation.z));
-            }
-
-            yield return null;
-        }
+        if (other.gameObject.layer == waterLayer)
+            Destroy(gameObject, 3f);
     }
 
     public void TakeHit(int damage)
