@@ -3,25 +3,29 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Animal
+  - LeftController
+  - RightController
+  - ScopeCamera
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Grab
+  - Bolt
+  - Ground
+  - NotGround
+  - Carnivore
+  - Herbivore
+  - Bullet
+  - Car
+  - Parking
+  - Phone
+  - Radar
   - 
   - 
   - 

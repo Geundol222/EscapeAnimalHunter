@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d0e10d8c2ef01b49b9964cc7259d07e, type: 3}
+  m_Name: AniamlData
+  m_EditorClassIdentifier: 
+  animals:
+  - name: 0
+    description: 
+    prefab: {fileID: 1465729228637230290, guid: 3f4e2493746eb2748851fa884faf8566,
+      type: 3}
+    weight: 0.1
+    maxHp: 9
+    attackDamage: 1
+    cost: 90
+  - name: 1
+    description: 
+    prefab: {fileID: 8346933464000803438, guid: 635bf2b1b1eaec043b75eb3fa9cfe078,
+      type: 3}
+    weight: 0.2
+    maxHp: 7
+    attackDamage: 1
+    cost: 80
+  - name: 2
+    description: 
+    prefab: {fileID: 2471215384402868530, guid: 0e4686612bd772340b6469adac31169b,
+      type: 3}
+    weight: 0.3
+    maxHp: 3
+    attackDamage: 0
+    cost: 65
+  - name: 3
+    description: 
+    prefab: {fileID: 5360700942124476747, guid: badddf64ecc10844faa88b68126a5435,
+      type: 3}
+    weight: 0.4
+    maxHp: 3
+    attackDamage: 0
+    cost: 50
